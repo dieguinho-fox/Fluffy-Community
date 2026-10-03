@@ -16,38 +16,32 @@ color: "#22c55e",
 icon: "🟢",
 label: "Informação"
 },
-
-
 medium: {
-    color: "#eab308",
-    icon: "🟡",
-    label: "Atenção"
+color: "#eab308",
+icon: "🟡",
+label: "Atenção"
 },
-
 high: {
-    color: "#ef4444",
-    icon: "🔴",
-    label: "Importante"
+color: "#ef4444",
+icon: "🔴",
+label: "Importante"
 }
-
-
 };
 
 async function loadAnnouncements() {
 if (!announcementContainer) {
 console.error(
-"announcementContainer não foi encontrado no index.html."
+"Elemento announcementContainer não encontrado."
 );
-
-
-    return;
+return;
 }
 
-announcementContainer.innerHTML =
-    "<p>Carregando avisos...</p>";
+
+announcementContainer.textContent =
+    "Carregando avisos...";
 
 try {
-    const { data, error } = await supabaseClient
+    const result = await supabaseClient
         .from("announcements")
         .select(
             "id, title, message, priority, created_at, expires_at"
@@ -57,18 +51,18 @@ try {
             ascending: false
         });
 
+    const data = result.data;
+    const error = result.error;
+
     if (error) {
         console.error(
             "Erro ao carregar avisos:",
             error
         );
 
-        announcementContainer.innerHTML = `
-            <div class="announcement-error">
-                <strong>Não foi possível carregar os avisos.</strong>
-                <p>${error.message}</p>
-            </div>
-        ;
+        announcementContainer.textContent =
+            "Erro ao carregar os avisos: " +
+            error.message;
 
         return;
     }
@@ -81,20 +75,22 @@ try {
     const now = new Date();
 
     const activeAnnouncements = (data || []).filter(
-        (announcement) => {
+        function (announcement) {
             if (!announcement.expires_at) {
                 return true;
             }
 
             return (
-                new Date(announcement.expires_at) > now
+                new Date(
+                    announcement.expires_at
+                ) > now
             );
         }
     );
 
     if (activeAnnouncements.length === 0) {
-        announcementContainer.innerHTML =
-            "<p>Nenhum aviso no momento.</p>";
+        announcementContainer.textContent =
+            "Nenhum aviso no momento.";
 
         return;
     }
@@ -102,7 +98,7 @@ try {
     announcementContainer.innerHTML = "";
 
     activeAnnouncements.forEach(
-        (announcement) => {
+        function (announcement) {
             const priority =
                 priorityInfo[
                     announcement.priority
@@ -111,10 +107,12 @@ try {
             const article =
                 document.createElement("article");
 
-            article.className = "announcement";
+            article.className =
+                "announcement";
 
             article.style.borderLeft =
-                `5px solid ${priority.color}`;
+                "5px solid " +
+                priority.color;
 
             const header =
                 document.createElement("div");
@@ -126,7 +124,9 @@ try {
                 document.createElement("h3");
 
             title.textContent =
-                `${priority.icon} ${announcement.title}`;
+                priority.icon +
+                " " +
+                announcement.title;
 
             const label =
                 document.createElement("span");
@@ -164,12 +164,8 @@ try {
         error
     );
 
-    announcementContainer.innerHTML = `
-        <div class="announcement-error">
-            <strong>Erro ao carregar os avisos.</strong>
-            <p>${error.message || error}</p>
-        </div>
-    `;
+    announcementContainer.textContent =
+        "Erro inesperado ao carregar os avisos.";
 }
 
 }
