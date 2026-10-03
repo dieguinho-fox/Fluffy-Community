@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Criar conta — Fluffy Account</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+
+            font-family: Arial, Helvetica, sans-serif;
+
+            background: linear-gradient(135deg, #fff7fb, #f3f7ff);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 24px;
+
+            color: #242424;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 430px;
+
+            background: white;
+
+            border-radius: 24px;
+
+            padding: 34px;
+
+            box-shadow: 0 14px 45px rgba(0, 0, 0, 0.10);
+        }
+
+        .logo {
+            text-align: center;
+
+            font-size: 42px;
+
+            margin-bottom: 6px;
+        }
+
+        h1 {
+            text-align: center;
+
+            margin: 0;
+
+            font-size: 28px;
+        }
+
+        .subtitle {
+            text-align: center;
+
+            color: #707070;
+
+            margin: 8px 0 28px;
+
+            line-height: 1.4;
+        }
+
+        label {
+            display: block;
+
+            font-weight: bold;
+
+            margin-top: 16px;
+
+            margin-bottom: 7px;
+        }
+
+        input {
+            width: 100%;
+
+            padding: 13px 14px;
+
+            font-size: 16px;
+
+            border: 1px solid #d8d8d8;
+
+            border-radius: 12px;
+
+            outline: none;
+
+            transition:
+                border-color 0.15s,
+                box-shadow 0.15s;
+        }
+
+        input:focus {
+            border-color: #7c5cff;
+
+            box-shadow:
+                0 0 0 3px rgba(124, 92, 255, 0.12);
+        }
+
+        .hint {
+            margin-top: 6px;
+
+            font-size: 12px;
+
+            color: #777;
+        }
+
+        .terms {
+            display: flex;
+
+            align-items: flex-start;
+
+            gap: 9px;
+
+            margin-top: 18px;
+
+            font-size: 13px;
+
+            line-height: 1.4;
+
+            color: #555;
+        }
+
+        .terms input {
+            width: auto;
+
+            margin-top: 2px;
+        }
+
+        button {
+            width: 100%;
+
+            margin-top: 20px;
+
+            padding: 14px;
+
+            border: 0;
+
+            border-radius: 12px;
+
+            background: #7c5cff;
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition:
+                opacity 0.15s,
+                transform 0.05s;
+        }
+
+        button:hover {
+            opacity: 0.92;
+        }
+
+        button:active {
+            transform: scale(0.99);
+        }
+
+        button:disabled {
+            cursor: not-allowed;
+
+            opacity: 0.6;
+        }
+
+        .message {
+            display: none;
+
+            margin-top: 16px;
+
+            padding: 13px;
+
+            border-radius: 12px;
+
+            font-size: 14px;
+
+            line-height: 1.4;
+        }
+
+        .message.success {
+            display: block;
+
+            background: #eaf8ee;
+
+            color: #176b32;
+        }
+
+        .message.error {
+            display: block;
+
+            background: #fff0f0;
+
+            color: #9b1c1c;
+        }
+
+        .login {
+            text-align: center;
+
+            margin-top: 22px;
+
+            color: #666;
+
+            font-size: 14px;
+        }
+
+        .login a {
+            color: #6d4cff;
+
+            font-weight: bold;
+
+            text-decoration: none;
+        }
+
+        .login a:hover {
+            text-decoration: underline;
+        }
+
+        .brand {
+            text-align: center;
+
+            margin-top: 20px;
+
+            font-size: 12px;
+
+            color: #999;
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="container">
+
+        <div class="logo">
+            🐾
+        </div>
+
+        <h1>
+            Criar Fluffy Account
+        </h1>
+
+        <p class="subtitle">
+            Crie sua conta para usar sua identidade nos jogos e serviços da Fluffy Studios.
+        </p>
+
+        <form id="registerForm">
+
+            <label for="username">
+                Nome de usuário
+            </label>
+
+            <input
+                id="username"
+                type="text"
+                minlength="3"
+                maxlength="20"
+                autocomplete="username"
+                placeholder="Ex.: FluffyPlayer"
+                required
+            >
+
+            <div class="hint">
+                3–20 caracteres. Use letras, números ou _.
+            </div>
+
+
+            <label for="email">
+                E-mail
+            </label>
+
+            <input
+                id="email"
+                type="email"
+                autocomplete="email"
+                placeholder="voce@email.com"
+                required
+            >
+
+
+            <label for="password">
+                Senha
+            </label>
+
+            <input
+                id="password"
+                type="password"
+                minlength="8"
+                autocomplete="new-password"
+                placeholder="Mínimo de 8 caracteres"
+                required
+            >
+
+
+            <label for="passwordConfirm">
+                Confirmar senha
+            </label>
+
+            <input
+                id="passwordConfirm"
+                type="password"
+                minlength="8"
+                autocomplete="new-password"
+                placeholder="Digite a senha novamente"
+                required
+            >
+
+
+            <label class="terms">
+
+                <input
+                    id="terms"
+                    type="checkbox"
+                    required
+                >
+
+                <span>
+                    Eu concordo com os termos de uso e a política de privacidade.
+                </span>
+
+            </label>
+
+
+            <button
+                id="registerButton"
+                type="submit"
+            >
+                Criar conta
+            </button>
+
+
+            <div
+                id="message"
+                class="message"
+            ></div>
+
+        </form>
+
+
+        <div class="login">
+
+            Já possui uma conta?
+
+            <a href="login.html">
+                Entrar
+            </a>
+
+        </div>
+
+
+        <div class="brand">
+            Fluffy Studios · Fluffy Account
+        </div>
+
+    </main>
+
+
+    <script>
+
+        /*
+         * CONFIGURAÇÃO DO SUPABASE
+         */
+
+        const SUPABASE_URL =
+            "https://wnihobtfpmabgfwoddye.supabase.co";
+
+        const SUPABASE_PUBLISHABLE_KEY =
+            "sb_publishable_Y-S1kbAXQE-Y4j-seMaHrQ_u_vUoTFF";
+
+
+        const supabaseClient =
+            window.supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_PUBLISHABLE_KEY
+            );
+
+
+        /*
+         * ELEMENTOS DA PÁGINA
+         */
+
+        const form =
+            document.getElementById("registerForm");
+
+        const usernameInput =
+            document.getElementById("username");
+
+        const emailInput =
+            document.getElementById("email");
+
+        const passwordInput =
+            document.getElementById("password");
+
+        const passwordConfirmInput =
+            document.getElementById("passwordConfirm");
+
+        const termsInput =
+            document.getElementById("terms");
+
+        const registerButton =
+            document.getElementById("registerButton");
+
+        const message =
+            document.getElementById("message");
+
+
+        /*
+         * MOSTRAR MENSAGEM
+         */
+
+        function showMessage(text, type) {
+
+            message.textContent = text;
+
+            message.className =
+                "message " + type;
+        }
+
+
+        /*
+         * VALIDAR USERNAME
+         */
+
+        function isValidUsername(username) {
+
+            return /^[A-Za-z0-9_]{3,20}$/.test(username);
+        }
+
+
+        /*
+         * CADASTRO
+         */
+
+        form.addEventListener(
+            "submit",
+            async function(event) {
+
+                event.preventDefault();
+
+
+                const username =
+                    usernameInput.value.trim();
+
+                const email =
+                    emailInput.value.trim();
+
+                const password =
+                    passwordInput.value;
+
+                const passwordConfirm =
+                    passwordConfirmInput.value;
+
+
+                message.className =
+                    "message";
+
+                message.textContent =
+                    "";
+
+
+                /*
+                 * USERNAME
+                 */
+
+                if (!isValidUsername(username)) {
+
+                    showMessage(
+                        "O nome de usuário deve ter 3–20 caracteres e usar apenas letras, números ou _.",
+                        "error"
+                    );
+
+                    return;
+                }
+
+
+                /*
+                 * SENHAS
+                 */
+
+                if (password !== passwordConfirm) {
+
+                    showMessage(
+                        "As senhas não são iguais.",
+                        "error"
+                    );
+
+                    return;
+                }
+
+
+                /*
+                 * TERMOS
+                 */
+
+                if (!termsInput.checked) {
+
+                    showMessage(
+                        "Você precisa aceitar os termos para criar a conta.",
+                        "error"
+                    );
+
+                    return;
+                }
+
+
+                /*
+                 * DESABILITAR BOTÃO
+                 */
+
+                registerButton.disabled = true;
+
+                registerButton.textContent =
+                    "Criando conta...";
+
+
+                try {
+
+                    /*
+                     * CRIAR CONTA NO SUPABASE
+                     */
+
+                    const {
+                        data,
+                        error
+                    } =
+                        await supabaseClient.auth.signUp({
+
+                            email: email,
+
+                            password: password,
+
+                            options: {
+
+                                data: {
+
+                                    username: username
+
+                                }
+
+                            }
+
+                        });
+
+
+                    if (error) {
+
+                        throw error;
+                    }
+
+
+                    /*
+                     * CONTA CRIADA
+                     */
+
+                    if (data.session) {
+
+                        showMessage(
+                            "Conta criada com sucesso!",
+                            "success"
+                        );
+
+                    } else {
+
+                        showMessage(
+                            "Conta criada com sucesso! Você já pode continuar. A confirmação de e-mail poderá ser usada posteriormente para liberar recursos adicionais.",
+                            "success"
+                        );
+
+                    }
+
+
+                    /*
+                     * LIMPAR FORMULÁRIO
+                     */
+
+                    form.reset();
+
+
+                } catch (error) {
+
+                    console.error(
+                        "Erro ao criar conta:",
+                        error
+                    );
+
+
+                    let errorMessage =
+                        error.message ||
+                        "Não foi possível criar a conta.";
+
+
+                    /*
+                     * MENSAGENS MAIS AMIGÁVEIS
+                     */
+
+                    if (
+                        errorMessage
+                            .toLowerCase()
+                            .includes("already registered")
+                    ) {
+
+                        errorMessage =
+                            "Este e-mail já possui uma conta.";
+
+                    }
+
+
+                    if (
+                        errorMessage
+                            .toLowerCase()
+                            .includes("password")
+                    ) {
+
+                        errorMessage =
+                            "A senha não atende aos requisitos configurados no Supabase.";
+
+                    }
+
+
+                    showMessage(
+                        errorMessage,
+                        "error"
+                    );
+
+
+                } finally {
+
+                    registerButton.disabled =
+                        false;
+
+                    registerButton.textContent =
+                        "Criar conta";
+
+                }
+
+            }
+        );
+
+    </script>
+
+</body>
+</html>
