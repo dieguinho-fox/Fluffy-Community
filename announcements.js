@@ -17,6 +17,7 @@ icon: "🟢",
 label: "Informação"
 },
 
+
 medium: {
     color: "#eab308",
     icon: "🟡",
@@ -29,12 +30,21 @@ high: {
     label: "Importante"
 }
 
+
 };
 
 async function loadAnnouncements() {
 if (!announcementContainer) {
-return;
+console.error(
+"announcementContainer não foi encontrado no index.html."
+);
+
+
+    return;
 }
+
+announcementContainer.innerHTML =
+    "<p>Carregando avisos...</p>";
 
 try {
     const { data, error } = await supabaseClient
@@ -53,9 +63,20 @@ try {
             error
         );
 
-        announcementContainer.style.display = "none";
+        announcementContainer.innerHTML = `
+            <div class="announcement-error">
+                <strong>Não foi possível carregar os avisos.</strong>
+                <p>${error.message}</p>
+            </div>
+        ;
+
         return;
     }
+
+    console.log(
+        "Avisos recebidos do Supabase:",
+        data
+    );
 
     const now = new Date();
 
@@ -72,7 +93,9 @@ try {
     );
 
     if (activeAnnouncements.length === 0) {
-        announcementContainer.style.display = "none";
+        announcementContainer.innerHTML =
+            "<p>Nenhum aviso no momento.</p>";
+
         return;
     }
 
@@ -135,15 +158,18 @@ try {
         }
     );
 
-    announcementContainer.style.display = "block";
-
 } catch (error) {
     console.error(
         "Erro inesperado ao carregar avisos:",
         error
     );
 
-    announcementContainer.style.display = "none";
+    announcementContainer.innerHTML = `
+        <div class="announcement-error">
+            <strong>Erro ao carregar os avisos.</strong>
+            <p>${error.message || error}</p>
+        </div>
+    `;
 }
 
 }
