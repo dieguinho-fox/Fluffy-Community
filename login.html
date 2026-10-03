@@ -73,19 +73,50 @@
         padding: 12px;
         border: none;
         border-radius: 7px;
-        background: #222;
-        color: white;
         font-size: 16px;
         cursor: pointer;
     }
 
-    button:hover {
+    #loginButton {
+        background: #222;
+        color: white;
+    }
+
+    #loginButton:hover {
         background: #444;
+    }
+
+    #googleLoginButton {
+        margin-top: 12px;
+        background: white;
+        color: #222;
+        border: 1px solid #ccc;
+    }
+
+    #googleLoginButton:hover {
+        background: #f5f5f5;
     }
 
     button:disabled {
         opacity: 0.6;
         cursor: not-allowed;
+    }
+
+    .divider {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 20px 0;
+        color: #888;
+        font-size: 14px;
+    }
+
+    .divider::before,
+    .divider::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: #ddd;
     }
 
     #message {
@@ -162,6 +193,17 @@
 
     </form>
 
+    <div class="divider">
+        ou
+    </div>
+
+    <button
+        type="button"
+        id="googleLoginButton"
+    >
+        Continuar com Google
+    </button>
+
     <div class="links">
         <p>
             Ainda não possui uma conta?
@@ -169,7 +211,9 @@
         </p>
 
         <p>
-            <a href="index.html">Voltar para a comunidade</a>
+            <a href="index.html">
+                Voltar para a comunidade
+            </a>
         </p>
     </div>
 
@@ -202,6 +246,11 @@
     const loginButton =
         document.getElementById("loginButton");
 
+    const googleLoginButton =
+        document.getElementById(
+            "googleLoginButton"
+        );
+
     const message =
         document.getElementById("message");
 
@@ -210,11 +259,17 @@
         message.style.display = "block";
 
         if (type === "success") {
-            message.style.backgroundColor = "#dcfce7";
-            message.style.color = "#166534";
+            message.style.backgroundColor =
+                "#dcfce7";
+
+            message.style.color =
+                "#166534";
         } else {
-            message.style.backgroundColor = "#fee2e2";
-            message.style.color = "#991b1b";
+            message.style.backgroundColor =
+                "#fee2e2";
+
+            message.style.color =
+                "#991b1b";
         }
     }
 
@@ -260,7 +315,9 @@
                     if (
                         error.message
                             .toLowerCase()
-                            .includes("invalid login credentials")
+                            .includes(
+                                "invalid login credentials"
+                            )
                     ) {
                         showMessage(
                             "E-mail ou senha incorretos.",
@@ -313,6 +370,61 @@
                 loginButton.disabled = false;
                 loginButton.textContent =
                     "Entrar";
+            }
+        }
+    );
+
+    googleLoginButton.addEventListener(
+        "click",
+        async function () {
+            googleLoginButton.disabled = true;
+            googleLoginButton.textContent =
+                "Abrindo Google...";
+
+            try {
+                const { error } =
+                    await supabaseClient.auth.signInWithOAuth({
+                        provider: "google",
+                        options: {
+                            redirectTo:
+                                "https://dieguinho-fox.github.io/Fluffy-Community/"
+                        }
+                    });
+
+                if (error) {
+                    console.error(
+                        "Erro no Google Login:",
+                        error
+                    );
+
+                    showMessage(
+                        "Não foi possível iniciar o login com Google.",
+                        "error"
+                    );
+
+                    googleLoginButton.disabled =
+                        false;
+
+                    googleLoginButton.textContent =
+                        "Continuar com Google";
+                }
+
+            } catch (error) {
+                console.error(
+                    "Erro inesperado:",
+                    error
+                );
+
+                showMessage(
+                    "Ocorreu um erro ao iniciar o login com Google.",
+                    "error"
+                );
+
+                googleLoginButton.disabled =
+                    false;
+
+                googleLoginButton.textContent =
+                    "Continuar com Google";
             }
         }
     );
