@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Entrar - Fluffy Community</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: Arial, sans-serif;
+        background: #f5f5f5;
+        color: #222;
+    }
+
+    .login-container {
+        width: 100%;
+        max-width: 420px;
+        padding: 30px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        margin-top: 0;
+        margin-bottom: 8px;
+        text-align: center;
+    }
+
+    .subtitle {
+        margin-top: 0;
+        margin-bottom: 25px;
+        text-align: center;
+        color: #666;
+    }
+
+    .form-group {
+        margin-bottom: 18px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 7px;
+        font-weight: bold;
+    }
+
+    input {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 7px;
+        font-size: 16px;
+        outline: none;
+    }
+
+    input:focus {
+        border-color: #666;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 7px;
+        background: #222;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #444;
+    }
+
+    button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    #message {
+        display: none;
+        margin-bottom: 18px;
+        padding: 10px;
+        border-radius: 7px;
+        text-align: center;
+    }
+
+    .links {
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    .links a {
+        color: #222;
+        text-decoration: none;
+    }
+
+    .links a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+
+<body>
+
+<main class="login-container">
+
+    <h1>Entrar</h1>
+
+    <p class="subtitle">
+        Entre na sua conta Fluffy Account
+    </p>
+
+    <div id="message"></div>
+
+    <form id="loginForm">
+
+        <div class="form-group">
+            <label for="email">E-mail</label>
+
+            <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="seu@email.com"
+                autocomplete="email"
+                required
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="password">Senha</label>
+
+            <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Sua senha"
+                autocomplete="current-password"
+                required
+            >
+        </div>
+
+        <button
+            type="submit"
+            id="loginButton"
+        >
+            Entrar
+        </button>
+
+    </form>
+
+    <div class="links">
+        <p>
+            Ainda não possui uma conta?
+            <a href="register.html">Criar conta</a>
+        </p>
+
+        <p>
+            <a href="index.html">Voltar para a comunidade</a>
+        </p>
+    </div>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+    const SUPABASE_URL =
+        "https://wnihobtfpmabgfwoddye.supabase.co";
+
+    const SUPABASE_KEY =
+        "sb_publishable_Y-S1kbAXQE-Y4j-seMaHrQ_u_vUoTFF";
+
+    const supabaseClient =
+        window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
+
+    const loginForm =
+        document.getElementById("loginForm");
+
+    const emailInput =
+        document.getElementById("email");
+
+    const passwordInput =
+        document.getElementById("password");
+
+    const loginButton =
+        document.getElementById("loginButton");
+
+    const message =
+        document.getElementById("message");
+
+    function showMessage(text, type) {
+        message.textContent = text;
+        message.style.display = "block";
+
+        if (type === "success") {
+            message.style.backgroundColor = "#dcfce7";
+            message.style.color = "#166534";
+        } else {
+            message.style.backgroundColor = "#fee2e2";
+            message.style.color = "#991b1b";
+        }
+    }
+
+    loginForm.addEventListener(
+        "submit",
+        async function (event) {
+            event.preventDefault();
+
+            const email =
+                emailInput.value.trim();
+
+            const password =
+                passwordInput.value;
+
+            if (!email || !password) {
+                showMessage(
+                    "Preencha todos os campos.",
+                    "error"
+                );
+
+                return;
+            }
+
+            loginButton.disabled = true;
+            loginButton.textContent =
+                "Entrando...";
+
+            message.style.display = "none";
+
+            try {
+                const { data, error } =
+                    await supabaseClient.auth.signInWithPassword({
+                        email: email,
+                        password: password
+                    });
+
+                if (error) {
+                    console.error(
+                        "Erro no login:",
+                        error
+                    );
+
+                    if (
+                        error.message
+                            .toLowerCase()
+                            .includes("invalid login credentials")
+                    ) {
+                        showMessage(
+                            "E-mail ou senha incorretos.",
+                            "error"
+                        );
+                    } else {
+                        showMessage(
+                            error.message,
+                            "error"
+                        );
+                    }
+
+                    return;
+                }
+
+                if (!data.session) {
+                    showMessage(
+                        "Login realizado, mas nenhuma sessão foi criada.",
+                        "error"
+                    );
+
+                    return;
+                }
+
+                showMessage(
+                    "Login realizado com sucesso!",
+                    "success"
+                );
+
+                setTimeout(
+                    function () {
+                        window.location.href =
+                            "index.html";
+                    },
+                    800
+                );
+
+            } catch (error) {
+                console.error(
+                    "Erro inesperado no login:",
+                    error
+                );
+
+                showMessage(
+                    "Ocorreu um erro ao tentar entrar.",
+                    "error"
+                );
+
+            } finally {
+                loginButton.disabled = false;
+                loginButton.textContent =
+                    "Entrar";
+            }
+        }
+    );
+</script>
+
+</body>
+</html>
