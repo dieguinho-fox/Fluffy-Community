@@ -1,29 +1,400 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Fluffy Community</title>
+```
+<title>Fluffy Community</title>
 
-    <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+    .announcement-container {
+        width: 100%;
+        max-width: 900px;
+        margin: 0 auto 25px;
+        padding: 0 20px;
+    }
+
+    .announcement {
+        display: none;
+
+        padding: 16px 18px;
+        margin-bottom: 12px;
+
+        border-radius: 14px;
+
+        border: 1px solid transparent;
+
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+    }
+
+    .announcement.low {
+        background: #eaf8ee;
+        border-color: #b8e6c5;
+        color: #176b32;
+    }
+
+    .announcement.medium {
+        background: #fff8df;
+        border-color: #f0d875;
+        color: #745900;
+    }
+
+    .announcement.high {
+        background: #fff0f0;
+        border-color: #efb2b2;
+        color: #9b1c1c;
+    }
+
+    .announcement-title {
+        margin: 0 0 6px;
+
+        font-size: 17px;
+        font-weight: bold;
+    }
+
+    .announcement-message {
+        margin: 0;
+
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+    .announcement-date {
+        margin-top: 8px;
+
+        font-size: 11px;
+        opacity: 0.7;
+    }
+
+    .account-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+
+        margin-top: 25px;
+        flex-wrap: wrap;
+    }
+
+    .account-button {
+        display: inline-block;
+
+        padding: 11px 20px;
+
+        border-radius: 10px;
+
+        text-decoration: none;
+
+        font-weight: bold;
+    }
+
+    .login-button {
+        background: #7c5cff;
+        color: white;
+    }
+
+    .register-button {
+        background: #eeeeee;
+        color: #333333;
+    }
+
+    .login-button:hover {
+        opacity: 0.9;
+    }
+
+    .register-button:hover {
+        background: #e2e2e2;
+    }
+</style>
+```
+
 </head>
 
 <body>
 
-    <header>
-        <h1>Fluffy Community</h1>
-        <p>A comunidade oficial da Fluffy Studios</p>
-    </header>
+```
+<header>
+    <h1>Fluffy Community</h1>
 
-    <main>
-        <h2>Bem-vindo!</h2>
-        <p>
-            Aqui você poderá encontrar nossos jogos,
-            notícias e, futuramente, os fóruns da comunidade.
-        </p>
-    </main>
+    <p>
+        A comunidade oficial da Fluffy Studios
+    </p>
 
-    <script src="script.js"></script>
+    <div class="account-buttons">
+
+        <a
+            class="account-button login-button"
+            href="login.html"
+        >
+            Entrar
+        </a>
+
+        <a
+            class="account-button register-button"
+            href="register.html"
+        >
+            Criar conta
+        </a>
+
+    </div>
+</header>
+
+
+<!-- AVISOS DO FLUFFY ACCOUNT -->
+
+<div
+    id="announcementContainer"
+    class="announcement-container"
+></div>
+
+
+<main>
+
+    <h2>Bem-vindo!</h2>
+
+    <p>
+        Aqui você poderá encontrar nossos jogos,
+        notícias e, futuramente, os fóruns da comunidade.
+    </p>
+
+</main>
+
+
+<script>
+
+    /*
+     * CONFIGURAÇÃO DO SUPABASE
+     */
+
+    const SUPABASE_URL =
+        "https://wnihobtfpmabgfwoddye.supabase.co";
+
+    const SUPABASE_PUBLISHABLE_KEY =
+        "sb_publishable_Y-S1kbAXQE-Y4j-seMaHrQ_u_vUoTFF";
+
+
+    const supabaseClient =
+        window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_PUBLISHABLE_KEY
+        );
+
+
+    /*
+     * ELEMENTOS
+     */
+
+    const announcementContainer =
+        document.getElementById(
+            "announcementContainer"
+        );
+
+
+    /*
+     * CARREGAR AVISOS
+     */
+
+    async function loadAnnouncements() {
+
+        try {
+
+            const {
+                data,
+                error
+            } = await supabaseClient
+                .from("announcements")
+                .select(
+                    "id, title, message, priority, created_at, expires_at"
+                )
+                .eq("active", true)
+                .order(
+                    "created_at",
+                    {
+                        ascending: false
+                    }
+                );
+
+
+            if (error) {
+
+                console.error(
+                    "Erro ao carregar avisos:",
+                    error
+                );
+
+                return;
+            }
+
+
+            /*
+             * LIMPAR AVISOS EXISTENTES
+             */
+
+            announcementContainer.innerHTML = "";
+
+
+            /*
+             * FILTRAR AVISOS EXPIRADOS
+             */
+
+            const now = new Date();
+
+            const activeAnnouncements =
+                data.filter(function(announcement) {
+
+                    if (!announcement.expires_at) {
+                        return true;
+                    }
+
+                    return (
+                        new Date(
+                            announcement.expires_at
+                        ) > now
+                    );
+
+                });
+
+
+            /*
+             * NENHUM AVISO
+             */
+
+            if (
+                activeAnnouncements.length === 0
+            ) {
+
+                announcementContainer.style.display =
+                    "none";
+
+                return;
+            }
+
+
+            announcementContainer.style.display =
+                "block";
+
+
+            /*
+             * MOSTRAR AVISOS
+             */
+
+            activeAnnouncements.forEach(
+                function(announcement) {
+
+                    const box =
+                        document.createElement(
+                            "div"
+                        );
+
+                    box.className =
+                        "announcement " +
+                        announcement.priority;
+
+
+                    const title =
+                        document.createElement(
+                            "h3"
+                        );
+
+                    title.className =
+                        "announcement-title";
+
+
+                    const icon =
+                        announcement.priority === "high"
+                            ? "🔴"
+                            : announcement.priority === "medium"
+                                ? "🟡"
+                                : "🟢";
+
+
+                    title.textContent =
+                        icon +
+                        " " +
+                        announcement.title;
+
+
+                    const message =
+                        document.createElement(
+                            "p"
+                        );
+
+                    message.className =
+                        "announcement-message";
+
+                    message.textContent =
+                        announcement.message;
+
+
+                    box.appendChild(title);
+
+                    box.appendChild(message);
+
+
+                    /*
+                     * DATA DO AVISO
+                     */
+
+                    if (
+                        announcement.created_at
+                    ) {
+
+                        const date =
+                            document.createElement(
+                                "div"
+                            );
+
+                        date.className =
+                            "announcement-date";
+
+                        const createdDate =
+                            new Date(
+                                announcement.created_at
+                            );
+
+
+                        date.textContent =
+                            "Publicado em " +
+                            createdDate.toLocaleDateString(
+                                "pt-BR"
+                            );
+
+
+                        box.appendChild(date);
+                    }
+
+
+                    announcementContainer
+                        .appendChild(box);
+
+                }
+            );
+
+        } catch (error) {
+
+            console.error(
+                "Erro inesperado ao carregar avisos:",
+                error
+            );
+
+        }
+
+    }
+
+
+    /*
+     * INICIAR
+     */
+
+    loadAnnouncements();
+
+</script>
+```
+
 </body>
 </html>
