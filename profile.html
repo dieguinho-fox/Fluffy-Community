@@ -1,183 +1,228 @@
 <!DOCTYPE html>
-
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Perfil - Fluffy Community</title>
+    <title>Perfil - Fluffy Community</title>
 
-<style>
-    * {
-        box-sizing: border-box;
-    }
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background: #f4f4f4;
-        color: #222;
-    }
+    <style>
+        * {
+            box-sizing: border-box;
+        }
 
-    header {
-        background: #ffffff;
-        border-bottom: 1px solid #ddd;
-        padding: 15px 25px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f4f8;
+            color: #222;
+        }
 
-    header h1 {
-        margin: 0;
-        font-size: 22px;
-    }
+        header {
+            background: #6c4cff;
+            color: white;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
 
-    nav {
-        display: flex;
-        gap: 15px;
-    }
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
 
-    nav a {
-        text-decoration: none;
-        color: #333;
-        font-weight: bold;
-    }
+        nav {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
 
-    .container {
-        max-width: 900px;
-        margin: 30px auto;
-        padding: 0 20px;
-    }
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
 
-    .profile-card {
-        background: white;
-        border-radius: 15px;
-        padding: 25px;
-        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
-    }
+        nav a:hover {
+            text-decoration: underline;
+        }
 
-    .profile-header {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-        margin-bottom: 25px;
-    }
+        main {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 16px;
+        }
 
-    .avatar {
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
-        object-fit: cover;
-        background: #ddd;
-    }
+        .profile-card {
+            background: white;
+            border-radius: 18px;
+            padding: 30px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+            margin-bottom: 25px;
+        }
 
-    .profile-info h2 {
-        margin: 0 0 8px;
-        font-size: 28px;
-    }
-
-    .profile-info p {
-        margin: 5px 0;
-        color: #666;
-    }
-
-    .bio {
-        margin-top: 15px;
-        color: #444;
-        white-space: pre-wrap;
-    }
-
-    .section-title {
-        margin-top: 30px;
-        margin-bottom: 15px;
-        font-size: 22px;
-    }
-
-    .game-title {
-        font-size: 20px;
-        font-weight: bold;
-        margin: 15px 0;
-    }
-
-    .achievements {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-    }
-
-    .achievement {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        background: #f8f8f8;
-        border: 1px solid #e2e2e2;
-        border-radius: 12px;
-        padding: 12px;
-    }
-
-    .achievement-icon {
-        width: 70px;
-        height: 70px;
-        object-fit: contain;
-        flex-shrink: 0;
-    }
-
-    .achievement-content {
-        flex: 1;
-    }
-
-    .achievement-name {
-        font-size: 17px;
-        font-weight: bold;
-        margin-bottom: 5px;
-    }
-
-    .achievement-description {
-        color: #555;
-        line-height: 1.4;
-    }
-
-    .achievement-secret {
-        display: inline-block;
-        margin-top: 7px;
-        padding: 3px 7px;
-        border-radius: 5px;
-        background: #333;
-        color: white;
-        font-size: 11px;
-        font-weight: bold;
-    }
-
-    .empty {
-        color: #777;
-        padding: 15px 0;
-    }
-
-    .error {
-        background: #ffe5e5;
-        color: #b00000;
-        border-radius: 10px;
-        padding: 15px;
-    }
-
-    @media (max-width: 600px) {
         .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 22px;
+            flex-wrap: wrap;
+        }
+
+        .avatar {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: #ddd;
+            border: 4px solid #6c4cff;
+        }
+
+        .profile-info h2 {
+            margin: 0 0 8px;
+            font-size: 30px;
+        }
+
+        .profile-info p {
+            margin: 5px 0;
+            color: #666;
+        }
+
+        .bio {
+            margin-top: 25px;
+            padding: 18px;
+            border-radius: 12px;
+            background: #f5f3ff;
+            white-space: pre-wrap;
+        }
+
+        .section {
+            background: white;
+            border-radius: 18px;
+            padding: 25px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+            margin-bottom: 25px;
+        }
+
+        .section h2 {
+            margin-top: 0;
+        }
+
+        .achievements-list {
+            display: flex;
             flex-direction: column;
-            text-align: center;
+            gap: 15px;
         }
 
         .achievement {
-            align-items: flex-start;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding: 15px;
+            border-radius: 14px;
+            background: #f7f7fa;
+            border: 1px solid #e5e5e5;
         }
 
         .achievement-icon {
-            width: 60px;
-            height: 60px;
+            width: 70px;
+            height: 70px;
+            object-fit: contain;
+            flex-shrink: 0;
         }
-    }
-</style>
 
+        .achievement-info {
+            flex: 1;
+        }
+
+        .achievement-info h3 {
+            margin: 0 0 6px;
+        }
+
+        .achievement-info p {
+            margin: 0;
+            color: #666;
+        }
+
+        .secret-label {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 4px 8px;
+            border-radius: 6px;
+            background: #6c4cff;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .sync-container {
+            margin-top: 20px;
+        }
+
+        #syncAchievementsButton {
+            display: none;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 18px;
+            background: #6c4cff;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        #syncAchievementsButton:hover {
+            background: #5638e6;
+        }
+
+        #syncAchievementsButton:disabled {
+            background: #aaa;
+            cursor: not-allowed;
+        }
+
+        #syncStatus {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .loading,
+        .error,
+        .empty {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+        }
+
+        .error {
+            color: #c62828;
+        }
+
+        @media (max-width: 600px) {
+            .profile-card,
+            .section {
+                padding: 20px;
+            }
+
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .achievement {
+                align-items: flex-start;
+            }
+
+            .achievement-icon {
+                width: 55px;
+                height: 55px;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -185,371 +230,733 @@
 <header>
     <h1>Fluffy Community</h1>
 
-<nav>
-    <a href="index.html">Início</a>
-    <a id="authLink" href="login.html">Entrar</a>
-</nav>
-
+    <nav>
+        <a href="index.html">Início</a>
+        <a id="accountLink" href="login.html">Entrar</a>
+    </nav>
 </header>
 
-<div class="container">
+<main>
 
-<div id="error" class="error" style="display: none;"></div>
-
-<div id="profileCard" class="profile-card" style="display: none;">
-
-    <div class="profile-header">
-        <img id="avatar" class="avatar" alt="Avatar">
-
-        <div class="profile-info">
-            <h2 id="username">Usuário</h2>
-            <p id="createdAt"></p>
-            <div id="bio" class="bio"></div>
-        </div>
+    <div id="loading" class="loading">
+        Carregando perfil...
     </div>
 
-    <h3 class="section-title">Conquistas</h3>
+    <div id="error" class="error" style="display: none;"></div>
 
-    <div class="game-title">Fluffy Adventure</div>
+    <div id="profileContent" style="display: none;">
 
-    <div id="achievements" class="achievements"></div>
+        <section class="profile-card">
 
-</div>
+            <div class="profile-header">
 
-</div>
+                <img
+                    id="avatar"
+                    class="avatar"
+                    src=""
+                    alt="Foto de perfil"
+                >
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+                <div class="profile-info">
+                    <h2 id="username">Usuário</h2>
+
+                    <p>
+                        Conta criada em:
+                        <span id="createdAt">-</span>
+                    </p>
+                </div>
+
+            </div>
+
+            <div
+                id="bio"
+                class="bio"
+                style="display: none;"
+            ></div>
+
+            <div class="sync-container">
+
+                <button
+                    id="syncAchievementsButton"
+                    type="button"
+                >
+                    🔄 Sincronizar conquistas
+                </button>
+
+                <div id="syncStatus"></div>
+
+            </div>
+
+        </section>
+
+        <section class="section">
+
+            <h2>🎮 Jogos</h2>
+
+            <div id="games">
+                <div class="empty">
+                    Fluffy Adventure
+                </div>
+            </div>
+
+        </section>
+
+        <section class="section">
+
+            <h2>🏆 Conquistas</h2>
+
+            <div
+                id="achievements"
+                class="achievements-list"
+            ></div>
+
+        </section>
+
+        <section class="section">
+
+            <h2>📋 Atividade</h2>
+
+            <div class="empty">
+                Nenhuma atividade disponível.
+            </div>
+
+        </section>
+
+    </div>
+
+</main>
 
 <script>
-const SUPABASE_URL = "https://wnihobtfpmabgfwoddye.supabase.co";
+    const SUPABASE_URL = "https://wnihobtfpmabgfwoddye.supabase.co";
 
-const SUPABASE_KEY =
-    "sb_publishable_Y-S1kbAXQE-Y4j-seMaHrQ_u_vUoTFF";
+    const SUPABASE_ANON_KEY =
+        "sb_publishable_Y-S1kbAXQE-Y4j-seMaHrQ_u_vUoTFF";
 
-const supabaseClient = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-);
+    const ACHIEVEMENTS_JSON_URL =
+        "https://raw.githubusercontent.com/dieguinho-fox/Fluffy-Adventure/main/Conquistas/achievements.json";
 
-const ACHIEVEMENTS_JSON_URL =
-    "https://raw.githubusercontent.com/dieguinho-fox/Fluffy-Adventure/main/Conquistas/achievements.json";
+    const ACHIEVEMENTS_BASE_URL =
+        "https://raw.githubusercontent.com/dieguinho-fox/Fluffy-Adventure/main/";
 
-const ACHIEVEMENTS_BASE_URL =
-    "https://raw.githubusercontent.com/dieguinho-fox/Fluffy-Adventure/main/";
+    const SAVE_BUCKET = "saves";
 
-const DEFAULT_AVATAR =
-    "https://ui-avatars.com/api/?name=Fluffy&background=random";
-
-const CURRENT_LANGUAGE = "pt_BR";
-
-const params = new URLSearchParams(window.location.search);
-const profileId = params.get("id");
-
-const profileCard = document.getElementById("profileCard");
-const errorElement = document.getElementById("error");
-const avatarElement = document.getElementById("avatar");
-const usernameElement = document.getElementById("username");
-const createdAtElement = document.getElementById("createdAt");
-const bioElement = document.getElementById("bio");
-const achievementsElement = document.getElementById("achievements");
-const authLink = document.getElementById("authLink");
-
-
-function showError(message) {
-    errorElement.textContent = message;
-    errorElement.style.display = "block";
-    profileCard.style.display = "none";
-}
-
-
-function getLocalizedText(value) {
-    if (!value || typeof value !== "object") {
-        return "";
-    }
-
-    if (value[CURRENT_LANGUAGE]) {
-        return value[CURRENT_LANGUAGE];
-    }
-
-    if (value.pt) {
-        return value.pt;
-    }
-
-    if (value.en) {
-        return value.en;
-    }
-
-    const firstKey = Object.keys(value)[0];
-
-    if (firstKey) {
-        return value[firstKey];
-    }
-
-    return "";
-}
-
-
-function convertIconPath(iconPath) {
-    if (!iconPath) {
-        return "";
-    }
-
-    let path = iconPath;
-
-    if (path.startsWith("res://")) {
-        path = path.substring(6);
-    }
-
-    const parts = path.split("/");
-
-    const encodedParts = parts.map(
-        part => encodeURIComponent(part)
+    const supabaseClient = supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
     );
 
-    return ACHIEVEMENTS_BASE_URL + encodedParts.join("/");
-}
+    const loadingElement = document.getElementById("loading");
+    const errorElement = document.getElementById("error");
+    const profileContent = document.getElementById("profileContent");
 
+    const avatarElement = document.getElementById("avatar");
+    const usernameElement = document.getElementById("username");
+    const createdAtElement = document.getElementById("createdAt");
+    const bioElement = document.getElementById("bio");
 
-function formatDate(dateString) {
-    if (!dateString) {
-        return "";
+    const achievementsElement =
+        document.getElementById("achievements");
+
+    const syncButton =
+        document.getElementById("syncAchievementsButton");
+
+    const syncStatus =
+        document.getElementById("syncStatus");
+
+    const accountLink =
+        document.getElementById("accountLink");
+
+    let currentProfile = null;
+    let currentSession = null;
+    let achievementsData = {};
+
+    function showError(message) {
+        loadingElement.style.display = "none";
+        profileContent.style.display = "none";
+
+        errorElement.textContent = message;
+        errorElement.style.display = "block";
     }
 
-    const date = new Date(dateString);
-
-    if (isNaN(date.getTime())) {
-        return "";
-    }
-
-    return "Conta criada em " +
-        date.toLocaleDateString("pt-BR");
-}
-
-
-function getAchievementCatalogEntry(catalog, achievementId) {
-    if (!catalog || typeof catalog !== "object") {
-        return null;
-    }
-
-    return catalog[achievementId] || null;
-}
-
-
-function renderAchievements(unlockedIds, catalog) {
-    achievementsElement.innerHTML = "";
-
-    if (!Array.isArray(unlockedIds) || unlockedIds.length === 0) {
-        achievementsElement.innerHTML =
-            '<div class="empty">Nenhuma conquista desbloqueada.</div>';
-
-        return;
-    }
-
-    let displayedCount = 0;
-
-    for (const achievementId of unlockedIds) {
-
-        const achievement =
-            getAchievementCatalogEntry(
-                catalog,
-                achievementId
-            );
-
-        if (!achievement) {
-            continue;
+    function formatDate(dateString) {
+        if (!dateString) {
+            return "-";
         }
 
-        const secret = achievement.secret === true;
+        const date = new Date(dateString);
 
-        const name =
-            getLocalizedText(achievement.name);
-
-        const description =
-            getLocalizedText(achievement.description);
-
-        const iconUrl =
-            convertIconPath(achievement.icon);
-
-        const article =
-            document.createElement("article");
-
-        article.className = "achievement";
-
-        const icon =
-            document.createElement("img");
-
-        icon.className = "achievement-icon";
-
-        icon.src = iconUrl;
-
-        icon.alt = name || "Conquista";
-
-        icon.onerror = function () {
-            this.src = DEFAULT_AVATAR;
-        };
-
-        const content =
-            document.createElement("div");
-
-        content.className = "achievement-content";
-
-        const achievementName =
-            document.createElement("div");
-
-        achievementName.className =
-            "achievement-name";
-
-        achievementName.textContent =
-            name || achievementId;
-
-        const achievementDescription =
-            document.createElement("div");
-
-        achievementDescription.className =
-            "achievement-description";
-
-        achievementDescription.textContent =
-            description || "";
-
-        content.appendChild(achievementName);
-        content.appendChild(achievementDescription);
-
-        if (secret) {
-            const secretBadge =
-                document.createElement("span");
-
-            secretBadge.className =
-                "achievement-secret";
-
-            secretBadge.textContent =
-                "SECRETA";
-
-            content.appendChild(secretBadge);
+        if (Number.isNaN(date.getTime())) {
+            return "-";
         }
 
-        article.appendChild(icon);
-        article.appendChild(content);
-
-        achievementsElement.appendChild(article);
-
-        displayedCount++;
+        return date.toLocaleDateString("pt-BR", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric"
+        });
     }
 
-    if (displayedCount === 0) {
-        achievementsElement.innerHTML =
-            '<div class="empty">Nenhuma conquista desbloqueada.</div>';
-    }
-}
+    function buildIconUrl(iconPath) {
+        if (!iconPath) {
+            return "";
+        }
 
+        let cleanPath = iconPath;
 
-async function updateAuthLink() {
-    const {
-        data: { session }
-    } = await supabaseClient.auth.getSession();
+        cleanPath = cleanPath.replace(/^res:\/\//, "");
+        cleanPath = cleanPath.replace(/^\/+/, "");
 
-    if (session && session.user) {
-        authLink.textContent = "Minha conta";
-        authLink.href = "index.html";
-    } else {
-        authLink.textContent = "Entrar";
-        authLink.href = "login.html";
-    }
-}
+        const encodedPath = cleanPath
+            .split("/")
+            .map(segment => encodeURIComponent(segment))
+            .join("/");
 
-
-async function loadProfile() {
-
-    if (!profileId) {
-        showError(
-            "Nenhum perfil foi especificado."
-        );
-
-        return;
+        return ACHIEVEMENTS_BASE_URL + encodedPath;
     }
 
-    const {
-        data: profile,
-        error: profileError
-    } = await supabaseClient
-        .from("profiles")
-        .select(
-            "id, username, created_at, avatar_url, bio, achievements"
-        )
-        .eq("id", profileId)
-        .single();
+    function normalizeAchievementIds(value) {
+        if (!Array.isArray(value)) {
+            return [];
+        }
 
-    if (profileError || !profile) {
-        console.error(profileError);
-
-        showError(
-            "Não foi possível encontrar este perfil."
-        );
-
-        return;
+        return value
+            .map(id => String(id))
+            .filter(id => id.length > 0);
     }
 
-    let catalog;
-
-    try {
-        const response =
-            await fetch(ACHIEVEMENTS_JSON_URL);
+    async function loadAchievementsData() {
+        const response = await fetch(ACHIEVEMENTS_JSON_URL, {
+            cache: "no-cache"
+        });
 
         if (!response.ok) {
             throw new Error(
-                "HTTP " + response.status
+                "Não foi possível carregar o catálogo de conquistas."
             );
         }
 
-        catalog = await response.json();
+        const data = await response.json();
 
-    } catch (error) {
+        if (!data || typeof data !== "object" || Array.isArray(data)) {
+            throw new Error(
+                "O arquivo achievements.json possui formato inválido."
+            );
+        }
 
-        console.error(
-            "Erro ao carregar conquistas:",
-            error
-        );
-
-        showError(
-            "Não foi possível carregar as conquistas."
-        );
-
-        return;
+        achievementsData = data;
     }
 
-    usernameElement.textContent =
-        profile.username || "Usuário";
+    function getLocalizedText(value) {
+        if (!value || typeof value !== "object") {
+            return "";
+        }
 
-    createdAtElement.textContent =
-        formatDate(profile.created_at);
+        const languages = [
+            "pt_BR",
+            "pt-BR",
+            "en_US",
+            "en-US",
+            "es_ES",
+            "es",
+            "ja_JP",
+            "ja"
+        ];
 
-    bioElement.textContent =
-        profile.bio || "";
+        for (const language of languages) {
+            if (
+                Object.prototype.hasOwnProperty.call(
+                    value,
+                    language
+                )
+            ) {
+                return value[language];
+            }
+        }
 
-    avatarElement.src =
-        profile.avatar_url || DEFAULT_AVATAR;
+        const keys = Object.keys(value);
 
-    avatarElement.onerror = function () {
-        this.src = DEFAULT_AVATAR;
-    };
+        if (keys.length > 0) {
+            return value[keys[0]];
+        }
 
-    renderAchievements(
-        profile.achievements,
-        catalog
+        return "";
+    }
+
+    function renderAchievements(unlockedIds) {
+        achievementsElement.innerHTML = "";
+
+        const unlockedSet = new Set(
+            normalizeAchievementIds(unlockedIds)
+        );
+
+        const achievementIds = Object.keys(achievementsData);
+
+        if (achievementIds.length === 0) {
+            achievementsElement.innerHTML =
+                '<div class="empty">Nenhuma conquista disponível.</div>';
+
+            return;
+        }
+
+        let renderedCount = 0;
+
+        for (const id of achievementIds) {
+
+            const achievement =
+                achievementsData[id];
+
+            if (
+                !achievement ||
+                typeof achievement !== "object"
+            ) {
+                continue;
+            }
+
+            const unlocked = unlockedSet.has(id);
+            const secret = achievement.secret === true;
+
+            if (!unlocked && secret) {
+                continue;
+            }
+
+            const card =
+                document.createElement("div");
+
+            card.className = "achievement";
+
+            const icon =
+                document.createElement("img");
+
+            icon.className = "achievement-icon";
+
+            if (unlocked && achievement.icon) {
+                icon.src =
+                    buildIconUrl(achievement.icon);
+            } else {
+                icon.src =
+                    buildIconUrl(
+                        "res://Conquistas/Ícones/bloqueado.png"
+                    );
+            }
+
+            icon.alt = "";
+
+            const info =
+                document.createElement("div");
+
+            info.className = "achievement-info";
+
+            const title =
+                document.createElement("h3");
+
+            const description =
+                document.createElement("p");
+
+            if (unlocked) {
+
+                title.textContent =
+                    getLocalizedText(
+                        achievement.name
+                    ) || id;
+
+                description.textContent =
+                    getLocalizedText(
+                        achievement.description
+                    );
+
+            } else {
+
+                title.textContent = "???";
+                description.textContent = "???";
+            }
+
+            info.appendChild(title);
+            info.appendChild(description);
+
+            if (secret) {
+                const secretLabel =
+                    document.createElement("span");
+
+                secretLabel.className =
+                    "secret-label";
+
+                secretLabel.textContent =
+                    "SECRETA";
+
+                info.appendChild(secretLabel);
+            }
+
+            card.appendChild(icon);
+            card.appendChild(info);
+
+            achievementsElement.appendChild(card);
+
+            renderedCount++;
+        }
+
+        if (renderedCount === 0) {
+            achievementsElement.innerHTML =
+                '<div class="empty">Nenhuma conquista desbloqueada.</div>';
+        }
+    }
+
+    async function loadProfile(profileId) {
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+            .from("profiles")
+            .select(
+                "id, username, created_at, avatar_url, bio, achievements"
+            )
+            .eq("id", profileId)
+            .maybeSingle();
+
+        if (error) {
+            throw error;
+        }
+
+        if (!data) {
+            throw new Error(
+                "Perfil não encontrado."
+            );
+        }
+
+        currentProfile = data;
+
+        usernameElement.textContent =
+            data.username || "FluffyPlayer";
+
+        createdAtElement.textContent =
+            formatDate(data.created_at);
+
+        if (data.avatar_url) {
+            avatarElement.src =
+                data.avatar_url;
+        } else {
+            avatarElement.src =
+                "https://ui-avatars.com/api/?name=" +
+                encodeURIComponent(
+                    data.username || "FluffyPlayer"
+                ) +
+                "&background=6c4cff&color=fff&size=220";
+        }
+
+        if (
+            data.bio &&
+            String(data.bio).trim() !== ""
+        ) {
+            bioElement.textContent = data.bio;
+            bioElement.style.display = "block";
+        } else {
+            bioElement.style.display = "none";
+        }
+
+        renderAchievements(
+            normalizeAchievementIds(
+                data.achievements
+            )
+        );
+    }
+
+    async function updateAccountNavigation() {
+
+        const {
+            data
+        } = await supabaseClient.auth.getSession();
+
+        currentSession =
+            data ? data.session : null;
+
+        if (currentSession) {
+            accountLink.textContent =
+                "Minha conta";
+
+            accountLink.href =
+                "index.html";
+        } else {
+            accountLink.textContent =
+                "Entrar";
+
+            accountLink.href =
+                "login.html";
+        }
+    }
+
+    async function checkProfileOwner() {
+
+        if (!currentProfile) {
+            syncButton.style.display = "none";
+            return;
+        }
+
+        if (!currentSession) {
+            syncButton.style.display = "none";
+            return;
+        }
+
+        if (
+            currentSession.user.id !==
+            currentProfile.id
+        ) {
+            syncButton.style.display = "none";
+            return;
+        }
+
+        syncButton.style.display = "inline-block";
+    }
+
+    async function synchronizeAchievements() {
+
+        if (!currentSession) {
+            syncStatus.textContent =
+                "Você precisa estar conectado para sincronizar.";
+
+            return;
+        }
+
+        if (!currentProfile) {
+            syncStatus.textContent =
+                "Perfil inválido.";
+
+            return;
+        }
+
+        if (
+            currentSession.user.id !==
+            currentProfile.id
+        ) {
+            syncStatus.textContent =
+                "Você só pode sincronizar suas próprias conquistas.";
+
+            return;
+        }
+
+        syncButton.disabled = true;
+
+        syncStatus.textContent =
+            "Baixando conquistas salvas...";
+
+        try {
+
+            const userId =
+                currentSession.user.id;
+
+            const filePath =
+                userId + "/achievements.json";
+
+            const {
+                data: signedUrlData,
+                error: signedUrlError
+            } = await supabaseClient.storage
+                .from(SAVE_BUCKET)
+                .createSignedUrl(
+                    filePath,
+                    60
+                );
+
+            if (signedUrlError) {
+                throw signedUrlError;
+            }
+
+            if (
+                !signedUrlData ||
+                !signedUrlData.signedUrl
+            ) {
+                throw new Error(
+                    "Não foi possível gerar o link do arquivo."
+                );
+            }
+
+            syncStatus.textContent =
+                "Lendo conquistas...";
+
+            const response =
+                await fetch(
+                    signedUrlData.signedUrl,
+                    {
+                        cache: "no-cache"
+                    }
+                );
+
+            if (!response.ok) {
+
+                if (response.status === 404) {
+                    throw new Error(
+                        "O arquivo achievements.json ainda não foi enviado pelo jogo."
+                    );
+                }
+
+                throw new Error(
+                    "Não foi possível baixar achievements.json."
+                );
+            }
+
+            const json =
+                await response.json();
+
+            let unlockedIds = [];
+
+            if (Array.isArray(json)) {
+
+                unlockedIds =
+                    normalizeAchievementIds(json);
+
+            } else if (
+                json &&
+                typeof json === "object"
+            ) {
+
+                if (
+                    Array.isArray(
+                        json.achievements
+                    )
+                ) {
+                    unlockedIds =
+                        normalizeAchievementIds(
+                            json.achievements
+                        );
+                } else {
+
+                    unlockedIds =
+                        Object.keys(json)
+                            .filter(
+                                id =>
+                                    json[id] === true
+                            );
+                }
+            }
+
+            syncStatus.textContent =
+                "Atualizando perfil...";
+
+            const {
+                error: updateError
+            } = await supabaseClient
+                .from("profiles")
+                .update({
+                    achievements: unlockedIds
+                })
+                .eq(
+                    "id",
+                    userId
+                );
+
+            if (updateError) {
+                throw updateError;
+            }
+
+            currentProfile.achievements =
+                unlockedIds;
+
+            renderAchievements(
+                unlockedIds
+            );
+
+            syncStatus.textContent =
+                "✅ Conquistas sincronizadas com sucesso.";
+
+        } catch (error) {
+
+            console.error(
+                "[Fluffy Community] Erro ao sincronizar conquistas:",
+                error
+            );
+
+            syncStatus.textContent =
+                "❌ " +
+                (
+                    error.message ||
+                    "Não foi possível sincronizar as conquistas."
+                );
+
+        } finally {
+
+            syncButton.disabled = false;
+        }
+    }
+
+    async function initialize() {
+
+        try {
+
+            await updateAccountNavigation();
+
+            const params =
+                new URLSearchParams(
+                    window.location.search
+                );
+
+            const profileId =
+                params.get("id");
+
+            if (!profileId) {
+                throw new Error(
+                    "Nenhum perfil foi especificado."
+                );
+            }
+
+            await loadAchievementsData();
+
+            await loadProfile(
+                profileId
+            );
+
+            await checkProfileOwner();
+
+            loadingElement.style.display =
+                "none";
+
+            profileContent.style.display =
+                "block";
+
+        } catch (error) {
+
+            console.error(
+                "[Fluffy Community] Erro:",
+                error
+            );
+
+            showError(
+                error.message ||
+                "Não foi possível carregar o perfil."
+            );
+        }
+    }
+
+    syncButton.addEventListener(
+        "click",
+        synchronizeAchievements
     );
 
-    profileCard.style.display = "block";
-}
+    supabaseClient.auth.onAuthStateChange(
+        async (_event, session) => {
 
+            currentSession = session;
 
-supabaseClient.auth.onAuthStateChange(
-    (_event, _session) => {
-        updateAuthLink();
-    }
-);
+            if (session) {
 
+                accountLink.textContent =
+                    "Minha conta";
 
-updateAuthLink();
-loadProfile();
+                accountLink.href =
+                    "index.html";
+
+            } else {
+
+                accountLink.textContent =
+                    "Entrar";
+
+                accountLink.href =
+                    "login.html";
+            }
+
+            await checkProfileOwner();
+        }
+    );
+
+    initialize();
 </script>
 
 </body>
