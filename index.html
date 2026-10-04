@@ -2,6 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
+
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
@@ -129,16 +130,16 @@
     <script src="announcements.js"></script>
 
     <script>
-        const SUPABASE_URL =
+        const ACCOUNT_SUPABASE_URL =
             "https://wnihobtfpmabgfwoddye.supabase.co";
 
-        const SUPABASE_KEY =
+        const ACCOUNT_SUPABASE_KEY =
             "sb_publishable_Y-S1kbAXQE-Y4j-seMaHrQ_u_vUoTFF";
 
-        const supabaseClient =
+        const accountSupabase =
             window.supabase.createClient(
-                SUPABASE_URL,
-                SUPABASE_KEY
+                ACCOUNT_SUPABASE_URL,
+                ACCOUNT_SUPABASE_KEY
             );
 
         const accountContainer =
@@ -151,7 +152,7 @@
             try {
 
                 const sessionResult =
-                    await supabaseClient.auth.getSession();
+                    await accountSupabase.auth.getSession();
 
                 const session =
                     sessionResult.data.session;
@@ -182,7 +183,7 @@
                     session.user;
 
                 const profileResult =
-                    await supabaseClient
+                    await accountSupabase
                         .from("profiles")
                         .select(
                             "id, username, created_at, avatar_url, bio"
@@ -440,7 +441,7 @@
         async function logout() {
 
             const result =
-                await supabaseClient.auth.signOut();
+                await accountSupabase.auth.signOut();
 
             if (result.error) {
 
