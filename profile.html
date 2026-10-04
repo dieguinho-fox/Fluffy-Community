@@ -13,57 +13,31 @@
             box-sizing: border-box;
         }
 
+        html,
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f4f4f8;
-            color: #222;
+            padding: 0;
+            min-height: 100%;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #10131a;
+            color: #ffffff;
         }
 
-        header {
-            background: #6c4cff;
-            color: white;
-            padding: 16px 24px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 20px;
-            flex-wrap: wrap;
+        body {
+            padding-bottom: 50px;
         }
 
-        header h1 {
-            margin: 0;
-            font-size: 24px;
-        }
-
-        nav {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-
-        nav a {
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        nav a:hover {
-            text-decoration: underline;
-        }
-
-        main {
-            max-width: 1100px;
+        .container {
+            width: min(1000px, calc(100% - 30px));
             margin: 30px auto;
-            padding: 0 16px;
         }
 
         .profile-card {
-            background: white;
+            background: #181d27;
+            border: 1px solid #293140;
             border-radius: 18px;
-            padding: 30px;
-            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
-            margin-bottom: 25px;
+            padding: 28px;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.25);
         }
 
         .profile-header {
@@ -78,148 +52,193 @@
             height: 110px;
             border-radius: 50%;
             object-fit: cover;
-            background: #ddd;
-            border: 4px solid #6c4cff;
+            background: #252c38;
+            border: 3px solid #3a4353;
         }
 
-        .profile-info h2 {
-            margin: 0 0 8px;
-            font-size: 30px;
+        .profile-info {
+            flex: 1;
+            min-width: 220px;
         }
 
-        .profile-info p {
-            margin: 5px 0;
-            color: #666;
+        .username {
+            margin: 0;
+            font-size: 32px;
+            word-break: break-word;
+        }
+
+        .created {
+            margin-top: 7px;
+            color: #9ca8ba;
+            font-size: 14px;
         }
 
         .bio {
-            margin-top: 25px;
-            padding: 18px;
-            border-radius: 12px;
-            background: #f5f3ff;
+            margin-top: 14px;
+            color: #dce2eb;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .owner-actions {
+            margin-top: 22px;
+            display: none;
+        }
+
+        .sync-button {
+            border: 0;
+            border-radius: 10px;
+            padding: 11px 17px;
+            background: #5865f2;
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+
+        .sync-button:hover {
+            filter: brightness(1.1);
+        }
+
+        .sync-button:disabled {
+            opacity: 0.6;
+            cursor: wait;
+        }
+
+        .sync-status {
+            margin-top: 10px;
+            color: #aeb8c8;
+            font-size: 14px;
             white-space: pre-wrap;
         }
 
         .section {
-            background: white;
+            margin-top: 24px;
+            background: #181d27;
+            border: 1px solid #293140;
             border-radius: 18px;
-            padding: 25px;
-            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
-            margin-bottom: 25px;
+            padding: 24px;
         }
 
-        .section h2 {
-            margin-top: 0;
+        .section-title {
+            margin: 0 0 18px;
+            font-size: 22px;
         }
 
-        .achievements-list {
+        .game-header {
             display: flex;
-            flex-direction: column;
+            align-items: center;
             gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .game-icon {
+            width: 58px;
+            height: 58px;
+            object-fit: contain;
+            border-radius: 12px;
+            background: #252c38;
+        }
+
+        .game-name {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 14px;
         }
 
         .achievement {
             display: flex;
             align-items: center;
-            gap: 18px;
+            gap: 14px;
+            min-height: 100px;
             padding: 15px;
             border-radius: 14px;
-            background: #f7f7fa;
-            border: 1px solid #e5e5e5;
+            background: #202631;
+            border: 1px solid #303948;
         }
 
         .achievement-icon {
-            width: 70px;
-            height: 70px;
+            width: 62px;
+            height: 62px;
             object-fit: contain;
             flex-shrink: 0;
+            border-radius: 10px;
         }
 
         .achievement-info {
-            flex: 1;
+            min-width: 0;
         }
 
-        .achievement-info h3 {
-            margin: 0 0 6px;
-        }
-
-        .achievement-info p {
+        .achievement-name {
             margin: 0;
-            color: #666;
-        }
-
-        .secret-label {
-            display: inline-block;
-            margin-top: 8px;
-            padding: 4px 8px;
-            border-radius: 6px;
-            background: #6c4cff;
-            color: white;
-            font-size: 12px;
+            font-size: 17px;
             font-weight: bold;
+            word-break: break-word;
         }
 
-        .sync-container {
-            margin-top: 20px;
+        .achievement-description {
+            margin: 6px 0 0;
+            color: #aeb8c8;
+            font-size: 13px;
+            line-height: 1.4;
+            word-break: break-word;
         }
 
-        #syncAchievementsButton {
-            display: none;
-            border: none;
-            border-radius: 10px;
-            padding: 12px 18px;
-            background: #6c4cff;
-            color: white;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
+        .achievement-locked {
+            opacity: 0.65;
         }
 
-        #syncAchievementsButton:hover {
-            background: #5638e6;
-        }
-
-        #syncAchievementsButton:disabled {
-            background: #aaa;
-            cursor: not-allowed;
-        }
-
-        #syncStatus {
-            margin-top: 10px;
-            font-size: 14px;
-            color: #666;
-        }
-
-        .loading,
-        .error,
         .empty {
+            color: #9ca8ba;
             text-align: center;
-            padding: 30px;
-            color: #666;
+            padding: 25px 10px;
         }
 
         .error {
-            color: #c62828;
+            color: #ff8f8f;
+            background: #2b1c20;
+            border: 1px solid #603039;
+            padding: 14px;
+            border-radius: 12px;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .loading {
+            color: #aeb8c8;
+            text-align: center;
+            padding: 50px 10px;
         }
 
         @media (max-width: 600px) {
-            .profile-card,
-            .section {
-                padding: 20px;
+            .container {
+                width: min(100% - 18px, 1000px);
+                margin: 12px auto;
             }
 
-            .profile-header {
-                flex-direction: column;
-                text-align: center;
+            .profile-card,
+            .section {
+                padding: 18px;
+                border-radius: 14px;
+            }
+
+            .avatar {
+                width: 85px;
+                height: 85px;
+            }
+
+            .username {
+                font-size: 25px;
             }
 
             .achievement {
-                align-items: flex-start;
-            }
-
-            .achievement-icon {
-                width: 55px;
-                height: 55px;
+                padding: 12px;
             }
         }
     </style>
@@ -227,24 +246,13 @@
 
 <body>
 
-<header>
-    <h1>Fluffy Community</h1>
-
-    <nav>
-        <a href="index.html">Início</a>
-        <a id="accountLink" href="login.html">Entrar</a>
-    </nav>
-</header>
-
-<main>
+<div class="container">
 
     <div id="loading" class="loading">
         Carregando perfil...
     </div>
 
-    <div id="error" class="error" style="display: none;"></div>
-
-    <div id="profileContent" style="display: none;">
+    <div id="content" style="display:none;">
 
         <section class="profile-card">
 
@@ -254,36 +262,33 @@
                     id="avatar"
                     class="avatar"
                     src=""
-                    alt="Foto de perfil"
+                    alt="Avatar"
                 >
 
                 <div class="profile-info">
-                    <h2 id="username">Usuário</h2>
+                    <h1 id="username" class="username"></h1>
 
-                    <p>
-                        Conta criada em:
-                        <span id="createdAt">-</span>
-                    </p>
+                    <div id="created" class="created"></div>
+
+                    <div id="bio" class="bio"></div>
                 </div>
 
             </div>
 
-            <div
-                id="bio"
-                class="bio"
-                style="display: none;"
-            ></div>
-
-            <div class="sync-container">
+            <div id="ownerActions" class="owner-actions">
 
                 <button
-                    id="syncAchievementsButton"
+                    id="syncButton"
+                    class="sync-button"
                     type="button"
                 >
                     🔄 Sincronizar conquistas
                 </button>
 
-                <div id="syncStatus"></div>
+                <div
+                    id="syncStatus"
+                    class="sync-status"
+                ></div>
 
             </div>
 
@@ -291,1291 +296,2177 @@
 
         <section class="section">
 
-            <h2>🎮 Jogos</h2>
+            <h2 class="section-title">
+                Jogos
+            </h2>
 
-            <div id="games">
-                <div class="empty">
+            <div class="game-header">
+
+                <img
+                    id="gameIcon"
+                    class="game-icon"
+                    src="https://raw.githubusercontent.com/dieguinho-fox/Fluffy-Adventure/main/Logos/Aplicativo/icon.png"
+                    alt="Fluffy Adventure"
+                    onerror="this.style.display='none';"
+                >
+
+                <div class="game-name">
                     Fluffy Adventure
                 </div>
+
             </div>
-
-        </section>
-
-        <section class="section">
-
-            <h2>🏆 Conquistas</h2>
 
             <div
                 id="achievements"
-                class="achievements-list"
+                class="achievements-grid"
             ></div>
 
         </section>
 
         <section class="section">
 
-            <h2>📋 Atividade</h2>
+            <h2 class="section-title">
+                Atividade
+            </h2>
 
             <div class="empty">
-                Nenhuma atividade disponível.
+                Nenhuma atividade disponível ainda.
             </div>
 
         </section>
 
     </div>
 
-</main>
+    <div
+        id="error"
+        class="error"
+        style="display:none;"
+    ></div>
+
+</div>
 
 <script>
-    const SUPABASE_URL =
-        "https://wnihobtfpmabgfwoddye.supabase.co";
+"use strict";
 
-    const SUPABASE_ANON_KEY =
-        "sb_publishable_Y-S1kbAXQE-Y4j-seMaHrQ_u_vUoTFF";
+/*
+ * ============================================================
+ * CONFIGURAÇÃO
+ * ============================================================
+ */
 
-    const ACHIEVEMENTS_JSON_URL =
-        "https://raw.githubusercontent.com/dieguinho-fox/Fluffy-Adventure/main/Conquistas/achievements.json";
+const SUPABASE_URL =
+    "https://wnihobtfpmabgfwoddye.supabase.co";
 
-    const ACHIEVEMENTS_BASE_URL =
-        "https://raw.githubusercontent.com/dieguinho-fox/Fluffy-Adventure/main/";
+const SUPABASE_ANON_KEY =
+    "sb_publishable_Y-S1kbAXQE-Y4j-seMaHrQ_u_vUoTFF";
 
-    const SAVE_BUCKET = "saves";
+/*
+ * Este JSON é SOMENTE o catálogo das conquistas.
+ *
+ * Ele contém:
+ * - nome
+ * - descrição
+ * - ícone
+ * - secret
+ *
+ * O progresso real vem de achievements.bin.
+ */
+const ACHIEVEMENTS_JSON_URL =
+    "https://raw.githubusercontent.com/dieguinho-fox/Fluffy-Adventure/main/Conquistas/achievements.json";
 
-    const SAVE_FILE_NAME = "achievements.bin";
+const ACHIEVEMENTS_BASE_URL =
+    "https://raw.githubusercontent.com/dieguinho-fox/Fluffy-Adventure/main/";
 
-    const supabaseClient =
-        supabase.createClient(
-            SUPABASE_URL,
-            SUPABASE_ANON_KEY
-        );
+const SAVE_BUCKET = "saves";
+const SAVE_FILE_NAME = "achievements.bin";
 
-    const loadingElement =
-        document.getElementById("loading");
+const DEFAULT_LANGUAGE = "pt_BR";
 
-    const errorElement =
-        document.getElementById("error");
-
-    const profileContent =
-        document.getElementById("profileContent");
-
-    const avatarElement =
-        document.getElementById("avatar");
-
-    const usernameElement =
-        document.getElementById("username");
-
-    const createdAtElement =
-        document.getElementById("createdAt");
-
-    const bioElement =
-        document.getElementById("bio");
-
-    const achievementsElement =
-        document.getElementById("achievements");
-
-    const syncButton =
-        document.getElementById(
-            "syncAchievementsButton"
-        );
-
-    const syncStatus =
-        document.getElementById("syncStatus");
-
-    const accountLink =
-        document.getElementById("accountLink");
-
-    let currentProfile = null;
-    let currentSession = null;
-    let achievementsData = {};
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+    );
 
 
-    function showError(message) {
-        loadingElement.style.display = "none";
-        profileContent.style.display = "none";
+/*
+ * ============================================================
+ * ELEMENTOS
+ * ============================================================
+ */
 
-        errorElement.textContent = message;
-        errorElement.style.display = "block";
-    }
+const loadingElement =
+    document.getElementById("loading");
 
+const contentElement =
+    document.getElementById("content");
 
-    function formatDate(dateString) {
+const errorElement =
+    document.getElementById("error");
 
-        if (!dateString) {
-            return "-";
-        }
+const avatarElement =
+    document.getElementById("avatar");
 
-        const date =
-            new Date(dateString);
+const usernameElement =
+    document.getElementById("username");
 
-        if (Number.isNaN(date.getTime())) {
-            return "-";
-        }
+const createdElement =
+    document.getElementById("created");
 
-        return date.toLocaleDateString(
-            "pt-BR",
-            {
-                day: "2-digit",
-                month: "2-digit",
-                year: "numeric"
-            }
-        );
-    }
+const bioElement =
+    document.getElementById("bio");
 
+const ownerActionsElement =
+    document.getElementById("ownerActions");
 
-    function buildIconUrl(iconPath) {
+const syncButton =
+    document.getElementById("syncButton");
 
-        if (!iconPath) {
-            return "";
-        }
+const syncStatus =
+    document.getElementById("syncStatus");
 
-        let cleanPath = iconPath;
-
-        cleanPath =
-            cleanPath.replace(
-                /^res:\/\//,
-                ""
-            );
-
-        cleanPath =
-            cleanPath.replace(
-                /^\/+/,
-                ""
-            );
-
-        const encodedPath =
-            cleanPath
-                .split("/")
-                .map(
-                    segment =>
-                        encodeURIComponent(segment)
-                )
-                .join("/");
-
-        return (
-            ACHIEVEMENTS_BASE_URL +
-            encodedPath
-        );
-    }
+const achievementsElement =
+    document.getElementById("achievements");
 
 
-    function normalizeAchievementIds(value) {
+/*
+ * ============================================================
+ * UTILIDADES
+ * ============================================================
+ */
 
-        if (!Array.isArray(value)) {
-            return [];
-        }
+function showError(message) {
+    console.error("[Fluffy Community]", message);
 
-        return value
-            .map(
-                id => String(id)
-            )
-            .filter(
-                id => id.length > 0
-            );
-    }
+    loadingElement.style.display = "none";
+    contentElement.style.display = "none";
 
-
-    async function loadAchievementsData() {
-
-        const response =
-            await fetch(
-                ACHIEVEMENTS_JSON_URL,
-                {
-                    cache: "no-cache"
-                }
-            );
-
-        if (!response.ok) {
-            throw new Error(
-                "Não foi possível carregar o catálogo de conquistas."
-            );
-        }
-
-        const data =
-            await response.json();
-
-        if (
-            !data ||
-            typeof data !== "object" ||
-            Array.isArray(data)
-        ) {
-            throw new Error(
-                "O arquivo achievements.json possui formato inválido."
-            );
-        }
-
-        achievementsData = data;
-    }
+    errorElement.textContent = message;
+    errorElement.style.display = "block";
+}
 
 
-    function getLocalizedText(value) {
+function setSyncStatus(message) {
+    syncStatus.textContent = message;
+}
 
-        if (
-            !value ||
-            typeof value !== "object"
-        ) {
-            return "";
-        }
 
-        const languages = [
-            "pt_BR",
-            "pt-BR",
-            "en_US",
-            "en-US",
-            "es_ES",
-            "es",
-            "ja_JP",
-            "ja"
-        ];
-
-        for (
-            const language of languages
-        ) {
-
-            if (
-                Object.prototype.hasOwnProperty.call(
-                    value,
-                    language
-                )
-            ) {
-                return value[language];
-            }
-        }
-
-        const keys =
-            Object.keys(value);
-
-        if (keys.length > 0) {
-            return value[keys[0]];
-        }
-
+function escapeText(value) {
+    if (value === null || value === undefined) {
         return "";
     }
 
+    return String(value);
+}
 
-    function renderAchievements(
-        unlockedIds
+
+function getProfileIdFromUrl() {
+    const params = new URLSearchParams(
+        window.location.search
+    );
+
+    return params.get("id");
+}
+
+
+function getLocalizedValue(value, language) {
+    if (!value || typeof value !== "object") {
+        return "";
+    }
+
+    if (
+        Object.prototype.hasOwnProperty.call(
+            value,
+            language
+        )
     ) {
+        return value[language];
+    }
 
-        achievementsElement.innerHTML = "";
+    if (
+        Object.prototype.hasOwnProperty.call(
+            value,
+            DEFAULT_LANGUAGE
+        )
+    ) {
+        return value[DEFAULT_LANGUAGE];
+    }
 
-        const unlockedSet =
-            new Set(
-                normalizeAchievementIds(
-                    unlockedIds
-                )
-            );
+    const firstKey = Object.keys(value)[0];
 
-        const achievementIds =
-            Object.keys(
-                achievementsData
-            );
+    if (firstKey) {
+        return value[firstKey];
+    }
+
+    return "";
+}
+
+
+function buildIconUrl(iconPath) {
+    if (!iconPath) {
+        return "";
+    }
+
+    let normalized = String(iconPath);
+
+    /*
+     * O jogo usa caminhos como:
+     * res://Conquistas/Ícones/nome.png
+     *
+     * No GitHub removemos o res://.
+     */
+    if (normalized.startsWith("res://")) {
+        normalized = normalized.substring(6);
+    }
+
+    normalized = normalized
+        .split("/")
+        .map(part => encodeURIComponent(part))
+        .join("/");
+
+    return ACHIEVEMENTS_BASE_URL + normalized;
+}
+
+
+/*
+ * ============================================================
+ * GODOT VARIANT READER
+ *
+ * Compatível com o formato utilizado por:
+ *
+ * FileAccess.store_var(unlocked_achievements)
+ *
+ * O arquivo possui:
+ *
+ * uint32 little-endian -> tamanho do Variant
+ * bytes                 -> Variant serializado
+ *
+ * O parser abaixo acompanha o formato de marshalls.cpp.
+ * ============================================================
+ */
+
+class GodotVariantReader {
+
+    constructor(arrayBuffer) {
+
+        this.bytes =
+            new Uint8Array(arrayBuffer);
+
+        this.view =
+            new DataView(arrayBuffer);
+
+        this.offset = 0;
+
+        this.decoder =
+            new TextDecoder("utf-8", {
+                fatal: false
+            });
+    }
+
+
+    remaining() {
+        return this.bytes.length - this.offset;
+    }
+
+
+    ensure(size, description) {
 
         if (
-            achievementIds.length === 0
+            !Number.isInteger(size) ||
+            size < 0 ||
+            this.offset + size > this.bytes.length
         ) {
-            achievementsElement.innerHTML =
-                '<div class="empty">Nenhuma conquista disponível.</div>';
-
-            return;
-        }
-
-        let renderedCount = 0;
-
-        for (
-            const id of achievementIds
-        ) {
-
-            const achievement =
-                achievementsData[id];
-
-            if (
-                !achievement ||
-                typeof achievement !== "object"
-            ) {
-                continue;
-            }
-
-            const unlocked =
-                unlockedSet.has(id);
-
-            const secret =
-                achievement.secret === true;
-
-            /*
-             * Conquistas secretas bloqueadas
-             * não aparecem no perfil.
-             */
-            if (
-                !unlocked &&
-                secret
-            ) {
-                continue;
-            }
-
-            const card =
-                document.createElement(
-                    "div"
-                );
-
-            card.className =
-                "achievement";
-
-            const icon =
-                document.createElement(
-                    "img"
-                );
-
-            icon.className =
-                "achievement-icon";
-
-            if (
-                unlocked &&
-                achievement.icon
-            ) {
-
-                icon.src =
-                    buildIconUrl(
-                        achievement.icon
-                    );
-
-            } else {
-
-                icon.src =
-                    buildIconUrl(
-                        "res://Conquistas/Ícones/bloqueado.png"
-                    );
-            }
-
-            icon.alt = "";
-
-            const info =
-                document.createElement(
-                    "div"
-                );
-
-            info.className =
-                "achievement-info";
-
-            const title =
-                document.createElement(
-                    "h3"
-                );
-
-            const description =
-                document.createElement(
-                    "p"
-                );
-
-            if (unlocked) {
-
-                title.textContent =
-                    getLocalizedText(
-                        achievement.name
-                    ) || id;
-
-                description.textContent =
-                    getLocalizedText(
-                        achievement.description
-                    );
-
-            } else {
-
-                title.textContent =
-                    "???";
-
-                description.textContent =
-                    "???";
-            }
-
-            info.appendChild(title);
-            info.appendChild(description);
-
-            if (secret) {
-
-                const secretLabel =
-                    document.createElement(
-                        "span"
-                    );
-
-                secretLabel.className =
-                    "secret-label";
-
-                secretLabel.textContent =
-                    "SECRETA";
-
-                info.appendChild(
-                    secretLabel
-                );
-            }
-
-            card.appendChild(icon);
-            card.appendChild(info);
-
-            achievementsElement.appendChild(
-                card
+            throw new Error(
+                "Dados insuficientes ao ler " +
+                description +
+                " na posição " +
+                this.offset +
+                ". Restante: " +
+                this.remaining() +
+                " bytes."
             );
-
-            renderedCount++;
-        }
-
-        if (renderedCount === 0) {
-
-            achievementsElement.innerHTML =
-                '<div class="empty">Nenhuma conquista desbloqueada.</div>';
         }
     }
 
 
-    async function loadProfile(
-        profileId
+    readUint8() {
+
+        this.ensure(1, "uint8");
+
+        const value =
+            this.view.getUint8(
+                this.offset
+            );
+
+        this.offset += 1;
+
+        return value;
+    }
+
+
+    readUint32() {
+
+        this.ensure(4, "uint32");
+
+        const value =
+            this.view.getUint32(
+                this.offset,
+                true
+            );
+
+        this.offset += 4;
+
+        return value;
+    }
+
+
+    readInt32() {
+
+        this.ensure(4, "int32");
+
+        const value =
+            this.view.getInt32(
+                this.offset,
+                true
+            );
+
+        this.offset += 4;
+
+        return value;
+    }
+
+
+    readUint64() {
+
+        this.ensure(8, "uint64");
+
+        const value =
+            this.view.getBigUint64(
+                this.offset,
+                true
+            );
+
+        this.offset += 8;
+
+        return value;
+    }
+
+
+    readInt64() {
+
+        this.ensure(8, "int64");
+
+        const value =
+            this.view.getBigInt64(
+                this.offset,
+                true
+            );
+
+        this.offset += 8;
+
+        return value;
+    }
+
+
+    readFloat32() {
+
+        this.ensure(4, "float32");
+
+        const value =
+            this.view.getFloat32(
+                this.offset,
+                true
+            );
+
+        this.offset += 4;
+
+        return value;
+    }
+
+
+    readFloat64() {
+
+        this.ensure(8, "float64");
+
+        const value =
+            this.view.getFloat64(
+                this.offset,
+                true
+            );
+
+        this.offset += 8;
+
+        return value;
+    }
+
+
+    /*
+     * Godot strings são:
+     *
+     * uint32 tamanho
+     * bytes UTF-8
+     * padding até múltiplo de 4
+     *
+     * O tamanho usado pelo formato é o número de bytes UTF-8,
+     * não o número de caracteres JavaScript.
+     */
+    readString() {
+
+        const length =
+            this.readUint32();
+
+        this.ensure(
+            length,
+            "string UTF-8"
+        );
+
+        const start =
+            this.offset;
+
+        const end =
+            start + length;
+
+        const stringBytes =
+            this.bytes.slice(
+                start,
+                end
+            );
+
+        this.offset = end;
+
+        const padding =
+            (4 - (length % 4)) % 4;
+
+        this.ensure(
+            padding,
+            "padding da string"
+        );
+
+        this.offset += padding;
+
+        return this.decoder.decode(
+            stringBytes
+        );
+    }
+
+
+    /*
+     * O tipo serializado ocupa somente os 8 bits inferiores.
+     *
+     * Isso é HEADER_TYPE_MASK = 0xFF no marshalls.cpp.
+     */
+    getBaseType(header) {
+        return header & 0xFF;
+    }
+
+
+    has64BitFlag(header) {
+        return (
+            (header & 0x00010000) !== 0
+        );
+    }
+
+
+    getContainerKind(
+        header,
+        shift
     ) {
 
-        const {
-            data,
-            error
-        } = await supabaseClient
-            .from("profiles")
-            .select(
-                "id, username, created_at, avatar_url, bio, achievements"
+        return (
+            (header >> shift) & 0x03
+        );
+    }
+
+
+    /*
+     * Decodifica metadados de Dictionary tipado.
+     *
+     * 0 = NONE
+     * 1 = BUILTIN
+     * 2 = CLASS_NAME
+     * 3 = SCRIPT
+     *
+     * Para o nosso Dictionary GDScript normal,
+     * normalmente ambos serão NONE.
+     */
+    readContainerType(
+        kind,
+        label
+    ) {
+
+        switch (kind) {
+
+            case 0:
+                return {
+                    kind: "none"
+                };
+
+            case 1: {
+
+                const builtinType =
+                    this.readUint32();
+
+                return {
+                    kind: "builtin",
+                    type: builtinType
+                };
+            }
+
+            case 2: {
+
+                const className =
+                    this.readString();
+
+                return {
+                    kind: "class_name",
+                    name: className
+                };
+            }
+
+            case 3: {
+
+                const scriptPath =
+                    this.readString();
+
+                return {
+                    kind: "script",
+                    path: scriptPath
+                };
+            }
+
+            default:
+                throw new Error(
+                    "Tipo de container " +
+                    kind +
+                    " inválido para " +
+                    label +
+                    "."
+                );
+        }
+    }
+
+
+    /*
+     * ========================================================
+     * VARIANT
+     * ========================================================
+     *
+     * Tipos relevantes:
+     *
+     * 0  NIL
+     * 1  BOOL
+     * 2  INT
+     * 3  FLOAT
+     * 4  STRING
+     * 5  VECTOR2
+     * 6  VECTOR2I
+     * 7  RECT2
+     * 8  RECT2I
+     * 9  VECTOR3
+     * 10 VECTOR3I
+     * 11 TRANSFORM2D
+     * 12 VECTOR4
+     * 13 VECTOR4I
+     * 14 PLANE
+     * 15 QUATERNION
+     * 16 AABB
+     * 17 BASIS
+     * 18 TRANSFORM3D
+     * 19 PROJECTION
+     * 20 COLOR
+     * 21 STRING_NAME
+     * 22 NODE_PATH
+     * 23 RID
+     * 24 OBJECT
+     * 25 CALLABLE
+     * 26 SIGNAL
+     * 27 DICTIONARY
+     * 28 ARRAY
+     * 29 PACKED_BYTE_ARRAY
+     * 30 PACKED_INT32_ARRAY
+     * 31 PACKED_INT64_ARRAY
+     * 32 PACKED_FLOAT32_ARRAY
+     * 33 PACKED_FLOAT64_ARRAY
+     * 34 PACKED_STRING_ARRAY
+     * 35 PACKED_VECTOR2_ARRAY
+     * 36 PACKED_VECTOR3_ARRAY
+     * 37 PACKED_COLOR_ARRAY
+     *
+     * Observação:
+     * dependendo da versão/branch do Godot, os números de
+     * alguns tipos podem variar. O formato real é identificado
+     * pelo HEADER_TYPE_MASK e pela enumeração daquela versão.
+     *
+     * Para evitar o problema anterior, o parser também usa
+     * validação estrutural do Dictionary.
+     */
+    readVariant(depth = 0) {
+
+        if (depth > 64) {
+            throw new Error(
+                "Profundidade máxima de Variant excedida."
+            );
+        }
+
+        const startOffset =
+            this.offset;
+
+        const header =
+            this.readUint32();
+
+        const type =
+            this.getBaseType(header);
+
+        /*
+         * Os tipos usados pelo achievements.bin são:
+         *
+         * Dictionary
+         * String
+         * Bool
+         *
+         * Em Godot 4, Dictionary serializado é 18.
+         *
+         * O código abaixo prioriza os valores reais do formato
+         * utilizado pelo Godot 4.x.
+         */
+
+        switch (type) {
+
+            case 0:
+                return null;
+
+
+            case 1: {
+
+                const value =
+                    this.readUint32() !== 0;
+
+                return value;
+            }
+
+
+            case 2: {
+
+                let value;
+
+                if (
+                    this.has64BitFlag(header)
+                ) {
+
+                    const big =
+                        this.readInt64();
+
+                    value =
+                        Number(big);
+
+                } else {
+
+                    value =
+                        this.readInt32();
+                }
+
+                return value;
+            }
+
+
+            case 3: {
+
+                if (
+                    this.has64BitFlag(header)
+                ) {
+                    return this.readFloat64();
+                }
+
+                return this.readFloat32();
+            }
+
+
+            case 4:
+            case 21: {
+
+                return this.readString();
+            }
+
+
+            /*
+             * Dictionary do Godot 4.
+             */
+            case 18: {
+
+                return this.readDictionary(
+                    header,
+                    depth
+                );
+            }
+
+
+            /*
+             * Array.
+             *
+             * Incluído para tornar o leitor robusto, mesmo que
+             * achievements.bin atualmente contenha Dictionary.
+             */
+            case 19: {
+
+                return this.readArray(
+                    header,
+                    depth
+                );
+            }
+
+
+            /*
+             * Alguns builds/formatos podem utilizar esses
+             * tipos adicionais. Eles são implementados para
+             * impedir que um tipo válido cause imediatamente
+             * "tipo não suportado".
+             */
+
+            case 20:
+                return this.readPackedByteArray();
+
+
+            case 22:
+                return this.readPackedInt32Array();
+
+
+            case 23:
+                return this.readPackedInt64Array();
+
+
+            case 24:
+                return this.readPackedFloat32Array();
+
+
+            case 25:
+                return this.readPackedFloat64Array();
+
+
+            case 26:
+                return this.readPackedStringArray();
+
+
+            case 27:
+                return this.readPackedVector2Array();
+
+
+            case 28:
+                return this.readPackedVector3Array();
+
+
+            case 29:
+                return this.readPackedColorArray();
+
+
+            default:
+
+                throw new Error(
+                    "Tipo Variant do Godot não suportado: " +
+                    type +
+                    " (header=0x" +
+                    header
+                        .toString(16)
+                        .padStart(8, "0") +
+                    ", offset=" +
+                    startOffset +
+                    ")."
+                );
+        }
+    }
+
+
+    /*
+     * ========================================================
+     * DICTIONARY
+     * ========================================================
+     */
+
+    readDictionary(
+        header,
+        depth
+    ) {
+
+        /*
+         * Bits 16-17:
+         * tipo das chaves
+         *
+         * Bits 18-19:
+         * tipo dos valores
+         */
+        const keyKind =
+            this.getContainerKind(
+                header,
+                16
+            );
+
+        const valueKind =
+            this.getContainerKind(
+                header,
+                18
+            );
+
+        this.readContainerType(
+            keyKind,
+            "chave do Dictionary"
+        );
+
+        this.readContainerType(
+            valueKind,
+            "valor do Dictionary"
+        );
+
+
+        /*
+         * O tamanho do Dictionary é uint32.
+         */
+        const count =
+            this.readUint32();
+
+
+        /*
+         * Proteção contra arquivo corrompido.
+         */
+        if (count > 1000000) {
+            throw new Error(
+                "Quantidade de entradas do Dictionary inválida: " +
+                count
+            );
+        }
+
+
+        const result = {};
+
+
+        for (
+            let i = 0;
+            i < count;
+            i++
+        ) {
+
+            const key =
+                this.readVariant(
+                    depth + 1
+                );
+
+            const value =
+                this.readVariant(
+                    depth + 1
+                );
+
+
+            /*
+             * achievements.bin utiliza IDs string:
+             *
+             * "easter_egg_1": true
+             * "alpha": true
+             *
+             * Caso algum tipo estranho apareça, convertemos
+             * para string para não perder a informação.
+             */
+            const keyString =
+                String(key);
+
+            result[keyString] =
+                value;
+        }
+
+
+        return result;
+    }
+
+
+    /*
+     * ========================================================
+     * ARRAY
+     * ========================================================
+     */
+
+    readArray(
+        header,
+        depth
+    ) {
+
+        const elementKind =
+            this.getContainerKind(
+                header,
+                16
+            );
+
+        this.readContainerType(
+            elementKind,
+            "elemento do Array"
+        );
+
+        const count =
+            this.readUint32();
+
+        if (count > 1000000) {
+            throw new Error(
+                "Quantidade de elementos do Array inválida: " +
+                count
+            );
+        }
+
+        const result = [];
+
+        for (
+            let i = 0;
+            i < count;
+            i++
+        ) {
+
+            result.push(
+                this.readVariant(
+                    depth + 1
+                )
+            );
+        }
+
+        return result;
+    }
+
+
+    /*
+     * ========================================================
+     * PACKED ARRAYS
+     * ========================================================
+     */
+
+    readPackedByteArray() {
+
+        const count =
+            this.readUint32();
+
+        this.ensure(
+            count,
+            "PackedByteArray"
+        );
+
+        const result =
+            this.bytes.slice(
+                this.offset,
+                this.offset + count
+            );
+
+        this.offset += count;
+
+        const padding =
+            (4 - (count % 4)) % 4;
+
+        this.ensure(
+            padding,
+            "padding do PackedByteArray"
+        );
+
+        this.offset += padding;
+
+        return result;
+    }
+
+
+    readPackedInt32Array() {
+
+        const count =
+            this.readUint32();
+
+        if (count > 1000000) {
+            throw new Error(
+                "PackedInt32Array muito grande."
+            );
+        }
+
+        const result = [];
+
+        for (
+            let i = 0;
+            i < count;
+            i++
+        ) {
+            result.push(
+                this.readInt32()
+            );
+        }
+
+        return result;
+    }
+
+
+    readPackedInt64Array() {
+
+        const count =
+            this.readUint32();
+
+        if (count > 1000000) {
+            throw new Error(
+                "PackedInt64Array muito grande."
+            );
+        }
+
+        const result = [];
+
+        for (
+            let i = 0;
+            i < count;
+            i++
+        ) {
+
+            result.push(
+                Number(
+                    this.readInt64()
+                )
+            );
+        }
+
+        return result;
+    }
+
+
+    readPackedFloat32Array() {
+
+        const count =
+            this.readUint32();
+
+        if (count > 1000000) {
+            throw new Error(
+                "PackedFloat32Array muito grande."
+            );
+        }
+
+        const result = [];
+
+        for (
+            let i = 0;
+            i < count;
+            i++
+        ) {
+
+            result.push(
+                this.readFloat32()
+            );
+        }
+
+        return result;
+    }
+
+
+    readPackedFloat64Array() {
+
+        const count =
+            this.readUint32();
+
+        if (count > 1000000) {
+            throw new Error(
+                "PackedFloat64Array muito grande."
+            );
+        }
+
+        const result = [];
+
+        for (
+            let i = 0;
+            i < count;
+            i++
+        ) {
+
+            result.push(
+                this.readFloat64()
+            );
+        }
+
+        return result;
+    }
+
+
+    readPackedStringArray() {
+
+        const count =
+            this.readUint32();
+
+        if (count > 1000000) {
+            throw new Error(
+                "PackedStringArray muito grande."
+            );
+        }
+
+        const result = [];
+
+        for (
+            let i = 0;
+            i < count;
+            i++
+        ) {
+
+            result.push(
+                this.readString()
+            );
+        }
+
+        return result;
+    }
+
+
+    /*
+     * Os tipos matemáticos abaixo não são necessários para
+     * achievements.bin, mas são lidos para que o parser não
+     * quebre simplesmente ao encontrar um tipo válido.
+     */
+
+    readPackedVector2Array() {
+
+        const count =
+            this.readUint32();
+
+        if (count > 1000000) {
+            throw new Error(
+                "PackedVector2Array muito grande."
+            );
+        }
+
+        const result = [];
+
+        for (
+            let i = 0;
+            i < count;
+            i++
+        ) {
+
+            result.push({
+                x: this.readFloat32(),
+                y: this.readFloat32()
+            });
+        }
+
+        return result;
+    }
+
+
+    readPackedVector3Array() {
+
+        const count =
+            this.readUint32();
+
+        if (count > 1000000) {
+            throw new Error(
+                "PackedVector3Array muito grande."
+            );
+        }
+
+        const result = [];
+
+        for (
+            let i = 0;
+            i < count;
+            i++
+        ) {
+
+            result.push({
+                x: this.readFloat32(),
+                y: this.readFloat32(),
+                z: this.readFloat32()
+            });
+        }
+
+        return result;
+    }
+
+
+    readPackedColorArray() {
+
+        const count =
+            this.readUint32();
+
+        if (count > 1000000) {
+            throw new Error(
+                "PackedColorArray muito grande."
+            );
+        }
+
+        const result = [];
+
+        for (
+            let i = 0;
+            i < count;
+            i++
+        ) {
+
+            result.push({
+                r: this.readFloat32(),
+                g: this.readFloat32(),
+                b: this.readFloat32(),
+                a: this.readFloat32()
+            });
+        }
+
+        return result;
+    }
+}
+
+
+/*
+ * ============================================================
+ * PARSER DE achievements.bin
+ * ============================================================
+ */
+
+function parseGodotAchievements(arrayBuffer) {
+
+    if (!arrayBuffer) {
+        throw new Error(
+            "O arquivo achievements.bin está vazio."
+        );
+    }
+
+
+    const fileBytes =
+        new Uint8Array(arrayBuffer);
+
+
+    if (fileBytes.length < 8) {
+        throw new Error(
+            "achievements.bin é pequeno demais para ser um arquivo Godot válido."
+        );
+    }
+
+
+    /*
+     * FileAccess.store_var() escreve primeiro:
+     *
+     * uint32 tamanho
+     *
+     * Depois vem o Variant.
+     */
+    const fileView =
+        new DataView(arrayBuffer);
+
+
+    const encodedLength =
+        fileView.getUint32(
+            0,
+            true
+        );
+
+
+    const availableLength =
+        fileBytes.length - 4;
+
+
+    console.log(
+        "[Fluffy Community] achievements.bin:",
+        {
+            fileSize: fileBytes.length,
+            encodedLength: encodedLength,
+            availableLength: availableLength
+        }
+    );
+
+
+    if (
+        encodedLength <= 0 ||
+        encodedLength > availableLength
+    ) {
+
+        throw new Error(
+            "O tamanho interno de achievements.bin é inválido. " +
+            "Tamanho declarado: " +
+            encodedLength +
+            " bytes; disponível: " +
+            availableLength +
+            " bytes."
+        );
+    }
+
+
+    /*
+     * Não passamos o prefixo para o VariantReader.
+     */
+    const encodedBuffer =
+        arrayBuffer.slice(
+            4,
+            4 + encodedLength
+        );
+
+
+    const encodedBytes =
+        new Uint8Array(
+            encodedBuffer
+        );
+
+
+    console.log(
+        "[Fluffy Community] Primeiros bytes do Variant:",
+        Array.from(
+            encodedBytes.slice(
+                0,
+                Math.min(
+                    32,
+                    encodedBytes.length
+                )
             )
-            .eq(
-                "id",
+        )
+            .map(
+                value =>
+                    value
+                        .toString(16)
+                        .padStart(2, "0")
+            )
+            .join(" ")
+    );
+
+
+    const reader =
+        new GodotVariantReader(
+            encodedBuffer
+        );
+
+
+    /*
+     * O primeiro Variant deve ser o Dictionary.
+     */
+    const firstHeader =
+        reader.view.getUint32(
+            0,
+            true
+        );
+
+    const firstType =
+        firstHeader & 0xFF;
+
+
+    console.log(
+        "[Fluffy Community] Primeiro Variant:",
+        {
+            header:
+                "0x" +
+                firstHeader
+                    .toString(16)
+                    .padStart(8, "0"),
+
+            type:
+                firstType,
+
+            offset:
+                reader.offset
+        }
+    );
+
+
+    const decoded =
+        reader.readVariant();
+
+
+    if (
+        !decoded ||
+        typeof decoded !== "object" ||
+        Array.isArray(decoded) ||
+        decoded instanceof Uint8Array
+    ) {
+
+        throw new Error(
+            "O conteúdo de achievements.bin não é um Dictionary Godot válido."
+        );
+    }
+
+
+    /*
+     * Se sobrar conteúdo significativo, isso é um forte
+     * indicativo de arquivo incompatível ou parser desalinhado.
+     *
+     * Porém não abortamos por alguns bytes finais, porque
+     * versões/formatos podem possuir dados adicionais.
+     */
+    console.log(
+        "[Fluffy Community] Variant decodificado:",
+        decoded
+    );
+
+    console.log(
+        "[Fluffy Community] Offset final:",
+        reader.offset,
+        "/",
+        encodedBuffer.byteLength
+    );
+
+
+    return decoded;
+}
+
+
+/*
+ * ============================================================
+ * CONVERTE O DICTIONARY DO GODOT PARA IDs DE CONQUISTAS
+ * ============================================================
+ */
+
+function extractUnlockedAchievementIds(decoded) {
+
+    if (
+        !decoded ||
+        typeof decoded !== "object" ||
+        Array.isArray(decoded)
+    ) {
+        throw new Error(
+            "Dictionary de conquistas inválido."
+        );
+    }
+
+
+    const unlockedIds = [];
+
+
+    for (
+        const [id, value]
+        of Object.entries(decoded)
+    ) {
+
+        /*
+         * Achievements.gd salva:
+         *
+         * unlocked_achievements[id] = true
+         *
+         * Portanto somente valores verdadeiros contam.
+         */
+        if (value === true) {
+            unlockedIds.push(id);
+        }
+    }
+
+
+    return unlockedIds;
+}
+
+
+/*
+ * ============================================================
+ * CARREGA CATÁLOGO
+ * ============================================================
+ */
+
+async function loadAchievementsCatalog() {
+
+    const response =
+        await fetch(
+            ACHIEVEMENTS_JSON_URL,
+            {
+                cache: "no-store"
+            }
+        );
+
+
+    if (!response.ok) {
+
+        throw new Error(
+            "Não foi possível carregar o catálogo de conquistas. " +
+            "HTTP " +
+            response.status
+        );
+    }
+
+
+    const data =
+        await response.json();
+
+
+    if (
+        !data ||
+        typeof data !== "object" ||
+        Array.isArray(data)
+    ) {
+
+        throw new Error(
+            "O catálogo achievements.json possui formato inválido."
+        );
+    }
+
+
+    return data;
+}
+
+
+/*
+ * ============================================================
+ * NORMALIZA CATALOGO
+ * ============================================================
+ */
+
+function normalizeCatalog(catalog) {
+
+    /*
+     * O catálogo atual possui os IDs diretamente como chaves.
+     *
+     * Exemplo:
+     *
+     * {
+     *   "alpha": {
+     *      ...
+     *   }
+     * }
+     *
+     * Caso no futuro venha dentro de "achievements", também
+     * aceitamos essa estrutura.
+     */
+    if (
+        catalog.achievements &&
+        typeof catalog.achievements === "object" &&
+        !Array.isArray(catalog.achievements)
+    ) {
+
+        return catalog.achievements;
+    }
+
+
+    return catalog;
+}
+
+
+/*
+ * ============================================================
+ * RENDERIZA CONQUISTAS
+ * ============================================================
+ */
+
+function renderAchievements(
+    catalog,
+    unlockedIds
+) {
+
+    achievementsElement.innerHTML = "";
+
+
+    const normalizedCatalog =
+        normalizeCatalog(catalog);
+
+
+    const unlockedSet =
+        new Set(
+            unlockedIds
+        );
+
+
+    let visibleCount = 0;
+
+
+    for (
+        const [id, rawData]
+        of Object.entries(
+            normalizedCatalog
+        )
+    ) {
+
+        if (
+            !rawData ||
+            typeof rawData !== "object"
+        ) {
+            continue;
+        }
+
+
+        const unlocked =
+            unlockedSet.has(id);
+
+
+        const secret =
+            rawData.secret === true;
+
+
+        /*
+         * Conquistas secretas bloqueadas não aparecem
+         * no perfil público.
+         */
+        if (
+            secret &&
+            !unlocked
+        ) {
+            continue;
+        }
+
+
+        const name =
+            unlocked || !secret
+                ? getLocalizedValue(
+                    rawData.name,
+                    DEFAULT_LANGUAGE
+                )
+                : "???";
+
+
+        const description =
+            unlocked || !secret
+                ? getLocalizedValue(
+                    rawData.description,
+                    DEFAULT_LANGUAGE
+                )
+                : "???";
+
+
+        const icon =
+            unlocked
+                ? buildIconUrl(
+                    rawData.icon
+                )
+                : "";
+
+
+        const card =
+            document.createElement("div");
+
+
+        card.className =
+            "achievement" +
+            (
+                unlocked
+                    ? ""
+                    : " achievement-locked"
+            );
+
+
+        const iconElement =
+            document.createElement("img");
+
+
+        iconElement.className =
+            "achievement-icon";
+
+
+        iconElement.alt =
+            name || "Conquista";
+
+
+        if (icon) {
+
+            iconElement.src =
+                icon;
+
+        } else {
+
+            iconElement.style.display =
+                "none";
+        }
+
+
+        const info =
+            document.createElement("div");
+
+
+        info.className =
+            "achievement-info";
+
+
+        const nameElement =
+            document.createElement("p");
+
+
+        nameElement.className =
+            "achievement-name";
+
+
+        nameElement.textContent =
+            name || id;
+
+
+        const descriptionElement =
+            document.createElement("p");
+
+
+        descriptionElement.className =
+            "achievement-description";
+
+
+        descriptionElement.textContent =
+            description || "";
+
+
+        info.appendChild(
+            nameElement
+        );
+
+        info.appendChild(
+            descriptionElement
+        );
+
+
+        card.appendChild(
+            iconElement
+        );
+
+        card.appendChild(
+            info
+        );
+
+
+        achievementsElement.appendChild(
+            card
+        );
+
+
+        visibleCount++;
+    }
+
+
+    if (visibleCount === 0) {
+
+        achievementsElement.innerHTML =
+            '<div class="empty">' +
+            'Nenhuma conquista desbloqueada ainda.' +
+            '</div>';
+    }
+}
+
+
+/*
+ * ============================================================
+ * BUSCA ARQUIVO PRIVADO DO SUPABASE
+ * ============================================================
+ */
+
+async function downloadAchievementsBin(
+    userId
+) {
+
+    const filePath =
+        userId +
+        "/" +
+        SAVE_FILE_NAME;
+
+
+    console.log(
+        "[Fluffy Community] Baixando:",
+        SAVE_BUCKET,
+        filePath
+    );
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .storage
+            .from(SAVE_BUCKET)
+            .createSignedUrl(
+                filePath,
+                60
+            );
+
+
+    if (error) {
+        throw error;
+    }
+
+
+    if (
+        !data ||
+        !data.signedUrl
+    ) {
+
+        throw new Error(
+            "O Supabase não retornou uma URL assinada para achievements.bin."
+        );
+    }
+
+
+    const response =
+        await fetch(
+            data.signedUrl,
+            {
+                cache: "no-store"
+            }
+        );
+
+
+    if (!response.ok) {
+
+        throw new Error(
+            "Não foi possível baixar achievements.bin. " +
+            "HTTP " +
+            response.status
+        );
+    }
+
+
+    const arrayBuffer =
+        await response.arrayBuffer();
+
+
+    if (arrayBuffer.byteLength === 0) {
+
+        throw new Error(
+            "achievements.bin está vazio."
+        );
+    }
+
+
+    console.log(
+        "[Fluffy Community] achievements.bin baixado:",
+        arrayBuffer.byteLength,
+        "bytes"
+    );
+
+
+    return arrayBuffer;
+}
+
+
+/*
+ * ============================================================
+ * SINCRONIZA CONQUISTAS
+ * ============================================================
+ */
+
+async function synchronizeAchievements(
+    profileId
+) {
+
+    syncButton.disabled =
+        true;
+
+    setSyncStatus(
+        "Baixando achievements.bin..."
+    );
+
+
+    try {
+
+        const arrayBuffer =
+            await downloadAchievementsBin(
                 profileId
-            )
-            .maybeSingle();
+            );
+
+
+        setSyncStatus(
+            "Lendo arquivo de conquistas..."
+        );
+
+
+        const decoded =
+            parseGodotAchievements(
+                arrayBuffer
+            );
+
+
+        const unlockedIds =
+            extractUnlockedAchievementIds(
+                decoded
+            );
+
+
+        console.log(
+            "[Fluffy Community] Conquistas desbloqueadas:",
+            unlockedIds
+        );
+
+
+        setSyncStatus(
+            "Atualizando perfil..."
+        );
+
+
+        const {
+            error
+        } =
+            await supabaseClient
+                .from("profiles")
+                .update({
+                    achievements:
+                        unlockedIds
+                })
+                .eq(
+                    "id",
+                    profileId
+                );
+
 
         if (error) {
             throw error;
         }
 
-        if (!data) {
+
+        /*
+         * Recarrega o catálogo e redesenha.
+         */
+        const catalog =
+            await loadAchievementsCatalog();
+
+
+        renderAchievements(
+            catalog,
+            unlockedIds
+        );
+
+
+        setSyncStatus(
+            "✅ Conquistas sincronizadas com sucesso!"
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "[Fluffy Community] Erro ao sincronizar conquistas:",
+            error
+        );
+
+
+        setSyncStatus(
+            "❌ Erro ao sincronizar:\n" +
+            (
+                error &&
+                error.message
+                    ? error.message
+                    : String(error)
+            )
+        );
+
+    } finally {
+
+        syncButton.disabled =
+            false;
+    }
+}
+
+
+/*
+ * ============================================================
+ * CARREGA PERFIL
+ * ============================================================
+ */
+
+async function loadProfile() {
+
+    const profileId =
+        getProfileIdFromUrl();
+
+
+    if (!profileId) {
+
+        showError(
+            "Nenhum ID de perfil foi informado na URL."
+        );
+
+        return;
+    }
+
+
+    try {
+
+        /*
+         * Sessão atual.
+         */
+        const {
+            data: sessionData
+        } =
+            await supabaseClient
+                .auth
+                .getSession();
+
+
+        const session =
+            sessionData.session;
+
+
+        /*
+         * Perfil público.
+         */
+        const {
+            data: profile,
+            error
+        } =
+            await supabaseClient
+                .from("profiles")
+                .select(
+                    "id, username, created_at, avatar_url, bio, achievements"
+                )
+                .eq(
+                    "id",
+                    profileId
+                )
+                .single();
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        if (!profile) {
+
             throw new Error(
                 "Perfil não encontrado."
             );
         }
 
-        currentProfile = data;
 
+        /*
+         * Informações básicas.
+         */
         usernameElement.textContent =
-            data.username ||
-            "FluffyPlayer";
-
-        createdAtElement.textContent =
-            formatDate(
-                data.created_at
+            escapeText(
+                profile.username
             );
 
-        if (data.avatar_url) {
+
+        if (profile.avatar_url) {
 
             avatarElement.src =
-                data.avatar_url;
+                profile.avatar_url;
 
         } else {
 
             avatarElement.src =
-                "https://ui-avatars.com/api/?name=" +
+                "data:image/svg+xml;charset=UTF-8," +
                 encodeURIComponent(
-                    data.username ||
-                    "FluffyPlayer"
-                ) +
-                "&background=6c4cff&color=fff&size=220";
+                    `
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="200"
+                        height="200"
+                        viewBox="0 0 200 200"
+                    >
+                        <rect
+                            width="200"
+                            height="200"
+                            fill="#252c38"
+                        />
+                        <circle
+                            cx="100"
+                            cy="78"
+                            r="35"
+                            fill="#8c98aa"
+                        />
+                        <path
+                            d="M40 180c8-40 32-60 60-60s52 20 60 60"
+                            fill="#8c98aa"
+                        />
+                    </svg>
+                    `
+                );
         }
 
-        if (
-            data.bio &&
-            String(data.bio).trim() !== ""
-        ) {
 
-            bioElement.textContent =
-                data.bio;
+        if (profile.created_at) {
 
-            bioElement.style.display =
-                "block";
+            const date =
+                new Date(
+                    profile.created_at
+                );
+
+
+            createdElement.textContent =
+                "Membro desde " +
+                date.toLocaleDateString(
+                    "pt-BR"
+                );
 
         } else {
 
-            bioElement.style.display =
+            createdElement.textContent =
+                "";
+        }
+
+
+        if (profile.bio) {
+
+            bioElement.textContent =
+                profile.bio;
+
+        } else {
+
+            bioElement.textContent =
+                "Este usuário ainda não adicionou uma biografia.";
+        }
+
+
+        /*
+         * Catálogo.
+         */
+        const catalog =
+            await loadAchievementsCatalog();
+
+
+        /*
+         * Conquistas já sincronizadas no perfil.
+         */
+        const profileAchievements =
+            Array.isArray(
+                profile.achievements
+            )
+                ? profile.achievements
+                : [];
+
+
+        renderAchievements(
+            catalog,
+            profileAchievements
+        );
+
+
+        /*
+         * Botão de sincronização:
+         *
+         * SOMENTE o dono do perfil pode vê-lo.
+         */
+        const isOwner =
+            !!session &&
+            !!session.user &&
+            session.user.id === profile.id;
+
+
+        if (isOwner) {
+
+            ownerActionsElement.style.display =
+                "block";
+
+
+            syncButton.onclick =
+                async () => {
+
+                    await synchronizeAchievements(
+                        profile.id
+                    );
+                };
+
+        } else {
+
+            ownerActionsElement.style.display =
                 "none";
         }
 
-        renderAchievements(
-            normalizeAchievementIds(
-                data.achievements
+
+        loadingElement.style.display =
+            "none";
+
+        contentElement.style.display =
+            "block";
+
+
+    } catch (error) {
+
+        console.error(
+            "[Fluffy Community] Erro ao carregar perfil:",
+            error
+        );
+
+
+        showError(
+            "Não foi possível carregar o perfil.\n\n" +
+            (
+                error &&
+                error.message
+                    ? error.message
+                    : String(error)
             )
         );
     }
+}
 
 
-    async function updateAccountNavigation() {
+/*
+ * ============================================================
+ * INICIALIZAÇÃO
+ * ============================================================
+ */
 
-        const {
-            data
-        } =
-            await supabaseClient.auth.getSession();
+loadProfile();
 
-        currentSession =
-            data
-                ? data.session
-                : null;
-
-        if (currentSession) {
-
-            accountLink.textContent =
-                "Minha conta";
-
-            accountLink.href =
-                "index.html";
-
-        } else {
-
-            accountLink.textContent =
-                "Entrar";
-
-            accountLink.href =
-                "login.html";
-        }
-    }
-
-
-    async function checkProfileOwner() {
-
-        if (!currentProfile) {
-            syncButton.style.display =
-                "none";
-
-            return;
-        }
-
-        if (!currentSession) {
-            syncButton.style.display =
-                "none";
-
-            return;
-        }
-
-        if (
-            currentSession.user.id !==
-            currentProfile.id
-        ) {
-
-            syncButton.style.display =
-                "none";
-
-            return;
-        }
-
-        syncButton.style.display =
-            "inline-block";
-    }
-
-
-    /*
-     * Leitor do formato usado pelo Godot 4:
-     *
-     * FileAccess.store_var()
-     *
-     * Estrutura:
-     *
-     * uint32 = tamanho do Variant
-     * Variant Dictionary
-     *   String -> Bool
-     *
-     * O Dictionary usado pelo jogo é:
-     *
-     * {
-     *     "achievement_id": true
-     * }
-     */
-
-
-    class GodotVariantReader {
-
-        constructor(buffer) {
-
-            this.bytes =
-                new Uint8Array(buffer);
-
-            this.view =
-                new DataView(buffer);
-
-            this.offset = 0;
-        }
-
-
-        ensure(size) {
-
-            if (
-                this.offset + size >
-                this.bytes.length
-            ) {
-                throw new Error(
-                    "Arquivo achievements.bin terminou inesperadamente."
-                );
-            }
-        }
-
-
-        readUint32() {
-
-            this.ensure(4);
-
-            const value =
-                this.view.getUint32(
-                    this.offset,
-                    true
-                );
-
-            this.offset += 4;
-
-            return value;
-        }
-
-
-        readInt32() {
-
-            this.ensure(4);
-
-            const value =
-                this.view.getInt32(
-                    this.offset,
-                    true
-                );
-
-            this.offset += 4;
-
-            return value;
-        }
-
-
-        readUint64() {
-
-            this.ensure(8);
-
-            const value =
-                this.view.getBigUint64(
-                    this.offset,
-                    true
-                );
-
-            this.offset += 8;
-
-            return value;
-        }
-
-
-        readBytes(length) {
-
-            this.ensure(length);
-
-            const result =
-                this.bytes.slice(
-                    this.offset,
-                    this.offset + length
-                );
-
-            this.offset += length;
-
-            return result;
-        }
-
-
-        align4() {
-
-            const remainder =
-                this.offset % 4;
-
-            if (remainder !== 0) {
-
-                this.offset +=
-                    4 - remainder;
-            }
-
-            this.ensure(0);
-        }
-
-
-        readString() {
-
-            const length =
-                this.readUint32();
-
-            if (length < 0) {
-                throw new Error(
-                    "Tamanho de String inválido."
-                );
-            }
-
-            const bytes =
-                this.readBytes(
-                    length
-                );
-
-            const decoder =
-                new TextDecoder(
-                    "utf-8",
-                    {
-                        fatal: true
-                    }
-                );
-
-            const text =
-                decoder.decode(bytes);
-
-            this.align4();
-
-            return text;
-        }
-
-
-        readVariant() {
-
-            const header =
-                this.readUint32();
-
-            const type =
-                header & 0xFF;
-
-            /*
-             * Tipos do Variant no Godot 4:
-             *
-             * 0  = NIL
-             * 1  = BOOL
-             * 2  = INT
-             * 3  = FLOAT
-             * 4  = STRING
-             * 18 = DICTIONARY
-             */
-
-            switch (type) {
-
-                case 0:
-                    return null;
-
-
-                case 1: {
-
-                    const value =
-                        this.readUint32();
-
-                    return value !== 0;
-                }
-
-
-                case 2: {
-
-                    const is64 =
-                        (
-                            header &
-                            0x00010000
-                        ) !== 0;
-
-                    if (is64) {
-
-                        const value =
-                            this.readUint64();
-
-                        return BigInt.asIntN(
-                            64,
-                            value
-                        );
-
-                    } else {
-
-                        return this.readInt32();
-                    }
-                }
-
-
-                case 3: {
-
-                    const is64 =
-                        (
-                            header &
-                            0x00010000
-                        ) !== 0;
-
-                    if (is64) {
-
-                        this.ensure(8);
-
-                        const value =
-                            this.view.getFloat64(
-                                this.offset,
-                                true
-                            );
-
-                        this.offset += 8;
-
-                        return value;
-
-                    } else {
-
-                        this.ensure(4);
-
-                        const value =
-                            this.view.getFloat32(
-                                this.offset,
-                                true
-                            );
-
-                        this.offset += 4;
-
-                        return value;
-                    }
-                }
-
-
-                case 4:
-
-                    return this.readString();
-
-
-                case 18:
-
-                    return this.readDictionary(
-                        header
-                    );
-
-
-                default:
-
-                    throw new Error(
-                        "Tipo Variant do Godot não suportado: " +
-                        type
-                    );
-            }
-        }
-
-
-        readDictionary(header) {
-
-            /*
-             * Para o Dictionary normal usado
-             * pelo jogo, não existem tipos
-             * tipados adicionais no header.
-             */
-
-            const keyType =
-                (
-                    header >> 16
-                ) & 0x03;
-
-            const valueType =
-                (
-                    header >> 18
-                ) & 0x03;
-
-            /*
-             * Se o Dictionary for tipado,
-             * o arquivo possui informações
-             * extras. O jogo atual usa
-             * Dictionary normal, então esses
-             * campos normalmente serão zero.
-             */
-            if (keyType !== 0) {
-
-                this.skipContainerType(
-                    keyType
-                );
-            }
-
-            if (valueType !== 0) {
-
-                this.skipContainerType(
-                    valueType
-                );
-            }
-
-            const count =
-                this.readUint32() &
-                0x7FFFFFFF;
-
-            const dictionary = {};
-
-            for (
-                let i = 0;
-                i < count;
-                i++
-            ) {
-
-                const key =
-                    this.readVariant();
-
-                const value =
-                    this.readVariant();
-
-                dictionary[
-                    String(key)
-                ] = value;
-            }
-
-            return dictionary;
-        }
-
-
-        skipContainerType(type) {
-
-            /*
-             * 01 = Builtin
-             * 10 = Class name
-             * 11 = Script
-             *
-             * Para o Dictionary atual
-             * isso não deverá ser necessário,
-             * mas mantemos suporte básico.
-             */
-
-            if (type === 1) {
-
-                this.readUint32();
-
-                return;
-            }
-
-            if (
-                type === 2 ||
-                type === 3
-            ) {
-
-                this.readString();
-
-                return;
-            }
-
-            throw new Error(
-                "Tipo de container Godot inválido."
-            );
-        }
-    }
-
-
-    function parseGodotAchievements(
-        arrayBuffer
-    ) {
-
-        const reader =
-            new GodotVariantReader(
-                arrayBuffer
-            );
-
-        /*
-         * FileAccess.get_var() primeiro
-         * lê um uint32 contendo o tamanho
-         * do Variant.
-         *
-         * O store_var() usado pelo jogo
-         * produz exatamente esse prefixo.
-         */
-        const serializedLength =
-            reader.readUint32();
-
-        if (
-            serializedLength <= 0
-        ) {
-            throw new Error(
-                "Tamanho inválido em achievements.bin."
-            );
-        }
-
-        if (
-            serializedLength >
-            reader.bytes.length -
-            reader.offset
-        ) {
-            throw new Error(
-                "O tamanho declarado de achievements.bin é inválido."
-            );
-        }
-
-        const value =
-            reader.readVariant();
-
-        if (
-            !value ||
-            typeof value !== "object" ||
-            Array.isArray(value)
-        ) {
-            throw new Error(
-                "achievements.bin não contém um Dictionary do Godot."
-            );
-        }
-
-        const unlockedIds = [];
-
-        for (
-            const id of Object.keys(value)
-        ) {
-
-            if (
-                value[id] === true
-            ) {
-                unlockedIds.push(
-                    String(id)
-                );
-            }
-        }
-
-        return unlockedIds;
-    }
-
-
-    async function synchronizeAchievements() {
-
-        if (!currentSession) {
-
-            syncStatus.textContent =
-                "Você precisa estar conectado para sincronizar.";
-
-            return;
-        }
-
-        if (!currentProfile) {
-
-            syncStatus.textContent =
-                "Perfil inválido.";
-
-            return;
-        }
-
-        if (
-            currentSession.user.id !==
-            currentProfile.id
-        ) {
-
-            syncStatus.textContent =
-                "Você só pode sincronizar suas próprias conquistas.";
-
-            return;
-        }
-
-        syncButton.disabled = true;
-
-        syncStatus.textContent =
-            "Baixando achievements.bin...";
-
-        try {
-
-            const userId =
-                currentSession.user.id;
-
-            const filePath =
-                userId +
-                "/" +
-                SAVE_FILE_NAME;
-
-            const {
-                data: signedUrlData,
-                error: signedUrlError
-            } =
-                await supabaseClient.storage
-                    .from(SAVE_BUCKET)
-                    .createSignedUrl(
-                        filePath,
-                        60
-                    );
-
-            if (signedUrlError) {
-                throw signedUrlError;
-            }
-
-            if (
-                !signedUrlData ||
-                !signedUrlData.signedUrl
-            ) {
-                throw new Error(
-                    "Não foi possível gerar o link do arquivo."
-                );
-            }
-
-            syncStatus.textContent =
-                "Lendo achievements.bin...";
-
-            const response =
-                await fetch(
-                    signedUrlData.signedUrl,
-                    {
-                        cache: "no-store"
-                    }
-                );
-
-            if (!response.ok) {
-
-                if (
-                    response.status === 404
-                ) {
-
-                    throw new Error(
-                        "O arquivo achievements.bin não foi encontrado na conta."
-                    );
-                }
-
-                throw new Error(
-                    "Não foi possível baixar achievements.bin. HTTP " +
-                    response.status
-                );
-            }
-
-            const arrayBuffer =
-                await response.arrayBuffer();
-
-            if (
-                arrayBuffer.byteLength === 0
-            ) {
-                throw new Error(
-                    "achievements.bin está vazio."
-                );
-            }
-
-            const unlockedIds =
-                parseGodotAchievements(
-                    arrayBuffer
-                );
-
-            console.log(
-                "[Fluffy Community] Conquistas encontradas:",
-                unlockedIds
-            );
-
-            syncStatus.textContent =
-                "Atualizando perfil...";
-
-            const {
-                error: updateError
-            } =
-                await supabaseClient
-                    .from("profiles")
-                    .update({
-                        achievements:
-                            unlockedIds
-                    })
-                    .eq(
-                        "id",
-                        userId
-                    );
-
-            if (updateError) {
-                throw updateError;
-            }
-
-            currentProfile.achievements =
-                unlockedIds;
-
-            renderAchievements(
-                unlockedIds
-            );
-
-            syncStatus.textContent =
-                "✅ Conquistas sincronizadas com sucesso.";
-
-        } catch (error) {
-
-            console.error(
-                "[Fluffy Community] Erro ao sincronizar conquistas:",
-                error
-            );
-
-            syncStatus.textContent =
-                "❌ " +
-                (
-                    error.message ||
-                    "Não foi possível sincronizar as conquistas."
-                );
-
-        } finally {
-
-            syncButton.disabled = false;
-        }
-    }
-
-
-    async function initialize() {
-
-        try {
-
-            await updateAccountNavigation();
-
-            const params =
-                new URLSearchParams(
-                    window.location.search
-                );
-
-            const profileId =
-                params.get("id");
-
-            if (!profileId) {
-
-                throw new Error(
-                    "Nenhum perfil foi especificado."
-                );
-            }
-
-            await loadAchievementsData();
-
-            await loadProfile(
-                profileId
-            );
-
-            await checkProfileOwner();
-
-            loadingElement.style.display =
-                "none";
-
-            profileContent.style.display =
-                "block";
-
-        } catch (error) {
-
-            console.error(
-                "[Fluffy Community] Erro:",
-                error
-            );
-
-            showError(
-                error.message ||
-                "Não foi possível carregar o perfil."
-            );
-        }
-    }
-
-
-    syncButton.addEventListener(
-        "click",
-        synchronizeAchievements
-    );
-
-
-    supabaseClient.auth.onAuthStateChange(
-        async (
-            _event,
-            session
-        ) => {
-
-            currentSession =
-                session;
-
-            if (session) {
-
-                accountLink.textContent =
-                    "Minha conta";
-
-                accountLink.href =
-                    "index.html";
-
-            } else {
-
-                accountLink.textContent =
-                    "Entrar";
-
-                accountLink.href =
-                    "login.html";
-            }
-
-            await checkProfileOwner();
-        }
-    );
-
-
-    initialize();
 </script>
 
 </body>
