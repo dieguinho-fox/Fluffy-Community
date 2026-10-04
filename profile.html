@@ -44,7 +44,7 @@
         }
 
         main {
-            max-width: 700px;
+            max-width: 900px;
             margin: 40px auto;
             padding: 20px;
         }
@@ -92,6 +92,76 @@
             color: #666;
         }
 
+        .achievements-section {
+            margin-top: 25px;
+            background: #ffffff;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .achievements-title {
+            margin: 0 0 5px;
+            font-size: 24px;
+        }
+
+        .achievements-count {
+            margin: 0 0 20px;
+            color: #777;
+        }
+
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            gap: 15px;
+        }
+
+        .achievement {
+            border: 1px solid #e2e2e2;
+            border-radius: 12px;
+            background: #fafafa;
+            padding: 12px;
+            cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            text-align: center;
+        }
+
+        .achievement:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.12);
+        }
+
+        .achievement-icon {
+            width: 72px;
+            height: 72px;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto 10px;
+        }
+
+        .achievement-name {
+            font-weight: bold;
+            font-size: 14px;
+            word-break: break-word;
+        }
+
+        .achievement-secret {
+            margin-top: 5px;
+            font-size: 12px;
+            color: #777;
+        }
+
+        .no-achievements {
+            text-align: center;
+            color: #777;
+            padding: 20px;
+        }
+
+        .loading {
+            text-align: center;
+            color: #666;
+        }
+
         .error {
             text-align: center;
             background: #ffffff;
@@ -100,9 +170,133 @@
             color: #c62828;
         }
 
-        .loading {
+        /* Modal */
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.65);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 9999;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .achievement-modal {
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            background: #ffffff;
+            border-radius: 18px;
+            padding: 30px;
+            box-sizing: border-box;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 12px;
+            right: 15px;
+            border: none;
+            background: transparent;
+            font-size: 28px;
+            cursor: pointer;
+            color: #777;
+        }
+
+        .modal-close:hover {
+            color: #222;
+        }
+
+        .modal-icon {
+            width: 130px;
+            height: 130px;
+            object-fit: contain;
+            display: block;
+            margin: 10px auto 20px;
+        }
+
+        .modal-title {
             text-align: center;
+            margin: 0;
+            font-size: 26px;
+        }
+
+        .modal-game {
+            text-align: center;
+            margin: 8px 0 20px;
+            color: #5865f2;
+            font-weight: bold;
+        }
+
+        .modal-description {
+            color: #444;
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+
+        .modal-field {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .modal-field-label {
+            font-size: 13px;
+            color: #777;
+            margin-bottom: 4px;
+        }
+
+        .modal-field-value {
+            font-weight: bold;
+            word-break: break-word;
+        }
+
+        .secret-badge {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 6px 10px;
+            border-radius: 20px;
+            background: #f1f1f1;
             color: #666;
+            font-size: 13px;
+        }
+
+        @media (max-width: 600px) {
+            main {
+                margin: 20px auto;
+                padding: 12px;
+            }
+
+            .profile-card,
+            .achievements-section {
+                padding: 20px;
+            }
+
+            .achievements-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+            }
+
+            .achievement {
+                padding: 8px;
+            }
+
+            .achievement-icon {
+                width: 60px;
+                height: 60px;
+            }
+
+            .achievement-name {
+                font-size: 12px;
+            }
         }
     </style>
 </head>
@@ -127,6 +321,56 @@
 
     </main>
 
+    <!-- Modal da conquista -->
+
+    <div
+        id="achievementModal"
+        class="modal-overlay"
+        aria-hidden="true"
+    >
+        <div
+            class="achievement-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modalTitle"
+        >
+
+            <button
+                id="modalClose"
+                class="modal-close"
+                type="button"
+                aria-label="Fechar"
+            >
+                ×
+            </button>
+
+            <img
+                id="modalIcon"
+                class="modal-icon"
+                src=""
+                alt=""
+            >
+
+            <h2
+                id="modalTitle"
+                class="modal-title"
+            ></h2>
+
+            <div
+                id="modalGame"
+                class="modal-game"
+            ></div>
+
+            <p
+                id="modalDescription"
+                class="modal-description"
+            ></p>
+
+            <div id="modalExtraFields"></div>
+
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <script>
@@ -142,10 +386,91 @@
                 SUPABASE_KEY
             );
 
+
+        /*
+         * =========================================================
+         * CONFIGURAÇÃO DAS CONQUISTAS
+         * =========================================================
+         *
+         * O JSON fica no repositório do Fluffy Adventure.
+         *
+         * Se o arquivo estiver na raiz do repositório:
+         *
+         * https://github.com/dieguinho-fox/Fluffy-Adventure
+         *
+         * esta URL já está correta.
+         */
+
+        const ACHIEVEMENTS_JSON_URL =
+            "https://raw.githubusercontent.com/dieguinho-fox/Fluffy-Adventure/main/fa_conquistas.json";
+
+
+        /*
+         * Os ícones também são carregados do repositório
+         * do Fluffy Adventure.
+         */
+
+        const ACHIEVEMENTS_BASE_URL =
+            "https://raw.githubusercontent.com/dieguinho-fox/Fluffy-Adventure/main/";
+
+
+        /*
+         * Idioma utilizado no site.
+         *
+         * Se pt_BR existir, ele será usado.
+         * Caso contrário, tentamos pt, depois en.
+         */
+
+        const CURRENT_LANGUAGE = "pt_BR";
+
+
         const profileContainer =
             document.getElementById(
                 "profileContainer"
             );
+
+
+        const achievementModal =
+            document.getElementById(
+                "achievementModal"
+            );
+
+        const modalClose =
+            document.getElementById(
+                "modalClose"
+            );
+
+        const modalIcon =
+            document.getElementById(
+                "modalIcon"
+            );
+
+        const modalTitle =
+            document.getElementById(
+                "modalTitle"
+            );
+
+        const modalGame =
+            document.getElementById(
+                "modalGame"
+            );
+
+        const modalDescription =
+            document.getElementById(
+                "modalDescription"
+            );
+
+        const modalExtraFields =
+            document.getElementById(
+                "modalExtraFields"
+            );
+
+
+        /*
+         * =========================================================
+         * CARREGAR PERFIL
+         * =========================================================
+         */
 
         async function loadProfile() {
 
@@ -157,6 +482,7 @@
             const profileId =
                 params.get("id");
 
+
             if (!profileId) {
 
                 showError(
@@ -166,22 +492,25 @@
                 return;
             }
 
+
             try {
 
                 const result =
                     await supabaseClient
                         .from("profiles")
                         .select(
-                            "id, username, created_at, avatar_url, bio"
+                            "id, username, created_at, avatar_url, bio, achievements"
                         )
                         .eq("id", profileId)
                         .maybeSingle();
+
 
                 const data =
                     result.data;
 
                 const error =
                     result.error;
+
 
                 if (error) {
 
@@ -197,6 +526,7 @@
                     return;
                 }
 
+
                 if (!data) {
 
                     showError(
@@ -206,7 +536,23 @@
                     return;
                 }
 
-                displayProfile(data);
+
+                /*
+                 * Carrega o catálogo de conquistas
+                 * antes de montar o perfil.
+                 */
+
+                const achievements =
+                    await loadAchievements(
+                        data.achievements
+                    );
+
+
+                displayProfile(
+                    data,
+                    achievements
+                );
+
 
             } catch (error) {
 
@@ -221,9 +567,210 @@
             }
         }
 
-        function displayProfile(profile) {
+
+        /*
+         * =========================================================
+         * CARREGAR JSON DE CONQUISTAS
+         * =========================================================
+         */
+
+        async function loadAchievements(
+            userAchievements
+        ) {
+
+            /*
+             * Se o campo ainda não existir,
+             * considera que o usuário não possui nenhuma.
+             */
+
+            if (!Array.isArray(userAchievements)) {
+                userAchievements = [];
+            }
+
+
+            if (userAchievements.length === 0) {
+                return [];
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        ACHIEVEMENTS_JSON_URL,
+                        {
+                            cache: "no-cache"
+                        }
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Não foi possível carregar fa_conquistas.json"
+                    );
+                }
+
+
+                const catalog =
+                    await response.json();
+
+
+                const result = [];
+
+
+                for (
+                    const achievementId
+                    of userAchievements
+                ) {
+
+                    const achievement =
+                        catalog[achievementId];
+
+
+                    /*
+                     * Se o usuário possui uma conquista
+                     * que não existe mais no JSON,
+                     * simplesmente não exibe.
+                     */
+
+                    if (!achievement) {
+                        console.warn(
+                            "Conquista não encontrada no JSON:",
+                            achievementId
+                        );
+
+                        continue;
+                    }
+
+
+                    result.push({
+                        id: achievementId,
+                        data: achievement
+                    });
+                }
+
+
+                return result;
+
+
+            } catch (error) {
+
+                console.error(
+                    "Erro ao carregar conquistas:",
+                    error
+                );
+
+                return [];
+            }
+        }
+
+
+        /*
+         * =========================================================
+         * PEGAR TEXTO LOCALIZADO
+         * =========================================================
+         */
+
+        function getLocalizedText(
+            value
+        ) {
+
+            if (!value) {
+                return "";
+            }
+
+
+            /*
+             * Se futuramente algum campo for
+             * simplesmente uma string.
+             */
+
+            if (typeof value === "string") {
+                return value;
+            }
+
+
+            if (typeof value !== "object") {
+                return String(value);
+            }
+
+
+            return (
+                value[CURRENT_LANGUAGE] ||
+                value.pt ||
+                value.en ||
+                Object.values(value)[0] ||
+                ""
+            );
+        }
+
+
+        /*
+         * =========================================================
+         * CONVERTER CAMINHO res:// PARA GITHUB
+         * =========================================================
+         */
+
+        function getAchievementIcon(
+            iconPath
+        ) {
+
+            if (!iconPath) {
+                return "";
+            }
+
+
+            /*
+             * Remove "res://"
+             */
+
+            let path =
+                iconPath.replace(
+                    /^res:\/\//,
+                    ""
+                );
+
+
+            /*
+             * Codifica corretamente cada parte
+             * do caminho, incluindo espaços e
+             * caracteres como "Í".
+             */
+
+            const parts =
+                path.split("/");
+
+
+            const encodedPath =
+                parts
+                    .map(
+                        part =>
+                            encodeURIComponent(part)
+                    )
+                    .join("/");
+
+
+            return (
+                ACHIEVEMENTS_BASE_URL +
+                encodedPath
+            );
+        }
+
+
+        /*
+         * =========================================================
+         * EXIBIR PERFIL
+         * =========================================================
+         */
+
+        function displayProfile(
+            profile,
+            achievements
+        ) {
 
             profileContainer.innerHTML = "";
+
 
             const card =
                 document.createElement(
@@ -232,6 +779,11 @@
 
             card.className =
                 "profile-card";
+
+
+            /*
+             * Avatar
+             */
 
             const avatar =
                 document.createElement(
@@ -245,6 +797,7 @@
                 "Foto de perfil de " +
                 profile.username;
 
+
             if (profile.avatar_url) {
 
                 avatar.src =
@@ -253,37 +806,13 @@
             } else {
 
                 avatar.src =
-                    "data:image/svg+xml," +
-                    encodeURIComponent(`
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="120"
-                            height="120"
-                            viewBox="0 0 120 120"
-                        >
-                            <rect
-                                width="120"
-                                height="120"
-                                rx="60"
-                                fill="#dddddd"
-                            />
-
-                            <circle
-                                cx="60"
-                                cy="45"
-                                r="22"
-                                fill="#999999"
-                            />
-
-                            <path
-                                d="M25 105
-                                   C25 80 40 68 60 68
-                                   C80 68 95 80 95 105"
-                                fill="#999999"
-                            />
-                        </svg>
-                    `);
+                    createDefaultAvatar();
             }
+
+
+            /*
+             * Nome
+             */
 
             const username =
                 document.createElement(
@@ -295,6 +824,11 @@
 
             username.textContent =
                 profile.username;
+
+
+            /*
+             * @username
+             */
 
             const handle =
                 document.createElement(
@@ -308,6 +842,11 @@
                 "@" +
                 profile.username;
 
+
+            /*
+             * Bio
+             */
+
             const bio =
                 document.createElement(
                     "p"
@@ -320,6 +859,11 @@
                 profile.bio ||
                 "Este usuário ainda não adicionou uma bio.";
 
+
+            /*
+             * Informações
+             */
+
             const info =
                 document.createElement(
                     "div"
@@ -328,15 +872,18 @@
             info.className =
                 "profile-info";
 
+
             const createdAt =
                 document.createElement(
                     "p"
                 );
 
+
             const date =
                 new Date(
                     profile.created_at
                 );
+
 
             createdAt.textContent =
                 "Membro desde " +
@@ -349,9 +896,15 @@
                     }
                 );
 
+
             info.appendChild(
                 createdAt
             );
+
+
+            /*
+             * Monta o card
+             */
 
             card.appendChild(
                 avatar
@@ -373,18 +926,623 @@
                 info
             );
 
+
             profileContainer.appendChild(
                 card
             );
+
+
+            /*
+             * Conquistas
+             */
+
+            displayAchievements(
+                achievements
+            );
+
 
             document.title =
                 profile.username +
                 " - Fluffy Community";
         }
 
-        function showError(message) {
 
-            profileContainer.innerHTML = "";
+        /*
+         * =========================================================
+         * EXIBIR CONQUISTAS
+         * =========================================================
+         */
+
+        function displayAchievements(
+            achievements
+        ) {
+
+            const section =
+                document.createElement(
+                    "section"
+                );
+
+            section.className =
+                "achievements-section";
+
+
+            const title =
+                document.createElement(
+                    "h2"
+                );
+
+            title.className =
+                "achievements-title";
+
+            title.textContent =
+                "🏆 Conquistas";
+
+
+            const count =
+                document.createElement(
+                    "p"
+                );
+
+            count.className =
+                "achievements-count";
+
+            count.textContent =
+                achievements.length === 1
+                    ? "1 conquista desbloqueada"
+                    : achievements.length +
+                      " conquistas desbloqueadas";
+
+
+            section.appendChild(
+                title
+            );
+
+            section.appendChild(
+                count
+            );
+
+
+            /*
+             * Nenhuma conquista
+             */
+
+            if (achievements.length === 0) {
+
+                const empty =
+                    document.createElement(
+                        "div"
+                    );
+
+                empty.className =
+                    "no-achievements";
+
+                empty.textContent =
+                    "Este usuário ainda não desbloqueou nenhuma conquista.";
+
+                section.appendChild(
+                    empty
+                );
+
+                profileContainer.appendChild(
+                    section
+                );
+
+                return;
+            }
+
+
+            const grid =
+                document.createElement(
+                    "div"
+                );
+
+            grid.className =
+                "achievements-grid";
+
+
+            for (
+                const achievement
+                of achievements
+            ) {
+
+                const data =
+                    achievement.data;
+
+
+                const button =
+                    document.createElement(
+                        "button"
+                    );
+
+                button.type =
+                    "button";
+
+                button.className =
+                    "achievement";
+
+
+                const icon =
+                    document.createElement(
+                        "img"
+                    );
+
+                icon.className =
+                    "achievement-icon";
+
+
+                icon.src =
+                    getAchievementIcon(
+                        data.icon
+                    );
+
+
+                icon.alt =
+                    getLocalizedText(
+                        data.name
+                    );
+
+
+                icon.onerror =
+                    function () {
+
+                        this.style.display =
+                            "none";
+                    };
+
+
+                const name =
+                    document.createElement(
+                        "div"
+                    );
+
+                name.className =
+                    "achievement-name";
+
+                name.textContent =
+                    getLocalizedText(
+                        data.name
+                    );
+
+
+                button.appendChild(
+                    icon
+                );
+
+                button.appendChild(
+                    name
+                );
+
+
+                if (data.secret) {
+
+                    const secret =
+                        document.createElement(
+                            "div"
+                        );
+
+                    secret.className =
+                        "achievement-secret";
+
+                    secret.textContent =
+                        "🔒 Secreta";
+
+                    button.appendChild(
+                        secret
+                    );
+                }
+
+
+                button.addEventListener(
+                    "click",
+                    function () {
+
+                        openAchievementModal(
+                            achievement.id,
+                            data
+                        );
+                    }
+                );
+
+
+                grid.appendChild(
+                    button
+                );
+            }
+
+
+            section.appendChild(
+                grid
+            );
+
+
+            profileContainer.appendChild(
+                section
+            );
+        }
+
+
+        /*
+         * =========================================================
+         * MODAL DA CONQUISTA
+         * =========================================================
+         */
+
+        function openAchievementModal(
+            achievementId,
+            achievement
+        ) {
+
+            const name =
+                getLocalizedText(
+                    achievement.name
+                );
+
+
+            const description =
+                getLocalizedText(
+                    achievement.description
+                );
+
+
+            modalIcon.src =
+                getAchievementIcon(
+                    achievement.icon
+                );
+
+            modalIcon.alt =
+                name;
+
+
+            modalTitle.textContent =
+                name;
+
+
+            /*
+             * O JSON atual é do Fluffy Adventure,
+             * então o jogo é identificado aqui.
+             *
+             * Se futuramente existir "game" no JSON,
+             * ele será usado automaticamente.
+             */
+
+            modalGame.textContent =
+                "🎮 " +
+                (
+                    achievement.game ||
+                    "Fluffy Adventure"
+                );
+
+
+            modalDescription.textContent =
+                description;
+
+
+            modalExtraFields.innerHTML =
+                "";
+
+
+            /*
+             * Mostra se é secreta.
+             */
+
+            if (achievement.secret) {
+
+                const secret =
+                    document.createElement(
+                        "div"
+                    );
+
+                secret.className =
+                    "secret-badge";
+
+                secret.textContent =
+                    "🔒 Conquista secreta";
+
+                modalExtraFields.appendChild(
+                    secret
+                );
+            }
+
+
+            /*
+             * ID da conquista.
+             */
+
+            addModalField(
+                "ID da conquista",
+                achievementId
+            );
+
+
+            /*
+             * Exibe automaticamente outros
+             * campos adicionados ao JSON.
+             *
+             * Ignoramos:
+             * icon
+             * name
+             * description
+             * secret
+             * game
+             *
+             * porque esses já possuem áreas próprias.
+             */
+
+            const ignoredFields = [
+                "icon",
+                "name",
+                "description",
+                "secret",
+                "game"
+            ];
+
+
+            for (
+                const key
+                of Object.keys(achievement)
+            ) {
+
+                if (
+                    ignoredFields.includes(
+                        key
+                    )
+                ) {
+                    continue;
+                }
+
+
+                let value =
+                    achievement[key];
+
+
+                /*
+                 * Se for objeto, tenta localizar
+                 * o idioma antes de transformar
+                 * em JSON.
+                 */
+
+                if (
+                    value &&
+                    typeof value === "object"
+                ) {
+
+                    value =
+                        getLocalizedText(
+                            value
+                        );
+                }
+
+
+                if (
+                    value === null ||
+                    value === undefined ||
+                    value === ""
+                ) {
+                    continue;
+                }
+
+
+                addModalField(
+                    formatFieldName(
+                        key
+                    ),
+                    String(value)
+                );
+            }
+
+
+            achievementModal.classList.add(
+                "open"
+            );
+
+            achievementModal.setAttribute(
+                "aria-hidden",
+                "false"
+            );
+
+            document.body.style.overflow =
+                "hidden";
+        }
+
+
+        /*
+         * =========================================================
+         * CAMPO EXTRA DO MODAL
+         * =========================================================
+         */
+
+        function addModalField(
+            label,
+            value
+        ) {
+
+            const field =
+                document.createElement(
+                    "div"
+                );
+
+            field.className =
+                "modal-field";
+
+
+            const fieldLabel =
+                document.createElement(
+                    "div"
+                );
+
+            fieldLabel.className =
+                "modal-field-label";
+
+            fieldLabel.textContent =
+                label;
+
+
+            const fieldValue =
+                document.createElement(
+                    "div"
+                );
+
+            fieldValue.className =
+                "modal-field-value";
+
+            fieldValue.textContent =
+                value;
+
+
+            field.appendChild(
+                fieldLabel
+            );
+
+            field.appendChild(
+                fieldValue
+            );
+
+
+            modalExtraFields.appendChild(
+                field
+            );
+        }
+
+
+        /*
+         * =========================================================
+         * FORMATAR NOME DE CAMPOS
+         * =========================================================
+         */
+
+        function formatFieldName(
+            value
+        ) {
+
+            return value
+                .replace(
+                    /_/g,
+                    " "
+                )
+                .replace(
+                    /\b\w/g,
+                    letter =>
+                        letter.toUpperCase()
+                );
+        }
+
+
+        /*
+         * =========================================================
+         * FECHAR MODAL
+         * =========================================================
+         */
+
+        function closeAchievementModal() {
+
+            achievementModal.classList.remove(
+                "open"
+            );
+
+            achievementModal.setAttribute(
+                "aria-hidden",
+                "true"
+            );
+
+            document.body.style.overflow =
+                "";
+        }
+
+
+        modalClose.addEventListener(
+            "click",
+            closeAchievementModal
+        );
+
+
+        achievementModal.addEventListener(
+            "click",
+            function (event) {
+
+                if (
+                    event.target ===
+                    achievementModal
+                ) {
+
+                    closeAchievementModal();
+                }
+            }
+        );
+
+
+        document.addEventListener(
+            "keydown",
+            function (event) {
+
+                if (
+                    event.key === "Escape" &&
+                    achievementModal.classList.contains(
+                        "open"
+                    )
+                ) {
+
+                    closeAchievementModal();
+                }
+            }
+        );
+
+
+        /*
+         * =========================================================
+         * AVATAR PADRÃO
+         * =========================================================
+         */
+
+        function createDefaultAvatar() {
+
+            return (
+                "data:image/svg+xml," +
+                encodeURIComponent(`
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="120"
+                        height="120"
+                        viewBox="0 0 120 120"
+                    >
+                        <rect
+                            width="120"
+                            height="120"
+                            rx="60"
+                            fill="#dddddd"
+                        />
+
+                        <circle
+                            cx="60"
+                            cy="45"
+                            r="22"
+                            fill="#999999"
+                        />
+
+                        <path
+                            d="M25 105
+                               C25 80 40 68 60 68
+                               C80 68 95 80 95 105"
+                            fill="#999999"
+                        />
+                    </svg>
+                `)
+            );
+        }
+
+
+        /*
+         * =========================================================
+         * ERRO
+         * =========================================================
+         */
+
+        function showError(
+            message
+        ) {
+
+            profileContainer.innerHTML =
+                "";
+
 
             const error =
                 document.createElement(
@@ -394,6 +1552,7 @@
             error.className =
                 "error";
 
+
             const title =
                 document.createElement(
                     "h2"
@@ -401,6 +1560,7 @@
 
             title.textContent =
                 "Ops!";
+
 
             const text =
                 document.createElement(
@@ -410,6 +1570,7 @@
             text.textContent =
                 message;
 
+
             error.appendChild(
                 title
             );
@@ -418,10 +1579,18 @@
                 text
             );
 
+
             profileContainer.appendChild(
                 error
             );
         }
+
+
+        /*
+         * =========================================================
+         * INICIAR
+         * =========================================================
+         */
 
         loadProfile();
     </script>
