@@ -327,7 +327,8 @@
 </main>
 
 <script>
-    const SUPABASE_URL = "https://wnihobtfpmabgfwoddye.supabase.co";
+    const SUPABASE_URL =
+        "https://wnihobtfpmabgfwoddye.supabase.co";
 
     const SUPABASE_ANON_KEY =
         "sb_publishable_Y-S1kbAXQE-Y4j-seMaHrQ_u_vUoTFF";
@@ -340,25 +341,42 @@
 
     const SAVE_BUCKET = "saves";
 
-    const supabaseClient = supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_ANON_KEY
-    );
+    const SAVE_FILE_NAME = "achievements.bin";
 
-    const loadingElement = document.getElementById("loading");
-    const errorElement = document.getElementById("error");
-    const profileContent = document.getElementById("profileContent");
+    const supabaseClient =
+        supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_ANON_KEY
+        );
 
-    const avatarElement = document.getElementById("avatar");
-    const usernameElement = document.getElementById("username");
-    const createdAtElement = document.getElementById("createdAt");
-    const bioElement = document.getElementById("bio");
+    const loadingElement =
+        document.getElementById("loading");
+
+    const errorElement =
+        document.getElementById("error");
+
+    const profileContent =
+        document.getElementById("profileContent");
+
+    const avatarElement =
+        document.getElementById("avatar");
+
+    const usernameElement =
+        document.getElementById("username");
+
+    const createdAtElement =
+        document.getElementById("createdAt");
+
+    const bioElement =
+        document.getElementById("bio");
 
     const achievementsElement =
         document.getElementById("achievements");
 
     const syncButton =
-        document.getElementById("syncAchievementsButton");
+        document.getElementById(
+            "syncAchievementsButton"
+        );
 
     const syncStatus =
         document.getElementById("syncStatus");
@@ -370,6 +388,7 @@
     let currentSession = null;
     let achievementsData = {};
 
+
     function showError(message) {
         loadingElement.style.display = "none";
         profileContent.style.display = "none";
@@ -378,56 +397,92 @@
         errorElement.style.display = "block";
     }
 
+
     function formatDate(dateString) {
+
         if (!dateString) {
             return "-";
         }
 
-        const date = new Date(dateString);
+        const date =
+            new Date(dateString);
 
         if (Number.isNaN(date.getTime())) {
             return "-";
         }
 
-        return date.toLocaleDateString("pt-BR", {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric"
-        });
+        return date.toLocaleDateString(
+            "pt-BR",
+            {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric"
+            }
+        );
     }
 
+
     function buildIconUrl(iconPath) {
+
         if (!iconPath) {
             return "";
         }
 
         let cleanPath = iconPath;
 
-        cleanPath = cleanPath.replace(/^res:\/\//, "");
-        cleanPath = cleanPath.replace(/^\/+/, "");
+        cleanPath =
+            cleanPath.replace(
+                /^res:\/\//,
+                ""
+            );
 
-        const encodedPath = cleanPath
-            .split("/")
-            .map(segment => encodeURIComponent(segment))
-            .join("/");
+        cleanPath =
+            cleanPath.replace(
+                /^\/+/,
+                ""
+            );
 
-        return ACHIEVEMENTS_BASE_URL + encodedPath;
+        const encodedPath =
+            cleanPath
+                .split("/")
+                .map(
+                    segment =>
+                        encodeURIComponent(segment)
+                )
+                .join("/");
+
+        return (
+            ACHIEVEMENTS_BASE_URL +
+            encodedPath
+        );
     }
 
+
     function normalizeAchievementIds(value) {
+
         if (!Array.isArray(value)) {
             return [];
         }
 
         return value
-            .map(id => String(id))
-            .filter(id => id.length > 0);
+            .map(
+                id => String(id)
+            )
+            .filter(
+                id => id.length > 0
+            );
     }
 
+
     async function loadAchievementsData() {
-        const response = await fetch(ACHIEVEMENTS_JSON_URL, {
-            cache: "no-cache"
-        });
+
+        const response =
+            await fetch(
+                ACHIEVEMENTS_JSON_URL,
+                {
+                    cache: "no-cache"
+                }
+            );
 
         if (!response.ok) {
             throw new Error(
@@ -435,9 +490,14 @@
             );
         }
 
-        const data = await response.json();
+        const data =
+            await response.json();
 
-        if (!data || typeof data !== "object" || Array.isArray(data)) {
+        if (
+            !data ||
+            typeof data !== "object" ||
+            Array.isArray(data)
+        ) {
             throw new Error(
                 "O arquivo achievements.json possui formato inválido."
             );
@@ -446,8 +506,13 @@
         achievementsData = data;
     }
 
+
     function getLocalizedText(value) {
-        if (!value || typeof value !== "object") {
+
+        if (
+            !value ||
+            typeof value !== "object"
+        ) {
             return "";
         }
 
@@ -462,7 +527,10 @@
             "ja"
         ];
 
-        for (const language of languages) {
+        for (
+            const language of languages
+        ) {
+
             if (
                 Object.prototype.hasOwnProperty.call(
                     value,
@@ -473,7 +541,8 @@
             }
         }
 
-        const keys = Object.keys(value);
+        const keys =
+            Object.keys(value);
 
         if (keys.length > 0) {
             return value[keys[0]];
@@ -482,16 +551,28 @@
         return "";
     }
 
-    function renderAchievements(unlockedIds) {
+
+    function renderAchievements(
+        unlockedIds
+    ) {
+
         achievementsElement.innerHTML = "";
 
-        const unlockedSet = new Set(
-            normalizeAchievementIds(unlockedIds)
-        );
+        const unlockedSet =
+            new Set(
+                normalizeAchievementIds(
+                    unlockedIds
+                )
+            );
 
-        const achievementIds = Object.keys(achievementsData);
+        const achievementIds =
+            Object.keys(
+                achievementsData
+            );
 
-        if (achievementIds.length === 0) {
+        if (
+            achievementIds.length === 0
+        ) {
             achievementsElement.innerHTML =
                 '<div class="empty">Nenhuma conquista disponível.</div>';
 
@@ -500,7 +581,9 @@
 
         let renderedCount = 0;
 
-        for (const id of achievementIds) {
+        for (
+            const id of achievementIds
+        ) {
 
             const achievement =
                 achievementsData[id];
@@ -512,27 +595,51 @@
                 continue;
             }
 
-            const unlocked = unlockedSet.has(id);
-            const secret = achievement.secret === true;
+            const unlocked =
+                unlockedSet.has(id);
 
-            if (!unlocked && secret) {
+            const secret =
+                achievement.secret === true;
+
+            /*
+             * Conquistas secretas bloqueadas
+             * não aparecem no perfil.
+             */
+            if (
+                !unlocked &&
+                secret
+            ) {
                 continue;
             }
 
             const card =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
 
-            card.className = "achievement";
+            card.className =
+                "achievement";
 
             const icon =
-                document.createElement("img");
+                document.createElement(
+                    "img"
+                );
 
-            icon.className = "achievement-icon";
+            icon.className =
+                "achievement-icon";
 
-            if (unlocked && achievement.icon) {
+            if (
+                unlocked &&
+                achievement.icon
+            ) {
+
                 icon.src =
-                    buildIconUrl(achievement.icon);
+                    buildIconUrl(
+                        achievement.icon
+                    );
+
             } else {
+
                 icon.src =
                     buildIconUrl(
                         "res://Conquistas/Ícones/bloqueado.png"
@@ -542,15 +649,22 @@
             icon.alt = "";
 
             const info =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
 
-            info.className = "achievement-info";
+            info.className =
+                "achievement-info";
 
             const title =
-                document.createElement("h3");
+                document.createElement(
+                    "h3"
+                );
 
             const description =
-                document.createElement("p");
+                document.createElement(
+                    "p"
+                );
 
             if (unlocked) {
 
@@ -566,16 +680,22 @@
 
             } else {
 
-                title.textContent = "???";
-                description.textContent = "???";
+                title.textContent =
+                    "???";
+
+                description.textContent =
+                    "???";
             }
 
             info.appendChild(title);
             info.appendChild(description);
 
             if (secret) {
+
                 const secretLabel =
-                    document.createElement("span");
+                    document.createElement(
+                        "span"
+                    );
 
                 secretLabel.className =
                     "secret-label";
@@ -583,24 +703,32 @@
                 secretLabel.textContent =
                     "SECRETA";
 
-                info.appendChild(secretLabel);
+                info.appendChild(
+                    secretLabel
+                );
             }
 
             card.appendChild(icon);
             card.appendChild(info);
 
-            achievementsElement.appendChild(card);
+            achievementsElement.appendChild(
+                card
+            );
 
             renderedCount++;
         }
 
         if (renderedCount === 0) {
+
             achievementsElement.innerHTML =
                 '<div class="empty">Nenhuma conquista desbloqueada.</div>';
         }
     }
 
-    async function loadProfile(profileId) {
+
+    async function loadProfile(
+        profileId
+    ) {
 
         const {
             data,
@@ -610,7 +738,10 @@
             .select(
                 "id, username, created_at, avatar_url, bio, achievements"
             )
-            .eq("id", profileId)
+            .eq(
+                "id",
+                profileId
+            )
             .maybeSingle();
 
         if (error) {
@@ -626,19 +757,26 @@
         currentProfile = data;
 
         usernameElement.textContent =
-            data.username || "FluffyPlayer";
+            data.username ||
+            "FluffyPlayer";
 
         createdAtElement.textContent =
-            formatDate(data.created_at);
+            formatDate(
+                data.created_at
+            );
 
         if (data.avatar_url) {
+
             avatarElement.src =
                 data.avatar_url;
+
         } else {
+
             avatarElement.src =
                 "https://ui-avatars.com/api/?name=" +
                 encodeURIComponent(
-                    data.username || "FluffyPlayer"
+                    data.username ||
+                    "FluffyPlayer"
                 ) +
                 "&background=6c4cff&color=fff&size=220";
         }
@@ -647,10 +785,17 @@
             data.bio &&
             String(data.bio).trim() !== ""
         ) {
-            bioElement.textContent = data.bio;
-            bioElement.style.display = "block";
+
+            bioElement.textContent =
+                data.bio;
+
+            bioElement.style.display =
+                "block";
+
         } else {
-            bioElement.style.display = "none";
+
+            bioElement.style.display =
+                "none";
         }
 
         renderAchievements(
@@ -660,22 +805,29 @@
         );
     }
 
+
     async function updateAccountNavigation() {
 
         const {
             data
-        } = await supabaseClient.auth.getSession();
+        } =
+            await supabaseClient.auth.getSession();
 
         currentSession =
-            data ? data.session : null;
+            data
+                ? data.session
+                : null;
 
         if (currentSession) {
+
             accountLink.textContent =
                 "Minha conta";
 
             accountLink.href =
                 "index.html";
+
         } else {
+
             accountLink.textContent =
                 "Entrar";
 
@@ -684,15 +836,20 @@
         }
     }
 
+
     async function checkProfileOwner() {
 
         if (!currentProfile) {
-            syncButton.style.display = "none";
+            syncButton.style.display =
+                "none";
+
             return;
         }
 
         if (!currentSession) {
-            syncButton.style.display = "none";
+            syncButton.style.display =
+                "none";
+
             return;
         }
 
@@ -700,16 +857,472 @@
             currentSession.user.id !==
             currentProfile.id
         ) {
-            syncButton.style.display = "none";
+
+            syncButton.style.display =
+                "none";
+
             return;
         }
 
-        syncButton.style.display = "inline-block";
+        syncButton.style.display =
+            "inline-block";
     }
+
+
+    /*
+     * Leitor do formato usado pelo Godot 4:
+     *
+     * FileAccess.store_var()
+     *
+     * Estrutura:
+     *
+     * uint32 = tamanho do Variant
+     * Variant Dictionary
+     *   String -> Bool
+     *
+     * O Dictionary usado pelo jogo é:
+     *
+     * {
+     *     "achievement_id": true
+     * }
+     */
+
+
+    class GodotVariantReader {
+
+        constructor(buffer) {
+
+            this.bytes =
+                new Uint8Array(buffer);
+
+            this.view =
+                new DataView(buffer);
+
+            this.offset = 0;
+        }
+
+
+        ensure(size) {
+
+            if (
+                this.offset + size >
+                this.bytes.length
+            ) {
+                throw new Error(
+                    "Arquivo achievements.bin terminou inesperadamente."
+                );
+            }
+        }
+
+
+        readUint32() {
+
+            this.ensure(4);
+
+            const value =
+                this.view.getUint32(
+                    this.offset,
+                    true
+                );
+
+            this.offset += 4;
+
+            return value;
+        }
+
+
+        readInt32() {
+
+            this.ensure(4);
+
+            const value =
+                this.view.getInt32(
+                    this.offset,
+                    true
+                );
+
+            this.offset += 4;
+
+            return value;
+        }
+
+
+        readUint64() {
+
+            this.ensure(8);
+
+            const value =
+                this.view.getBigUint64(
+                    this.offset,
+                    true
+                );
+
+            this.offset += 8;
+
+            return value;
+        }
+
+
+        readBytes(length) {
+
+            this.ensure(length);
+
+            const result =
+                this.bytes.slice(
+                    this.offset,
+                    this.offset + length
+                );
+
+            this.offset += length;
+
+            return result;
+        }
+
+
+        align4() {
+
+            const remainder =
+                this.offset % 4;
+
+            if (remainder !== 0) {
+
+                this.offset +=
+                    4 - remainder;
+            }
+
+            this.ensure(0);
+        }
+
+
+        readString() {
+
+            const length =
+                this.readUint32();
+
+            if (length < 0) {
+                throw new Error(
+                    "Tamanho de String inválido."
+                );
+            }
+
+            const bytes =
+                this.readBytes(
+                    length
+                );
+
+            const decoder =
+                new TextDecoder(
+                    "utf-8",
+                    {
+                        fatal: true
+                    }
+                );
+
+            const text =
+                decoder.decode(bytes);
+
+            this.align4();
+
+            return text;
+        }
+
+
+        readVariant() {
+
+            const header =
+                this.readUint32();
+
+            const type =
+                header & 0xFF;
+
+            /*
+             * Tipos do Variant no Godot 4:
+             *
+             * 0  = NIL
+             * 1  = BOOL
+             * 2  = INT
+             * 3  = FLOAT
+             * 4  = STRING
+             * 18 = DICTIONARY
+             */
+
+            switch (type) {
+
+                case 0:
+                    return null;
+
+
+                case 1: {
+
+                    const value =
+                        this.readUint32();
+
+                    return value !== 0;
+                }
+
+
+                case 2: {
+
+                    const is64 =
+                        (
+                            header &
+                            0x00010000
+                        ) !== 0;
+
+                    if (is64) {
+
+                        const value =
+                            this.readUint64();
+
+                        return BigInt.asIntN(
+                            64,
+                            value
+                        );
+
+                    } else {
+
+                        return this.readInt32();
+                    }
+                }
+
+
+                case 3: {
+
+                    const is64 =
+                        (
+                            header &
+                            0x00010000
+                        ) !== 0;
+
+                    if (is64) {
+
+                        this.ensure(8);
+
+                        const value =
+                            this.view.getFloat64(
+                                this.offset,
+                                true
+                            );
+
+                        this.offset += 8;
+
+                        return value;
+
+                    } else {
+
+                        this.ensure(4);
+
+                        const value =
+                            this.view.getFloat32(
+                                this.offset,
+                                true
+                            );
+
+                        this.offset += 4;
+
+                        return value;
+                    }
+                }
+
+
+                case 4:
+
+                    return this.readString();
+
+
+                case 18:
+
+                    return this.readDictionary(
+                        header
+                    );
+
+
+                default:
+
+                    throw new Error(
+                        "Tipo Variant do Godot não suportado: " +
+                        type
+                    );
+            }
+        }
+
+
+        readDictionary(header) {
+
+            /*
+             * Para o Dictionary normal usado
+             * pelo jogo, não existem tipos
+             * tipados adicionais no header.
+             */
+
+            const keyType =
+                (
+                    header >> 16
+                ) & 0x03;
+
+            const valueType =
+                (
+                    header >> 18
+                ) & 0x03;
+
+            /*
+             * Se o Dictionary for tipado,
+             * o arquivo possui informações
+             * extras. O jogo atual usa
+             * Dictionary normal, então esses
+             * campos normalmente serão zero.
+             */
+            if (keyType !== 0) {
+
+                this.skipContainerType(
+                    keyType
+                );
+            }
+
+            if (valueType !== 0) {
+
+                this.skipContainerType(
+                    valueType
+                );
+            }
+
+            const count =
+                this.readUint32() &
+                0x7FFFFFFF;
+
+            const dictionary = {};
+
+            for (
+                let i = 0;
+                i < count;
+                i++
+            ) {
+
+                const key =
+                    this.readVariant();
+
+                const value =
+                    this.readVariant();
+
+                dictionary[
+                    String(key)
+                ] = value;
+            }
+
+            return dictionary;
+        }
+
+
+        skipContainerType(type) {
+
+            /*
+             * 01 = Builtin
+             * 10 = Class name
+             * 11 = Script
+             *
+             * Para o Dictionary atual
+             * isso não deverá ser necessário,
+             * mas mantemos suporte básico.
+             */
+
+            if (type === 1) {
+
+                this.readUint32();
+
+                return;
+            }
+
+            if (
+                type === 2 ||
+                type === 3
+            ) {
+
+                this.readString();
+
+                return;
+            }
+
+            throw new Error(
+                "Tipo de container Godot inválido."
+            );
+        }
+    }
+
+
+    function parseGodotAchievements(
+        arrayBuffer
+    ) {
+
+        const reader =
+            new GodotVariantReader(
+                arrayBuffer
+            );
+
+        /*
+         * FileAccess.get_var() primeiro
+         * lê um uint32 contendo o tamanho
+         * do Variant.
+         *
+         * O store_var() usado pelo jogo
+         * produz exatamente esse prefixo.
+         */
+        const serializedLength =
+            reader.readUint32();
+
+        if (
+            serializedLength <= 0
+        ) {
+            throw new Error(
+                "Tamanho inválido em achievements.bin."
+            );
+        }
+
+        if (
+            serializedLength >
+            reader.bytes.length -
+            reader.offset
+        ) {
+            throw new Error(
+                "O tamanho declarado de achievements.bin é inválido."
+            );
+        }
+
+        const value =
+            reader.readVariant();
+
+        if (
+            !value ||
+            typeof value !== "object" ||
+            Array.isArray(value)
+        ) {
+            throw new Error(
+                "achievements.bin não contém um Dictionary do Godot."
+            );
+        }
+
+        const unlockedIds = [];
+
+        for (
+            const id of Object.keys(value)
+        ) {
+
+            if (
+                value[id] === true
+            ) {
+                unlockedIds.push(
+                    String(id)
+                );
+            }
+        }
+
+        return unlockedIds;
+    }
+
 
     async function synchronizeAchievements() {
 
         if (!currentSession) {
+
             syncStatus.textContent =
                 "Você precisa estar conectado para sincronizar.";
 
@@ -717,6 +1330,7 @@
         }
 
         if (!currentProfile) {
+
             syncStatus.textContent =
                 "Perfil inválido.";
 
@@ -727,6 +1341,7 @@
             currentSession.user.id !==
             currentProfile.id
         ) {
+
             syncStatus.textContent =
                 "Você só pode sincronizar suas próprias conquistas.";
 
@@ -736,7 +1351,7 @@
         syncButton.disabled = true;
 
         syncStatus.textContent =
-            "Baixando conquistas salvas...";
+            "Baixando achievements.bin...";
 
         try {
 
@@ -744,17 +1359,20 @@
                 currentSession.user.id;
 
             const filePath =
-                userId + "/achievements.json";
+                userId +
+                "/" +
+                SAVE_FILE_NAME;
 
             const {
                 data: signedUrlData,
                 error: signedUrlError
-            } = await supabaseClient.storage
-                .from(SAVE_BUCKET)
-                .createSignedUrl(
-                    filePath,
-                    60
-                );
+            } =
+                await supabaseClient.storage
+                    .from(SAVE_BUCKET)
+                    .createSignedUrl(
+                        filePath,
+                        60
+                    );
 
             if (signedUrlError) {
                 throw signedUrlError;
@@ -770,78 +1388,70 @@
             }
 
             syncStatus.textContent =
-                "Lendo conquistas...";
+                "Lendo achievements.bin...";
 
             const response =
                 await fetch(
                     signedUrlData.signedUrl,
                     {
-                        cache: "no-cache"
+                        cache: "no-store"
                     }
                 );
 
             if (!response.ok) {
 
-                if (response.status === 404) {
+                if (
+                    response.status === 404
+                ) {
+
                     throw new Error(
-                        "O arquivo achievements.json ainda não foi enviado pelo jogo."
+                        "O arquivo achievements.bin não foi encontrado na conta."
                     );
                 }
 
                 throw new Error(
-                    "Não foi possível baixar achievements.json."
+                    "Não foi possível baixar achievements.bin. HTTP " +
+                    response.status
                 );
             }
 
-            const json =
-                await response.json();
+            const arrayBuffer =
+                await response.arrayBuffer();
 
-            let unlockedIds = [];
-
-            if (Array.isArray(json)) {
-
-                unlockedIds =
-                    normalizeAchievementIds(json);
-
-            } else if (
-                json &&
-                typeof json === "object"
+            if (
+                arrayBuffer.byteLength === 0
             ) {
-
-                if (
-                    Array.isArray(
-                        json.achievements
-                    )
-                ) {
-                    unlockedIds =
-                        normalizeAchievementIds(
-                            json.achievements
-                        );
-                } else {
-
-                    unlockedIds =
-                        Object.keys(json)
-                            .filter(
-                                id =>
-                                    json[id] === true
-                            );
-                }
+                throw new Error(
+                    "achievements.bin está vazio."
+                );
             }
+
+            const unlockedIds =
+                parseGodotAchievements(
+                    arrayBuffer
+                );
+
+            console.log(
+                "[Fluffy Community] Conquistas encontradas:",
+                unlockedIds
+            );
 
             syncStatus.textContent =
                 "Atualizando perfil...";
 
             const {
                 error: updateError
-            } = await supabaseClient
-                .from("profiles")
-                .update({
-                    achievements: unlockedIds
-                })
-                .eq(
-                    "id",
-                    userId
-                );
+            } =
+                await supabaseClient
+                    .from("profiles")
+                    .update({
+                        achievements:
+                            unlockedIds
+                    })
+                    .eq(
+                        "id",
+                        userId
+                    );
 
             if (updateError) {
                 throw updateError;
@@ -877,6 +1487,7 @@
         }
     }
 
+
     async function initialize() {
 
         try {
@@ -892,6 +1503,7 @@
                 params.get("id");
 
             if (!profileId) {
+
                 throw new Error(
                     "Nenhum perfil foi especificado."
                 );
@@ -925,15 +1537,21 @@
         }
     }
 
+
     syncButton.addEventListener(
         "click",
         synchronizeAchievements
     );
 
-    supabaseClient.auth.onAuthStateChange(
-        async (_event, session) => {
 
-            currentSession = session;
+    supabaseClient.auth.onAuthStateChange(
+        async (
+            _event,
+            session
+        ) => {
+
+            currentSession =
+                session;
 
             if (session) {
 
@@ -955,6 +1573,7 @@
             await checkProfileOwner();
         }
     );
+
 
     initialize();
 </script>
