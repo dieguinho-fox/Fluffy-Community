@@ -2,1180 +2,1110 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <title>Preferências — Fluffy Community</title>
 
-    <title>Preferências - Fluffy Community</title>
-
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
-        main {
-            max-width: 700px;
-            margin: 30px auto;
-            padding: 20px;
-        }
-
-        .settings-card {
-            background: #ffffff;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow:
-                0 4px 15px rgba(0, 0, 0, 0.08);
-        }
-
-        .settings-card h2 {
-            margin-top: 0;
-        }
-
-        .section {
-            margin-top: 30px;
-            padding-top: 25px;
-            border-top: 1px solid #eeeeee;
-        }
-
-        .section:first-of-type {
-            margin-top: 20px;
-            padding-top: 0;
-            border-top: none;
-        }
-
-        .field {
-            margin-top: 20px;
-        }
-
-        .field label {
-            display: block;
-            margin-bottom: 7px;
-            font-weight: bold;
-        }
-
-        .field input,
-        .field textarea {
-            width: 100%;
+        * {
             box-sizing: border-box;
-            padding: 11px;
-            border: 1px solid #cccccc;
-            border-radius: 8px;
-            font-size: 15px;
-            font-family: inherit;
         }
 
-        .field textarea {
-            min-height: 100px;
-            resize: vertical;
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            color: #222;
         }
 
-        .field small {
-            display: block;
-            margin-top: 5px;
-            color: #777777;
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px 20px 50px;
         }
 
-        .account-email {
-            color: #555555;
-            word-break: break-word;
-        }
-
-        .login-method {
+        .header {
             display: flex;
             align-items: center;
-            justify-content: space-between;
             gap: 15px;
-            padding: 15px;
-            margin-top: 12px;
-            border: 1px solid #eeeeee;
-            border-radius: 10px;
+            margin-bottom: 25px;
         }
 
-        .login-method-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .login-method-icon {
-            font-size: 24px;
-        }
-
-        .login-method-name {
-            font-weight: bold;
-        }
-
-        .login-method-status {
-            font-size: 13px;
-            color: #777777;
-            margin-top: 3px;
-        }
-
-        .connected {
-            color: #16803c;
-        }
-
-        .not-connected {
-            color: #777777;
-        }
-
-        .buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 30px;
-        }
-
-        .button {
-            display: inline-block;
-            padding: 11px 18px;
+        .back-button {
             border: none;
-            border-radius: 8px;
-            background: #5865f2;
-            color: #ffffff;
-            text-decoration: none;
-            font-weight: bold;
+            background: #e5e5e5;
+            border-radius: 10px;
+            padding: 10px 15px;
             cursor: pointer;
             font-size: 14px;
         }
 
-        .button:hover {
-            opacity: 0.9;
+        .back-button:hover {
+            background: #d8d8d8;
         }
 
-        .secondary-button {
-            background: #777777;
+        h1 {
+            margin: 0;
+            font-size: 28px;
         }
 
-        .logout-button {
-            background: #e53935;
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
         }
 
-        .message {
-            margin-top: 20px;
-            padding: 12px;
-            border-radius: 8px;
-            display: none;
+        .card h2 {
+            margin-top: 0;
+            margin-bottom: 8px;
+        }
+
+        .description {
+            color: #666;
+            font-size: 14px;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 7px;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 9px;
+            padding: 11px 12px;
+            font-size: 15px;
+            outline: none;
+            margin-bottom: 16px;
+        }
+
+        input:focus,
+        textarea:focus {
+            border-color: #777;
+        }
+
+        textarea {
+            min-height: 110px;
+            resize: vertical;
+        }
+
+        input[readonly] {
+            background: #f2f2f2;
+            color: #666;
+        }
+
+        .counter {
+            text-align: right;
+            margin-top: -12px;
+            margin-bottom: 16px;
+            font-size: 12px;
+            color: #777;
+        }
+
+        button {
+            border: none;
+            border-radius: 9px;
+            padding: 11px 16px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .primary {
+            background: #222;
+            color: white;
+        }
+
+        .primary:hover {
+            background: #333;
+        }
+
+        .secondary {
+            background: #e9e9e9;
+            color: #222;
+        }
+
+        .secondary:hover {
+            background: #ddd;
+        }
+
+        .danger {
+            background: #d93025;
+            color: white;
+        }
+
+        .danger:hover {
+            background: #b9231a;
+        }
+
+        .save-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 5px;
+        }
+
+        .status {
+            font-size: 14px;
+        }
+
+        .method {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .method:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .method:first-of-type {
+            padding-top: 5px;
+        }
+
+        .method-info {
+            flex: 1;
+        }
+
+        .method-title {
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .method-status {
+            font-size: 13px;
+            color: #666;
         }
 
         .success {
-            display: block;
-            background: #e8f5e9;
-            color: #1b5e20;
+            color: #16803c;
         }
 
-        .error {
-            display: block;
-            background: #ffebee;
-            color: #b71c1c;
+        .warning {
+            color: #a56600;
+        }
+
+        .security-item {
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .security-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .security-item h3 {
+            margin: 0 0 6px;
+            font-size: 16px;
+        }
+
+        .security-item p {
+            margin: 0 0 12px;
+            color: #666;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .hidden {
+            display: none !important;
         }
 
         .loading {
             text-align: center;
-            color: #666666;
+            padding: 40px 20px;
+            color: #666;
         }
 
-        .disabled-button {
-            background: #aaaaaa;
-            cursor: not-allowed;
+        .error-box {
+            background: #ffe8e6;
+            color: #a51d14;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .password-form {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .account-danger {
+            border: 1px solid #f0b5b0;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px 15px 40px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .method {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .method button {
+                width: 100%;
+            }
         }
     </style>
 </head>
 
 <body>
 
-    <header>
-        <h1>Fluffy Community</h1>
+<div class="container">
 
-        <p>
-            Preferências da conta
-        </p>
-    </header>
+    <div class="header">
+        <button class="back-button" onclick="goBack()">← Voltar</button>
+        <h1>Preferências</h1>
+    </div>
 
-    <main>
+    <div id="loading" class="loading">
+        Carregando suas configurações...
+    </div>
 
-        <div id="settingsContainer">
-            <p class="loading">
-                Carregando suas configurações...
+    <div id="errorBox" class="error-box hidden"></div>
+
+    <div id="content" class="hidden">
+
+        <!-- PERFIL -->
+        <div class="card">
+            <h2>Perfil</h2>
+            <p class="description">
+                Essas informações aparecem no seu perfil público.
             </p>
+
+            <label for="username">Nome de usuário</label>
+            <input
+                id="username"
+                type="text"
+                maxlength="20"
+                autocomplete="username"
+            >
+
+            <div class="counter" id="usernameCounter">
+                0/20
+            </div>
+
+            <label for="avatarUrl">URL da foto de perfil</label>
+            <input
+                id="avatarUrl"
+                type="url"
+                placeholder="https://..."
+            >
+
+            <label for="bio">Biografia</label>
+            <textarea
+                id="bio"
+                maxlength="300"
+                placeholder="Conte um pouco sobre você..."
+            ></textarea>
+
+            <div class="counter" id="bioCounter">
+                0/300
+            </div>
+
+            <label for="email">E-mail</label>
+            <input
+                id="email"
+                type="email"
+                readonly
+            >
+
+            <label for="createdAt">Conta criada em</label>
+            <input
+                id="createdAt"
+                type="text"
+                readonly
+            >
+
+            <div class="save-area">
+                <button id="saveProfile" class="primary">
+                    Salvar alterações
+                </button>
+
+                <span id="saveStatus" class="status"></span>
+            </div>
         </div>
 
-    </main>
+        <!-- MÉTODOS DE LOGIN -->
+        <div class="card">
+            <h2>Métodos de login</h2>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+            <p class="description">
+                Gerencie as formas usadas para entrar na sua conta.
+            </p>
 
-    <script>
-        const SETTINGS_SUPABASE_URL =
-            "https://wnihobtfpmabgfwoddye.supabase.co";
+            <div class="method">
+                <div class="method-info">
+                    <div class="method-title">
+                        Google
+                    </div>
 
-        const SETTINGS_SUPABASE_KEY =
-            "sb_publishable_Y-S1kbAXQE-Y4j-seMaHrQ_u_vUoTFF";
+                    <div id="googleStatus" class="method-status">
+                        Verificando...
+                    </div>
+                </div>
 
-        const settingsSupabase =
-            window.supabase.createClient(
-                SETTINGS_SUPABASE_URL,
-                SETTINGS_SUPABASE_KEY
-            );
+                <button id="googleButton" class="secondary">
+                    Verificando...
+                </button>
+            </div>
 
-        const settingsContainer =
-            document.getElementById(
-                "settingsContainer"
-            );
+            <div class="method">
+                <div class="method-info">
+                    <div class="method-title">
+                        Senha
+                    </div>
 
-        let currentUser = null;
-        let currentProfile = null;
+                    <div id="passwordStatus" class="method-status">
+                        Verificando...
+                    </div>
+                </div>
 
-        async function loadSettings() {
+                <button id="passwordButton" class="secondary">
+                    Verificando...
+                </button>
+            </div>
 
-            try {
+            <div id="passwordForm" class="password-form hidden">
 
-                const sessionResult =
-                    await settingsSupabase.auth.getSession();
+                <label for="newPassword">
+                    Nova senha
+                </label>
 
-                const session =
-                    sessionResult.data.session;
+                <input
+                    id="newPassword"
+                    type="password"
+                    minlength="6"
+                    autocomplete="new-password"
+                    placeholder="Digite uma nova senha"
+                >
 
-                if (
-                    sessionResult.error ||
-                    !session
-                ) {
-                    window.location.href =
-                        "login.html";
+                <label for="confirmPassword">
+                    Confirmar nova senha
+                </label>
 
-                    return;
-                }
+                <input
+                    id="confirmPassword"
+                    type="password"
+                    minlength="6"
+                    autocomplete="new-password"
+                    placeholder="Digite a senha novamente"
+                >
 
-                currentUser =
-                    session.user;
+                <div class="save-area">
+                    <button id="savePassword" class="primary">
+                        Salvar senha
+                    </button>
 
-                const profileResult =
-                    await settingsSupabase
-                        .from("profiles")
-                        .select(
-                            "id, username, created_at, avatar_url, bio"
-                        )
-                        .eq(
-                            "id",
-                            currentUser.id
-                        )
-                        .maybeSingle();
+                    <button id="cancelPassword" class="secondary">
+                        Cancelar
+                    </button>
 
-                if (profileResult.error) {
+                    <span id="passwordSaveStatus" class="status"></span>
+                </div>
 
-                    console.error(
-                        "Erro ao carregar perfil:",
-                        profileResult.error
-                    );
+            </div>
+        </div>
 
-                    showError(
-                        "Não foi possível carregar suas configurações."
-                    );
+        <!-- SEGURANÇA -->
+        <div class="card">
+            <h2>Segurança</h2>
 
-                    return;
-                }
+            <p class="description">
+                Controle o acesso à sua conta.
+            </p>
 
-                if (!profileResult.data) {
+            <div class="security-item">
 
-                    showError(
-                        "Seu perfil ainda não foi criado."
-                    );
+                <h3>Sair de todas as sessões</h3>
 
-                    return;
-                }
+                <p>
+                    Encerra as sessões da sua conta em outros dispositivos
+                    e navegadores.
+                </p>
 
-                currentProfile =
-                    profileResult.data;
+                <button id="logoutAll" class="secondary">
+                    Sair de todas as sessões
+                </button>
 
-                displaySettings();
+            </div>
 
-            } catch (error) {
+            <div class="security-item">
 
-                console.error(
-                    "Erro inesperado:",
-                    error
-                );
+                <h3>Sair desta conta</h3>
 
-                showError(
-                    "Ocorreu um erro ao carregar as configurações."
-                );
-            }
+                <p>
+                    Encerra a sessão atual neste dispositivo.
+                </p>
+
+                <button id="logout" class="secondary">
+                    Sair
+                </button>
+
+            </div>
+        </div>
+
+        <!-- CONTA -->
+        <div class="card account-danger">
+
+            <h2>Conta</h2>
+
+            <p class="description">
+                Ações permanentes relacionadas à sua conta.
+            </p>
+
+            <div class="security-item">
+
+                <h3>Excluir conta</h3>
+
+                <p>
+                    A exclusão da conta será adicionada posteriormente.
+                    Ela exigirá confirmação antes de ser executada.
+                </p>
+
+                <button
+                    class="danger"
+                    onclick="alert('A exclusão da conta ainda não está disponível.')"
+                >
+                    Excluir minha conta
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    const ACCOUNT_SUPABASE_URL =
+        "https://wnihobtfpmabgfwoddye.supabase.co";
+
+    const ACCOUNT_SUPABASE_KEY =
+        "sb_publishable_Y-S1kbAXQE-Y4j-seMaHrQ_u_vUoTFF";
+
+    const accountSupabase =
+        window.supabase.createClient(
+            ACCOUNT_SUPABASE_URL,
+            ACCOUNT_SUPABASE_KEY
+        );
+
+    let currentUser = null;
+    let currentProfile = null;
+
+    const loading = document.getElementById("loading");
+    const content = document.getElementById("content");
+    const errorBox = document.getElementById("errorBox");
+
+    const usernameInput = document.getElementById("username");
+    const avatarUrlInput = document.getElementById("avatarUrl");
+    const bioInput = document.getElementById("bio");
+    const emailInput = document.getElementById("email");
+    const createdAtInput = document.getElementById("createdAt");
+
+    const usernameCounter =
+        document.getElementById("usernameCounter");
+
+    const bioCounter =
+        document.getElementById("bioCounter");
+
+    const saveProfile =
+        document.getElementById("saveProfile");
+
+    const saveStatus =
+        document.getElementById("saveStatus");
+
+    const googleStatus =
+        document.getElementById("googleStatus");
+
+    const googleButton =
+        document.getElementById("googleButton");
+
+    const passwordStatus =
+        document.getElementById("passwordStatus");
+
+    const passwordButton =
+        document.getElementById("passwordButton");
+
+    const passwordForm =
+        document.getElementById("passwordForm");
+
+    const newPassword =
+        document.getElementById("newPassword");
+
+    const confirmPassword =
+        document.getElementById("confirmPassword");
+
+    const savePassword =
+        document.getElementById("savePassword");
+
+    const cancelPassword =
+        document.getElementById("cancelPassword");
+
+    const passwordSaveStatus =
+        document.getElementById("passwordSaveStatus");
+
+    function showError(message) {
+        errorBox.textContent = message;
+        errorBox.classList.remove("hidden");
+    }
+
+    function hideError() {
+        errorBox.classList.add("hidden");
+        errorBox.textContent = "";
+    }
+
+    function updateCounters() {
+        usernameCounter.textContent =
+            `${usernameInput.value.length}/20`;
+
+        bioCounter.textContent =
+            `${bioInput.value.length}/300`;
+    }
+
+    function formatDate(dateString) {
+        if (!dateString) {
+            return "Não informado";
         }
 
-        function displaySettings() {
-
-            settingsContainer.innerHTML = "";
-
-            const card =
-                document.createElement(
-                    "div"
-                );
-
-            card.className =
-                "settings-card";
-
-            const title =
-                document.createElement(
-                    "h2"
-                );
-
-            title.textContent =
-                "Preferências da conta";
-
-            card.appendChild(
-                title
-            );
-
-            /*
-             * PERFIL
-             */
-
-            const profileSection =
-                document.createElement(
-                    "div"
-                );
-
-            profileSection.className =
-                "section";
-
-            const profileTitle =
-                document.createElement(
-                    "h3"
-                );
-
-            profileTitle.textContent =
-                "Perfil";
-
-            profileSection.appendChild(
-                profileTitle
-            );
-
-            /*
-             * USERNAME
-             */
-
-            const usernameField =
-                document.createElement(
-                    "div"
-                );
-
-            usernameField.className =
-                "field";
-
-            const usernameLabel =
-                document.createElement(
-                    "label"
-                );
-
-            usernameLabel.textContent =
-                "Nome de usuário";
-
-            const usernameInput =
-                document.createElement(
-                    "input"
-                );
-
-            usernameInput.type =
-                "text";
-
-            usernameInput.id =
-                "usernameInput";
-
-            usernameInput.value =
-                currentProfile.username;
-
-            usernameInput.maxLength =
-                20;
-
-            usernameInput.autocomplete =
-                "username";
-
-            usernameField.appendChild(
-                usernameLabel
-            );
-
-            usernameField.appendChild(
-                usernameInput
-            );
-
-            profileSection.appendChild(
-                usernameField
-            );
-
-            /*
-             * AVATAR
-             */
-
-            const avatarField =
-                document.createElement(
-                    "div"
-                );
-
-            avatarField.className =
-                "field";
-
-            const avatarLabel =
-                document.createElement(
-                    "label"
-                );
-
-            avatarLabel.textContent =
-                "Foto de perfil";
-
-            const avatarInput =
-                document.createElement(
-                    "input"
-                );
-
-            avatarInput.type =
-                "url";
-
-            avatarInput.id =
-                "avatarInput";
-
-            avatarInput.value =
-                currentProfile.avatar_url ||
-                "";
-
-            avatarInput.placeholder =
-                "https://exemplo.com/imagem.png";
-
-            const avatarHelp =
-                document.createElement(
-                    "small"
-                );
-
-            avatarHelp.textContent =
-                "O envio de imagens diretamente pelo site será adicionado depois.";
-
-            avatarField.appendChild(
-                avatarLabel
-            );
-
-            avatarField.appendChild(
-                avatarInput
-            );
-
-            avatarField.appendChild(
-                avatarHelp
-            );
-
-            profileSection.appendChild(
-                avatarField
-            );
-
-            /*
-             * BIO
-             */
-
-            const bioField =
-                document.createElement(
-                    "div"
-                );
-
-            bioField.className =
-                "field";
-
-            const bioLabel =
-                document.createElement(
-                    "label"
-                );
-
-            bioLabel.textContent =
-                "Bio";
-
-            const bioInput =
-                document.createElement(
-                    "textarea"
-                );
-
-            bioInput.id =
-                "bioInput";
-
-            bioInput.maxLength =
-                300;
-
-            bioInput.placeholder =
-                "Conte um pouco sobre você...";
-
-            bioInput.value =
-                currentProfile.bio ||
-                "";
-
-            bioField.appendChild(
-                bioLabel
-            );
-
-            bioField.appendChild(
-                bioInput
-            );
-
-            profileSection.appendChild(
-                bioField
-            );
-
-            /*
-             * EMAIL
-             */
-
-            const emailField =
-                document.createElement(
-                    "div"
-                );
-
-            emailField.className =
-                "field";
-
-            const emailLabel =
-                document.createElement(
-                    "label"
-                );
-
-            emailLabel.textContent =
-                "E-mail da conta";
-
-            const email =
-                document.createElement(
-                    "p"
-                );
-
-            email.className =
-                "account-email";
-
-            email.textContent =
-                currentUser.email ||
-                "E-mail não disponível";
-
-            emailField.appendChild(
-                emailLabel
-            );
-
-            emailField.appendChild(
-                email
-            );
-
-            profileSection.appendChild(
-                emailField
-            );
-
-            /*
-             * DATA DE CRIAÇÃO
-             */
-
-            const createdField =
-                document.createElement(
-                    "div"
-                );
-
-            createdField.className =
-                "field";
-
-            const createdLabel =
-                document.createElement(
-                    "label"
-                );
-
-            createdLabel.textContent =
-                "Conta criada em";
-
-            const createdDate =
-                document.createElement(
-                    "p"
-                );
-
-            const date =
-                new Date(
-                    currentProfile.created_at
-                );
-
-            createdDate.textContent =
-                date.toLocaleDateString(
-                    "pt-BR",
-                    {
-                        day: "2-digit",
-                        month: "2-digit",
-                        year: "numeric"
-                    }
-                );
-
-            createdField.appendChild(
-                createdLabel
-            );
-
-            createdField.appendChild(
-                createdDate
-            );
-
-            profileSection.appendChild(
-                createdField
-            );
-
-            card.appendChild(
-                profileSection
-            );
-
-            /*
-             * MÉTODOS DE LOGIN
-             */
-
-            const loginSection =
-                document.createElement(
-                    "div"
-                );
-
-            loginSection.className =
-                "section";
-
-            const loginTitle =
-                document.createElement(
-                    "h3"
-                );
-
-            loginTitle.textContent =
-                "Métodos de login";
-
-            loginSection.appendChild(
-                loginTitle
-            );
-
-            /*
-             * GOOGLE
-             */
-
-            const googleMethod =
-                document.createElement(
-                    "div"
-                );
-
-            googleMethod.className =
-                "login-method";
-
-            const googleInfo =
-                document.createElement(
-                    "div"
-                );
-
-            googleInfo.className =
-                "login-method-info";
-
-            const googleIcon =
-                document.createElement(
-                    "div"
-                );
-
-            googleIcon.className =
-                "login-method-icon";
-
-            googleIcon.textContent =
-                "🔵";
-
-            const googleText =
-                document.createElement(
-                    "div"
-                );
-
-            const googleName =
-                document.createElement(
-                    "div"
-                );
-
-            googleName.className =
-                "login-method-name";
-
-            googleName.textContent =
-                "Google";
-
-            const googleStatus =
-                document.createElement(
-                    "div"
-                );
+        const date = new Date(dateString);
+
+        return date.toLocaleDateString(
+            "pt-BR",
+            {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric"
+            }
+        );
+    }
+
+    function hasProvider(provider) {
+        if (!currentUser || !currentUser.identities) {
+            return false;
+        }
+
+        return currentUser.identities.some(
+            identity => identity.provider === provider
+        );
+    }
+
+    function updateLoginMethods() {
+
+        const hasGoogle =
+            hasProvider("google");
+
+        const hasPassword =
+            hasProvider("email");
+
+        if (hasGoogle) {
+
+            googleStatus.textContent =
+                "Google está conectado à sua conta.";
 
             googleStatus.className =
-                "login-method-status";
+                "method-status success";
 
-            const googleIdentity =
-                currentUser.identities
-                    ? currentUser.identities.find(
-                        function(identity) {
-                            return (
-                                identity.provider ===
-                                "google"
-                            );
-                        }
-                    )
-                    : null;
+            googleButton.textContent =
+                "Conectado";
 
-            if (googleIdentity) {
+            googleButton.disabled = true;
 
-                googleStatus.textContent =
-                    "Conectado";
+        } else {
 
-                googleStatus.classList.add(
-                    "connected"
-                );
+            googleStatus.textContent =
+                "Google ainda não está conectado.";
 
-            } else {
+            googleStatus.className =
+                "method-status warning";
 
-                googleStatus.textContent =
-                    "Não conectado";
+            googleButton.textContent =
+                "Adicionar";
 
-                googleStatus.classList.add(
-                    "not-connected"
-                );
-            }
-
-            googleText.appendChild(
-                googleName
-            );
-
-            googleText.appendChild(
-                googleStatus
-            );
-
-            googleInfo.appendChild(
-                googleIcon
-            );
-
-            googleInfo.appendChild(
-                googleText
-            );
-
-            googleMethod.appendChild(
-                googleInfo
-            );
-
-            if (!googleIdentity) {
-
-                const googleButton =
-                    document.createElement(
-                        "button"
-                    );
-
-                googleButton.className =
-                    "button";
-
-                googleButton.textContent =
-                    "Adicionar";
-
-                googleButton.addEventListener(
-                    "click",
-                    connectGoogle
-                );
-
-                googleMethod.appendChild(
-                    googleButton
-                );
-            }
-
-            loginSection.appendChild(
-                googleMethod
-            );
-
-            /*
-             * SENHA
-             */
-
-            const passwordMethod =
-                document.createElement(
-                    "div"
-                );
-
-            passwordMethod.className =
-                "login-method";
-
-            const passwordInfo =
-                document.createElement(
-                    "div"
-                );
-
-            passwordInfo.className =
-                "login-method-info";
-
-            const passwordIcon =
-                document.createElement(
-                    "div"
-                );
-
-            passwordIcon.className =
-                "login-method-icon";
-
-            passwordIcon.textContent =
-                "🔑";
-
-            const passwordText =
-                document.createElement(
-                    "div"
-                );
-
-            const passwordName =
-                document.createElement(
-                    "div"
-                );
-
-            passwordName.className =
-                "login-method-name";
-
-            passwordName.textContent =
-                "Senha";
-
-            const passwordStatus =
-                document.createElement(
-                    "div"
-                );
-
-            passwordStatus.className =
-                "login-method-status";
-
-            const passwordIdentity =
-                currentUser.identities
-                    ? currentUser.identities.find(
-                        function(identity) {
-                            return (
-                                identity.provider ===
-                                "email"
-                            );
-                        }
-                    )
-                    : null;
-
-            if (passwordIdentity) {
-
-                passwordStatus.textContent =
-                    "Configurada";
-
-                passwordStatus.classList.add(
-                    "connected"
-                );
-
-            } else {
-
-                passwordStatus.textContent =
-                    "Ainda não configurada";
-
-                passwordStatus.classList.add(
-                    "not-connected"
-                );
-            }
-
-            passwordText.appendChild(
-                passwordName
-            );
-
-            passwordText.appendChild(
-                passwordStatus
-            );
-
-            passwordInfo.appendChild(
-                passwordIcon
-            );
-
-            passwordInfo.appendChild(
-                passwordText
-            );
-
-            passwordMethod.appendChild(
-                passwordInfo
-            );
-
-            const passwordButton =
-                document.createElement(
-                    "button"
-                );
-
-            passwordButton.className =
-                "button";
-
-            passwordButton.textContent =
-                passwordIdentity
-                    ? "Alterar"
-                    : "Adicionar";
-
-            passwordButton.addEventListener(
-                "click",
-                function() {
-
-                    alert(
-                        "A configuração de senha será adicionada na próxima etapa."
-                    );
-
-                }
-            );
-
-            passwordMethod.appendChild(
-                passwordButton
-            );
-
-            loginSection.appendChild(
-                passwordMethod
-            );
-
-            card.appendChild(
-                loginSection
-            );
-
-            /*
-             * MENSAGEM
-             */
-
-            const message =
-                document.createElement(
-                    "div"
-                );
-
-            message.id =
-                "message";
-
-            message.className =
-                "message";
-
-            card.appendChild(
-                message
-            );
-
-            /*
-             * BOTÕES
-             */
-
-            const buttons =
-                document.createElement(
-                    "div"
-                );
-
-            buttons.className =
-                "buttons";
-
-            const saveButton =
-                document.createElement(
-                    "button"
-                );
-
-            saveButton.className =
-                "button";
-
-            saveButton.textContent =
-                "Salvar alterações";
-
-            saveButton.addEventListener(
-                "click",
-                saveProfile
-            );
-
-            const backButton =
-                document.createElement(
-                    "a"
-                );
-
-            backButton.className =
-                "button secondary-button";
-
-            backButton.textContent =
-                "Voltar ao perfil";
-
-            backButton.href =
-                "profile.html?id=" +
-                encodeURIComponent(
-                    currentProfile.id
-                );
-
-            const logoutButton =
-                document.createElement(
-                    "button"
-                );
-
-            logoutButton.className =
-                "button logout-button";
-
-            logoutButton.textContent =
-                "Sair";
-
-            logoutButton.addEventListener(
-                "click",
-                logout
-            );
-
-            buttons.appendChild(
-                saveButton
-            );
-
-            buttons.appendChild(
-                backButton
-            );
-
-            buttons.appendChild(
-                logoutButton
-            );
-
-            card.appendChild(
-                buttons
-            );
-
-            settingsContainer.appendChild(
-                card
-            );
+            googleButton.disabled = false;
         }
 
-        async function saveProfile() {
+        if (hasPassword) {
+
+            passwordStatus.textContent =
+                "Sua conta possui uma senha.";
+
+            passwordStatus.className =
+                "method-status success";
+
+            passwordButton.textContent =
+                "Alterar senha";
+
+        } else {
+
+            passwordStatus.textContent =
+                "Sua conta ainda não possui uma senha.";
+
+            passwordStatus.className =
+                "method-status warning";
+
+            passwordButton.textContent =
+                "Adicionar senha";
+        }
+    }
+
+    async function loadAccount() {
+
+        try {
+
+            hideError();
+
+            const {
+                data: {
+                    user
+                },
+                error: userError
+            } = await accountSupabase.auth.getUser();
+
+            if (userError) {
+                throw userError;
+            }
+
+            if (!user) {
+
+                window.location.href =
+                    "login.html";
+
+                return;
+            }
+
+            currentUser = user;
+
+            const {
+                data: profile,
+                error: profileError
+            } = await accountSupabase
+                .from("profiles")
+                .select(
+                    "id, username, created_at, avatar_url, bio"
+                )
+                .eq("id", user.id)
+                .single();
+
+            if (profileError) {
+                throw profileError;
+            }
+
+            currentProfile = profile;
+
+            usernameInput.value =
+                profile.username || "";
+
+            avatarUrlInput.value =
+                profile.avatar_url || "";
+
+            bioInput.value =
+                profile.bio || "";
+
+            emailInput.value =
+                user.email || "";
+
+            createdAtInput.value =
+                formatDate(profile.created_at);
+
+            updateCounters();
+            updateLoginMethods();
+
+            loading.classList.add("hidden");
+            content.classList.remove("hidden");
+
+        } catch (error) {
+
+            console.error(
+                "Erro ao carregar configurações:",
+                error
+            );
+
+            loading.classList.add("hidden");
+
+            showError(
+                "Não foi possível carregar suas configurações: " +
+                (error.message || "erro desconhecido")
+            );
+        }
+    }
+
+    usernameInput.addEventListener(
+        "input",
+        updateCounters
+    );
+
+    bioInput.addEventListener(
+        "input",
+        updateCounters
+    );
+
+    saveProfile.addEventListener(
+        "click",
+        async () => {
+
+            hideError();
 
             const username =
-                document.getElementById(
-                    "usernameInput"
-                ).value.trim();
+                usernameInput.value.trim();
 
             const avatarUrl =
-                document.getElementById(
-                    "avatarInput"
-                ).value.trim();
+                avatarUrlInput.value.trim();
 
             const bio =
-                document.getElementById(
-                    "bioInput"
-                ).value.trim();
+                bioInput.value.trim();
 
             if (!username) {
 
-                showMessage(
-                    "O nome de usuário não pode ficar vazio.",
-                    true
-                );
+                saveStatus.textContent =
+                    "O nome de usuário não pode ficar vazio.";
+
+                saveStatus.className =
+                    "status warning";
 
                 return;
             }
 
             if (username.length > 20) {
 
-                showMessage(
-                    "O nome de usuário pode ter no máximo 20 caracteres.",
-                    true
-                );
+                saveStatus.textContent =
+                    "O nome de usuário deve ter no máximo 20 caracteres.";
+
+                saveStatus.className =
+                    "status warning";
 
                 return;
             }
 
+            if (bio.length > 300) {
+
+                saveStatus.textContent =
+                    "A biografia deve ter no máximo 300 caracteres.";
+
+                saveStatus.className =
+                    "status warning";
+
+                return;
+            }
+
+            saveProfile.disabled = true;
+
+            saveStatus.textContent =
+                "Salvando...";
+
+            saveStatus.className =
+                "status";
+
             try {
 
-                const result =
-                    await settingsSupabase
-                        .from("profiles")
-                        .update({
-                            username: username,
-                            avatar_url:
-                                avatarUrl ||
-                                null,
-                            bio:
-                                bio ||
-                                null
-                        })
-                        .eq(
-                            "id",
-                            currentUser.id
-                        );
+                const {
+                    error
+                } = await accountSupabase
+                    .from("profiles")
+                    .update({
+                        username: username,
+                        avatar_url: avatarUrl || null,
+                        bio: bio || null
+                    })
+                    .eq("id", currentUser.id);
 
-                if (result.error) {
-
-                    console.error(
-                        "Erro ao salvar perfil:",
-                        result.error
-                    );
-
-                    showMessage(
-                        "Não foi possível salvar as alterações: " +
-                        result.error.message,
-                        true
-                    );
-
-                    return;
+                if (error) {
+                    throw error;
                 }
 
                 currentProfile.username =
                     username;
 
                 currentProfile.avatar_url =
-                    avatarUrl ||
-                    null;
+                    avatarUrl || null;
 
                 currentProfile.bio =
-                    bio ||
-                    null;
+                    bio || null;
 
-                showMessage(
-                    "Alterações salvas com sucesso!",
-                    false
-                );
+                saveStatus.textContent =
+                    "Alterações salvas!";
+
+                saveStatus.className =
+                    "status success";
 
             } catch (error) {
 
                 console.error(
-                    "Erro inesperado:",
+                    "Erro ao salvar perfil:",
                     error
                 );
 
-                showMessage(
-                    "Ocorreu um erro ao salvar as alterações.",
-                    true
-                );
+                saveStatus.textContent =
+                    "Não foi possível salvar: " +
+                    (error.message || "erro desconhecido");
+
+                saveStatus.className =
+                    "status warning";
+
+            } finally {
+
+                saveProfile.disabled = false;
             }
         }
+    );
 
-        async function connectGoogle() {
+    googleButton.addEventListener(
+        "click",
+        async () => {
+
+            if (hasProvider("google")) {
+                return;
+            }
+
+            googleButton.disabled = true;
+
+            googleButton.textContent =
+                "Conectando...";
 
             try {
 
-                const result =
-                    await settingsSupabase.auth
-                        .linkIdentity({
-                            provider: "google",
-                            options: {
-                                redirectTo:
-                                    window.location.origin +
-                                    window.location.pathname
-                            }
-                        });
+                const {
+                    data,
+                    error
+                } = await accountSupabase.auth.linkIdentity({
+                    provider: "google",
+                    options: {
+                        redirectTo:
+                            window.location.href
+                    }
+                });
 
-                if (result.error) {
+                if (error) {
+                    throw error;
+                }
 
-                    console.error(
-                        "Erro ao conectar Google:",
-                        result.error
-                    );
-
-                    showMessage(
-                        "Não foi possível conectar o Google: " +
-                        result.error.message,
-                        true
+                if (data) {
+                    console.log(
+                        "Identidade Google vinculada."
                     );
                 }
 
             } catch (error) {
 
                 console.error(
-                    "Erro inesperado:",
+                    "Erro ao conectar Google:",
                     error
                 );
 
-                showMessage(
-                    "Ocorreu um erro ao conectar o Google.",
-                    true
+                alert(
+                    "Não foi possível conectar o Google:\n\n" +
+                    error.message
                 );
+
+                googleButton.disabled = false;
+                googleButton.textContent =
+                    "Adicionar";
             }
         }
+    );
 
-        async function logout() {
+    passwordButton.addEventListener(
+        "click",
+        () => {
 
-            const result =
-                await settingsSupabase.auth.signOut();
+            passwordForm.classList.toggle(
+                "hidden"
+            );
 
-            if (result.error) {
+            passwordSaveStatus.textContent =
+                "";
 
-                console.error(
-                    "Erro ao sair:",
-                    result.error
+            newPassword.value = "";
+            confirmPassword.value = "";
+
+            if (
+                !passwordForm.classList.contains(
+                    "hidden"
+                )
+            ) {
+                newPassword.focus();
+            }
+        }
+    );
+
+    cancelPassword.addEventListener(
+        "click",
+        () => {
+
+            passwordForm.classList.add(
+                "hidden"
+            );
+
+            newPassword.value = "";
+            confirmPassword.value = "";
+
+            passwordSaveStatus.textContent =
+                "";
+        }
+    );
+
+    savePassword.addEventListener(
+        "click",
+        async () => {
+
+            passwordSaveStatus.textContent =
+                "";
+
+            const password =
+                newPassword.value;
+
+            const confirmation =
+                confirmPassword.value;
+
+            if (password.length < 6) {
+
+                passwordSaveStatus.textContent =
+                    "A senha precisa ter pelo menos 6 caracteres.";
+
+                passwordSaveStatus.className =
+                    "status warning";
+
+                return;
+            }
+
+            if (password !== confirmation) {
+
+                passwordSaveStatus.textContent =
+                    "As senhas não são iguais.";
+
+                passwordSaveStatus.className =
+                    "status warning";
+
+                return;
+            }
+
+            savePassword.disabled = true;
+
+            passwordSaveStatus.textContent =
+                "Salvando senha...";
+
+            passwordSaveStatus.className =
+                "status";
+
+            try {
+
+                const {
+                    error
+                } = await accountSupabase.auth.updateUser({
+                    password: password
+                });
+
+                if (error) {
+                    throw error;
+                }
+
+                passwordSaveStatus.textContent =
+                    "Senha salva com sucesso!";
+
+                passwordSaveStatus.className =
+                    "status success";
+
+                newPassword.value = "";
+                confirmPassword.value = "";
+
+                await refreshUser();
+
+                updateLoginMethods();
+
+                setTimeout(
+                    () => {
+                        passwordForm.classList.add(
+                            "hidden"
+                        );
+                    },
+                    1500
                 );
 
-                showMessage(
-                    "Não foi possível sair da conta.",
-                    true
+            } catch (error) {
+
+                console.error(
+                    "Erro ao salvar senha:",
+                    error
+                );
+
+                passwordSaveStatus.textContent =
+                    "Não foi possível salvar a senha: " +
+                    (error.message || "erro desconhecido");
+
+                passwordSaveStatus.className =
+                    "status warning";
+
+            } finally {
+
+                savePassword.disabled = false;
+            }
+        }
+    );
+
+    async function refreshUser() {
+
+        const {
+            data: {
+                user
+            },
+            error
+        } = await accountSupabase.auth.getUser();
+
+        if (error) {
+            throw error;
+        }
+
+        currentUser = user;
+    }
+
+    document.getElementById(
+        "logout"
+    ).addEventListener(
+        "click",
+        async () => {
+
+            const confirmed =
+                confirm(
+                    "Deseja sair da sua conta neste dispositivo?"
+                );
+
+            if (!confirmed) {
+                return;
+            }
+
+            const {
+                error
+            } = await accountSupabase.auth.signOut({
+                scope: "local"
+            });
+
+            if (error) {
+
+                alert(
+                    "Não foi possível sair:\n\n" +
+                    error.message
                 );
 
                 return;
@@ -1184,55 +1114,83 @@
             window.location.href =
                 "login.html";
         }
+    );
 
-        function showMessage(
-            message,
-            isError
-        ) {
+    document.getElementById(
+        "logoutAll"
+    ).addEventListener(
+        "click",
+        async () => {
 
-            const element =
-                document.getElementById(
-                    "message"
+            const confirmed =
+                confirm(
+                    "Isso encerrará todas as sessões da sua conta em outros dispositivos. Continuar?"
                 );
 
-            if (!element) {
+            if (!confirmed) {
                 return;
             }
 
-            element.textContent =
-                message;
-
-            element.className =
-                "message " +
-                (
-                    isError
-                        ? "error"
-                        : "success"
-                );
-        }
-
-        function showError(message) {
-
-            settingsContainer.innerHTML = "";
-
-            const error =
-                document.createElement(
-                    "div"
+            const button =
+                document.getElementById(
+                    "logoutAll"
                 );
 
-            error.className =
-                "error";
+            button.disabled = true;
+            button.textContent =
+                "Encerrando sessões...";
 
-            error.textContent =
-                message;
+            try {
 
-            settingsContainer.appendChild(
-                error
-            );
+                const {
+                    error
+                } = await accountSupabase.auth.signOut({
+                    scope: "global"
+                });
+
+                if (error) {
+                    throw error;
+                }
+
+                window.location.href =
+                    "login.html";
+
+            } catch (error) {
+
+                console.error(
+                    "Erro ao encerrar sessões:",
+                    error
+                );
+
+                alert(
+                    "Não foi possível encerrar as sessões:\n\n" +
+                    error.message
+                );
+
+                button.disabled = false;
+                button.textContent =
+                    "Sair de todas as sessões";
+            }
         }
+    );
 
-        loadSettings();
-    </script>
+    function goBack() {
+
+        if (
+            document.referrer &&
+            document.referrer.includes(
+                "Fluffy-Community"
+            )
+        ) {
+            history.back();
+        } else {
+            window.location.href =
+                "index.html";
+        }
+    }
+
+    loadAccount();
+</script>
 
 </body>
 </html>
