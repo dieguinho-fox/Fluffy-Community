@@ -266,16 +266,30 @@
                 >
 
                 <div class="profile-info">
-                    <h1 id="username" class="username"></h1>
 
-                    <div id="created" class="created"></div>
+                    <h1
+                        id="username"
+                        class="username"
+                    ></h1>
 
-                    <div id="bio" class="bio"></div>
+                    <div
+                        id="created"
+                        class="created"
+                    ></div>
+
+                    <div
+                        id="bio"
+                        class="bio"
+                    ></div>
+
                 </div>
 
             </div>
 
-            <div id="ownerActions" class="owner-actions">
+            <div
+                id="ownerActions"
+                class="owner-actions"
+            >
 
                 <button
                     id="syncButton"
@@ -293,6 +307,7 @@
             </div>
 
         </section>
+
 
         <section class="section">
 
@@ -323,6 +338,7 @@
 
         </section>
 
+
         <section class="section">
 
             <h2 class="section-title">
@@ -337,6 +353,7 @@
 
     </div>
 
+
     <div
         id="error"
         class="error"
@@ -345,8 +362,10 @@
 
 </div>
 
+
 <script>
 "use strict";
+
 
 /*
  * ============================================================
@@ -360,27 +379,44 @@ const SUPABASE_URL =
 const SUPABASE_ANON_KEY =
     "sb_publishable_Y-S1kbAXQE-Y4j-seMaHrQ_u_vUoTFF";
 
+
 /*
- * Este JSON é SOMENTE o catálogo das conquistas.
+ * Catálogo das conquistas.
  *
- * Ele contém:
+ * IMPORTANTE:
+ *
+ * Este JSON NÃO é o save do jogo.
+ *
+ * Ele serve apenas para obter:
  * - nome
  * - descrição
  * - ícone
  * - secret
  *
- * O progresso real vem de achievements.bin.
+ * O progresso vem de achievements.bin.
  */
 const ACHIEVEMENTS_JSON_URL =
     "https://raw.githubusercontent.com/dieguinho-fox/Fluffy-Adventure/main/Conquistas/achievements.json";
 
+
 const ACHIEVEMENTS_BASE_URL =
     "https://raw.githubusercontent.com/dieguinho-fox/Fluffy-Adventure/main/";
 
-const SAVE_BUCKET = "saves";
-const SAVE_FILE_NAME = "achievements.bin";
 
-const DEFAULT_LANGUAGE = "pt_BR";
+/*
+ * Storage privado.
+ */
+const SAVE_BUCKET =
+    "saves";
+
+
+const SAVE_FILE_NAME =
+    "achievements.bin";
+
+
+const DEFAULT_LANGUAGE =
+    "pt_BR";
+
 
 const supabaseClient =
     window.supabase.createClient(
@@ -398,32 +434,42 @@ const supabaseClient =
 const loadingElement =
     document.getElementById("loading");
 
+
 const contentElement =
     document.getElementById("content");
+
 
 const errorElement =
     document.getElementById("error");
 
+
 const avatarElement =
     document.getElementById("avatar");
+
 
 const usernameElement =
     document.getElementById("username");
 
+
 const createdElement =
     document.getElementById("created");
+
 
 const bioElement =
     document.getElementById("bio");
 
+
 const ownerActionsElement =
     document.getElementById("ownerActions");
+
 
 const syncButton =
     document.getElementById("syncButton");
 
+
 const syncStatus =
     document.getElementById("syncStatus");
+
 
 const achievementsElement =
     document.getElementById("achievements");
@@ -436,43 +482,56 @@ const achievementsElement =
  */
 
 function showError(message) {
-    console.error("[Fluffy Community]", message);
 
-    loadingElement.style.display = "none";
-    contentElement.style.display = "none";
+    console.error(
+        "[Fluffy Community]",
+        message
+    );
 
-    errorElement.textContent = message;
-    errorElement.style.display = "block";
+    loadingElement.style.display =
+        "none";
+
+    contentElement.style.display =
+        "none";
+
+    errorElement.textContent =
+        message;
+
+    errorElement.style.display =
+        "block";
 }
 
 
 function setSyncStatus(message) {
-    syncStatus.textContent = message;
-}
 
-
-function escapeText(value) {
-    if (value === null || value === undefined) {
-        return "";
-    }
-
-    return String(value);
+    syncStatus.textContent =
+        message;
 }
 
 
 function getProfileIdFromUrl() {
-    const params = new URLSearchParams(
-        window.location.search
-    );
+
+    const params =
+        new URLSearchParams(
+            window.location.search
+        );
 
     return params.get("id");
 }
 
 
-function getLocalizedValue(value, language) {
-    if (!value || typeof value !== "object") {
+function getLocalizedValue(
+    value,
+    language
+) {
+
+    if (
+        !value ||
+        typeof value !== "object"
+    ) {
         return "";
     }
+
 
     if (
         Object.prototype.hasOwnProperty.call(
@@ -483,6 +542,7 @@ function getLocalizedValue(value, language) {
         return value[language];
     }
 
+
     if (
         Object.prototype.hasOwnProperty.call(
             value,
@@ -492,56 +552,90 @@ function getLocalizedValue(value, language) {
         return value[DEFAULT_LANGUAGE];
     }
 
-    const firstKey = Object.keys(value)[0];
+
+    const firstKey =
+        Object.keys(value)[0];
+
 
     if (firstKey) {
         return value[firstKey];
     }
+
 
     return "";
 }
 
 
 function buildIconUrl(iconPath) {
+
     if (!iconPath) {
         return "";
     }
 
-    let normalized = String(iconPath);
 
-    /*
-     * O jogo usa caminhos como:
-     * res://Conquistas/Ícones/nome.png
-     *
-     * No GitHub removemos o res://.
-     */
-    if (normalized.startsWith("res://")) {
-        normalized = normalized.substring(6);
+    let normalized =
+        String(iconPath);
+
+
+    if (
+        normalized.startsWith("res://")
+    ) {
+
+        normalized =
+            normalized.substring(6);
     }
 
-    normalized = normalized
-        .split("/")
-        .map(part => encodeURIComponent(part))
-        .join("/");
 
-    return ACHIEVEMENTS_BASE_URL + normalized;
+    normalized =
+        normalized
+            .split("/")
+            .map(
+                part =>
+                    encodeURIComponent(part)
+            )
+            .join("/");
+
+
+    return (
+        ACHIEVEMENTS_BASE_URL +
+        normalized
+    );
 }
 
 
 /*
  * ============================================================
  * GODOT VARIANT READER
+ * ============================================================
  *
- * Compatível com o formato utilizado por:
+ * FileAccess.store_var() grava:
  *
- * FileAccess.store_var(unlocked_achievements)
+ * [4 bytes] tamanho do Variant
+ * [N bytes] Variant serializado
  *
- * O arquivo possui:
  *
- * uint32 little-endian -> tamanho do Variant
- * bytes                 -> Variant serializado
+ * No Godot 4.x:
  *
- * O parser abaixo acompanha o formato de marshalls.cpp.
+ * 0  = NIL
+ * 1  = BOOL
+ * 2  = INT
+ * 3  = FLOAT
+ * 4  = STRING
+ *
+ * ...
+ *
+ * 27 = DICTIONARY
+ * 28 = ARRAY
+ * 29 = PACKED_BYTE_ARRAY
+ * 30 = PACKED_INT32_ARRAY
+ * 31 = PACKED_INT64_ARRAY
+ * 32 = PACKED_FLOAT32_ARRAY
+ * 33 = PACKED_FLOAT64_ARRAY
+ * 34 = PACKED_STRING_ARRAY
+ * 35 = PACKED_VECTOR2_ARRAY
+ * 36 = PACKED_VECTOR3_ARRAY
+ * 37 = PACKED_COLOR_ARRAY
+ *
  * ============================================================
  */
 
@@ -550,32 +644,52 @@ class GodotVariantReader {
     constructor(arrayBuffer) {
 
         this.bytes =
-            new Uint8Array(arrayBuffer);
+            new Uint8Array(
+                arrayBuffer
+            );
+
 
         this.view =
-            new DataView(arrayBuffer);
+            new DataView(
+                arrayBuffer
+            );
 
-        this.offset = 0;
+
+        this.offset =
+            0;
+
 
         this.decoder =
-            new TextDecoder("utf-8", {
-                fatal: false
-            });
+            new TextDecoder(
+                "utf-8",
+                {
+                    fatal: false
+                }
+            );
     }
 
 
     remaining() {
-        return this.bytes.length - this.offset;
+
+        return (
+            this.bytes.length -
+            this.offset
+        );
     }
 
 
-    ensure(size, description) {
+    ensure(
+        size,
+        description
+    ) {
 
         if (
             !Number.isInteger(size) ||
             size < 0 ||
-            this.offset + size > this.bytes.length
+            this.offset + size >
+                this.bytes.length
         ) {
+
             throw new Error(
                 "Dados insuficientes ao ler " +
                 description +
@@ -591,14 +705,20 @@ class GodotVariantReader {
 
     readUint8() {
 
-        this.ensure(1, "uint8");
+        this.ensure(
+            1,
+            "uint8"
+        );
+
 
         const value =
             this.view.getUint8(
                 this.offset
             );
 
+
         this.offset += 1;
+
 
         return value;
     }
@@ -606,7 +726,11 @@ class GodotVariantReader {
 
     readUint32() {
 
-        this.ensure(4, "uint32");
+        this.ensure(
+            4,
+            "uint32"
+        );
+
 
         const value =
             this.view.getUint32(
@@ -614,7 +738,9 @@ class GodotVariantReader {
                 true
             );
 
+
         this.offset += 4;
+
 
         return value;
     }
@@ -622,7 +748,11 @@ class GodotVariantReader {
 
     readInt32() {
 
-        this.ensure(4, "int32");
+        this.ensure(
+            4,
+            "int32"
+        );
+
 
         const value =
             this.view.getInt32(
@@ -630,23 +760,9 @@ class GodotVariantReader {
                 true
             );
 
+
         this.offset += 4;
 
-        return value;
-    }
-
-
-    readUint64() {
-
-        this.ensure(8, "uint64");
-
-        const value =
-            this.view.getBigUint64(
-                this.offset,
-                true
-            );
-
-        this.offset += 8;
 
         return value;
     }
@@ -654,7 +770,11 @@ class GodotVariantReader {
 
     readInt64() {
 
-        this.ensure(8, "int64");
+        this.ensure(
+            8,
+            "int64"
+        );
+
 
         const value =
             this.view.getBigInt64(
@@ -662,7 +782,9 @@ class GodotVariantReader {
                 true
             );
 
+
         this.offset += 8;
+
 
         return value;
     }
@@ -670,7 +792,11 @@ class GodotVariantReader {
 
     readFloat32() {
 
-        this.ensure(4, "float32");
+        this.ensure(
+            4,
+            "float32"
+        );
+
 
         const value =
             this.view.getFloat32(
@@ -678,7 +804,9 @@ class GodotVariantReader {
                 true
             );
 
+
         this.offset += 4;
+
 
         return value;
     }
@@ -686,7 +814,11 @@ class GodotVariantReader {
 
     readFloat64() {
 
-        this.ensure(8, "float64");
+        this.ensure(
+            8,
+            "float64"
+        );
+
 
         const value =
             this.view.getFloat64(
@@ -694,37 +826,40 @@ class GodotVariantReader {
                 true
             );
 
+
         this.offset += 8;
+
 
         return value;
     }
 
 
     /*
-     * Godot strings são:
+     * String Godot:
      *
-     * uint32 tamanho
-     * bytes UTF-8
-     * padding até múltiplo de 4
-     *
-     * O tamanho usado pelo formato é o número de bytes UTF-8,
-     * não o número de caracteres JavaScript.
+     * uint32 = quantidade de bytes
+     * UTF-8
+     * padding para múltiplo de 4
      */
     readString() {
 
         const length =
             this.readUint32();
 
+
         this.ensure(
             length,
             "string UTF-8"
         );
 
+
         const start =
             this.offset;
 
+
         const end =
             start + length;
+
 
         const stringBytes =
             this.bytes.slice(
@@ -732,17 +867,27 @@ class GodotVariantReader {
                 end
             );
 
-        this.offset = end;
+
+        this.offset =
+            end;
+
 
         const padding =
-            (4 - (length % 4)) % 4;
+            (
+                4 -
+                (length % 4)
+            ) % 4;
+
 
         this.ensure(
             padding,
             "padding da string"
         );
 
-        this.offset += padding;
+
+        this.offset +=
+            padding;
+
 
         return this.decoder.decode(
             stringBytes
@@ -751,16 +896,17 @@ class GodotVariantReader {
 
 
     /*
-     * O tipo serializado ocupa somente os 8 bits inferiores.
-     *
-     * Isso é HEADER_TYPE_MASK = 0xFF no marshalls.cpp.
+     * O Godot usa os 8 bits inferiores do header
+     * para identificar o tipo Variant.
      */
     getBaseType(header) {
+
         return header & 0xFF;
     }
 
 
     has64BitFlag(header) {
+
         return (
             (header & 0x00010000) !== 0
         );
@@ -778,17 +924,6 @@ class GodotVariantReader {
     }
 
 
-    /*
-     * Decodifica metadados de Dictionary tipado.
-     *
-     * 0 = NONE
-     * 1 = BUILTIN
-     * 2 = CLASS_NAME
-     * 3 = SCRIPT
-     *
-     * Para o nosso Dictionary GDScript normal,
-     * normalmente ambos serão NONE.
-     */
     readContainerType(
         kind,
         label
@@ -797,14 +932,17 @@ class GodotVariantReader {
         switch (kind) {
 
             case 0:
+
                 return {
                     kind: "none"
                 };
+
 
             case 1: {
 
                 const builtinType =
                     this.readUint32();
+
 
                 return {
                     kind: "builtin",
@@ -812,10 +950,12 @@ class GodotVariantReader {
                 };
             }
 
+
             case 2: {
 
                 const className =
                     this.readString();
+
 
                 return {
                     kind: "class_name",
@@ -823,10 +963,12 @@ class GodotVariantReader {
                 };
             }
 
+
             case 3: {
 
                 const scriptPath =
                     this.readString();
+
 
                 return {
                     kind: "script",
@@ -834,7 +976,9 @@ class GodotVariantReader {
                 };
             }
 
+
             default:
+
                 throw new Error(
                     "Tipo de container " +
                     kind +
@@ -850,211 +994,228 @@ class GodotVariantReader {
      * ========================================================
      * VARIANT
      * ========================================================
-     *
-     * Tipos relevantes:
-     *
-     * 0  NIL
-     * 1  BOOL
-     * 2  INT
-     * 3  FLOAT
-     * 4  STRING
-     * 5  VECTOR2
-     * 6  VECTOR2I
-     * 7  RECT2
-     * 8  RECT2I
-     * 9  VECTOR3
-     * 10 VECTOR3I
-     * 11 TRANSFORM2D
-     * 12 VECTOR4
-     * 13 VECTOR4I
-     * 14 PLANE
-     * 15 QUATERNION
-     * 16 AABB
-     * 17 BASIS
-     * 18 TRANSFORM3D
-     * 19 PROJECTION
-     * 20 COLOR
-     * 21 STRING_NAME
-     * 22 NODE_PATH
-     * 23 RID
-     * 24 OBJECT
-     * 25 CALLABLE
-     * 26 SIGNAL
-     * 27 DICTIONARY
-     * 28 ARRAY
-     * 29 PACKED_BYTE_ARRAY
-     * 30 PACKED_INT32_ARRAY
-     * 31 PACKED_INT64_ARRAY
-     * 32 PACKED_FLOAT32_ARRAY
-     * 33 PACKED_FLOAT64_ARRAY
-     * 34 PACKED_STRING_ARRAY
-     * 35 PACKED_VECTOR2_ARRAY
-     * 36 PACKED_VECTOR3_ARRAY
-     * 37 PACKED_COLOR_ARRAY
-     *
-     * Observação:
-     * dependendo da versão/branch do Godot, os números de
-     * alguns tipos podem variar. O formato real é identificado
-     * pelo HEADER_TYPE_MASK e pela enumeração daquela versão.
-     *
-     * Para evitar o problema anterior, o parser também usa
-     * validação estrutural do Dictionary.
      */
-    readVariant(depth = 0) {
 
-        if (depth > 64) {
+    readVariant(
+        depth = 0
+    ) {
+
+        if (
+            depth > 64
+        ) {
+
             throw new Error(
                 "Profundidade máxima de Variant excedida."
             );
         }
 
+
         const startOffset =
             this.offset;
+
 
         const header =
             this.readUint32();
 
-        const type =
-            this.getBaseType(header);
 
-        /*
-         * Os tipos usados pelo achievements.bin são:
-         *
-         * Dictionary
-         * String
-         * Bool
-         *
-         * Em Godot 4, Dictionary serializado é 18.
-         *
-         * O código abaixo prioriza os valores reais do formato
-         * utilizado pelo Godot 4.x.
-         */
+        const type =
+            this.getBaseType(
+                header
+            );
+
+
+        console.log(
+            "[GodotVariantReader] Variant:",
+            {
+                offset:
+                    startOffset,
+
+                header:
+                    "0x" +
+                    header
+                        .toString(16)
+                        .padStart(
+                            8,
+                            "0"
+                        ),
+
+                type:
+                    type
+            }
+        );
+
 
         switch (type) {
 
+            /*
+             * NIL
+             */
             case 0:
+
                 return null;
 
 
-            case 1: {
+            /*
+             * BOOL
+             */
+            case 1:
 
-                const value =
-                    this.readUint32() !== 0;
-
-                return value;
-            }
-
-
-            case 2: {
-
-                let value;
-
-                if (
-                    this.has64BitFlag(header)
-                ) {
-
-                    const big =
-                        this.readInt64();
-
-                    value =
-                        Number(big);
-
-                } else {
-
-                    value =
-                        this.readInt32();
-                }
-
-                return value;
-            }
-
-
-            case 3: {
-
-                if (
-                    this.has64BitFlag(header)
-                ) {
-                    return this.readFloat64();
-                }
-
-                return this.readFloat32();
-            }
-
-
-            case 4:
-            case 21: {
-
-                return this.readString();
-            }
+                return (
+                    this.readUint32() !== 0
+                );
 
 
             /*
-             * Dictionary do Godot 4.
+             * INT
              */
-            case 18: {
+            case 2:
+
+                if (
+                    this.has64BitFlag(
+                        header
+                    )
+                ) {
+
+                    return Number(
+                        this.readInt64()
+                    );
+                }
+
+
+                return this.readInt32();
+
+
+            /*
+             * FLOAT
+             */
+            case 3:
+
+                if (
+                    this.has64BitFlag(
+                        header
+                    )
+                ) {
+
+                    return this.readFloat64();
+                }
+
+
+                return this.readFloat32();
+
+
+            /*
+             * STRING
+             */
+            case 4:
+
+                return this.readString();
+
+
+            /*
+             * STRING_NAME
+             */
+            case 21:
+
+                return this.readString();
+
+
+            /*
+             * DICTIONARY
+             *
+             * ESTE É O PONTO PRINCIPAL:
+             *
+             * Godot 4.x:
+             *
+             * DICTIONARY = 27
+             */
+            case 27:
 
                 return this.readDictionary(
                     header,
                     depth
                 );
-            }
 
 
             /*
-             * Array.
-             *
-             * Incluído para tornar o leitor robusto, mesmo que
-             * achievements.bin atualmente contenha Dictionary.
+             * ARRAY
              */
-            case 19: {
+            case 28:
 
                 return this.readArray(
                     header,
                     depth
                 );
-            }
 
 
             /*
-             * Alguns builds/formatos podem utilizar esses
-             * tipos adicionais. Eles são implementados para
-             * impedir que um tipo válido cause imediatamente
-             * "tipo não suportado".
+             * PACKED BYTE ARRAY
              */
+            case 29:
 
-            case 20:
                 return this.readPackedByteArray();
 
 
-            case 22:
+            /*
+             * PACKED INT32 ARRAY
+             */
+            case 30:
+
                 return this.readPackedInt32Array();
 
 
-            case 23:
+            /*
+             * PACKED INT64 ARRAY
+             */
+            case 31:
+
                 return this.readPackedInt64Array();
 
 
-            case 24:
+            /*
+             * PACKED FLOAT32 ARRAY
+             */
+            case 32:
+
                 return this.readPackedFloat32Array();
 
 
-            case 25:
+            /*
+             * PACKED FLOAT64 ARRAY
+             */
+            case 33:
+
                 return this.readPackedFloat64Array();
 
 
-            case 26:
+            /*
+             * PACKED STRING ARRAY
+             */
+            case 34:
+
                 return this.readPackedStringArray();
 
 
-            case 27:
+            /*
+             * PACKED VECTOR2 ARRAY
+             */
+            case 35:
+
                 return this.readPackedVector2Array();
 
 
-            case 28:
+            /*
+             * PACKED VECTOR3 ARRAY
+             */
+            case 36:
+
                 return this.readPackedVector3Array();
 
 
-            case 29:
+            /*
+             * PACKED COLOR ARRAY
+             */
+            case 37:
+
                 return this.readPackedColorArray();
 
 
@@ -1066,7 +1227,10 @@ class GodotVariantReader {
                     " (header=0x" +
                     header
                         .toString(16)
-                        .padStart(8, "0") +
+                        .padStart(
+                            8,
+                            "0"
+                        ) +
                     ", offset=" +
                     startOffset +
                     ")."
@@ -1088,10 +1252,13 @@ class GodotVariantReader {
 
         /*
          * Bits 16-17:
-         * tipo das chaves
+         * tipo das chaves.
          *
          * Bits 18-19:
-         * tipo dos valores
+         * tipo dos valores.
+         *
+         * No seu achievements.bin,
+         * ambos são 0.
          */
         const keyKind =
             this.getContainerKind(
@@ -1099,34 +1266,56 @@ class GodotVariantReader {
                 16
             );
 
+
         const valueKind =
             this.getContainerKind(
                 header,
                 18
             );
 
-        this.readContainerType(
-            keyKind,
-            "chave do Dictionary"
-        );
 
-        this.readContainerType(
-            valueKind,
-            "valor do Dictionary"
-        );
+        /*
+         * Só existem metadados adicionais
+         * quando o Dictionary é tipado.
+         */
+        if (
+            keyKind !== 0
+        ) {
+
+            this.readContainerType(
+                keyKind,
+                "chave do Dictionary"
+            );
+        }
+
+
+        if (
+            valueKind !== 0
+        ) {
+
+            this.readContainerType(
+                valueKind,
+                "valor do Dictionary"
+            );
+        }
 
 
         /*
-         * O tamanho do Dictionary é uint32.
+         * Seu arquivo mostrou:
+         *
+         * 09 00 00 00
+         *
+         * Portanto existem 9 entradas.
          */
         const count =
-            this.readUint32();
+            this.readUint32() &
+            0x7FFFFFFF;
 
 
-        /*
-         * Proteção contra arquivo corrompido.
-         */
-        if (count > 1000000) {
+        if (
+            count > 1000000
+        ) {
+
             throw new Error(
                 "Quantidade de entradas do Dictionary inválida: " +
                 count
@@ -1148,25 +1337,14 @@ class GodotVariantReader {
                     depth + 1
                 );
 
+
             const value =
                 this.readVariant(
                     depth + 1
                 );
 
 
-            /*
-             * achievements.bin utiliza IDs string:
-             *
-             * "easter_egg_1": true
-             * "alpha": true
-             *
-             * Caso algum tipo estranho apareça, convertemos
-             * para string para não perder a informação.
-             */
-            const keyString =
-                String(key);
-
-            result[keyString] =
+            result[String(key)] =
                 value;
         }
 
@@ -1192,22 +1370,35 @@ class GodotVariantReader {
                 16
             );
 
-        this.readContainerType(
-            elementKind,
-            "elemento do Array"
-        );
+
+        if (
+            elementKind !== 0
+        ) {
+
+            this.readContainerType(
+                elementKind,
+                "elemento do Array"
+            );
+        }
+
 
         const count =
             this.readUint32();
 
-        if (count > 1000000) {
+
+        if (
+            count > 1000000
+        ) {
+
             throw new Error(
                 "Quantidade de elementos do Array inválida: " +
                 count
             );
         }
 
+
         const result = [];
+
 
         for (
             let i = 0;
@@ -1221,6 +1412,7 @@ class GodotVariantReader {
                 )
             );
         }
+
 
         return result;
     }
@@ -1237,10 +1429,22 @@ class GodotVariantReader {
         const count =
             this.readUint32();
 
+
+        if (
+            count > 100000000
+        ) {
+
+            throw new Error(
+                "PackedByteArray muito grande."
+            );
+        }
+
+
         this.ensure(
             count,
             "PackedByteArray"
         );
+
 
         const result =
             this.bytes.slice(
@@ -1248,17 +1452,27 @@ class GodotVariantReader {
                 this.offset + count
             );
 
-        this.offset += count;
+
+        this.offset +=
+            count;
+
 
         const padding =
-            (4 - (count % 4)) % 4;
+            (
+                4 -
+                (count % 4)
+            ) % 4;
+
 
         this.ensure(
             padding,
             "padding do PackedByteArray"
         );
 
-        this.offset += padding;
+
+        this.offset +=
+            padding;
+
 
         return result;
     }
@@ -1269,23 +1483,31 @@ class GodotVariantReader {
         const count =
             this.readUint32();
 
-        if (count > 1000000) {
+
+        if (
+            count > 1000000
+        ) {
+
             throw new Error(
                 "PackedInt32Array muito grande."
             );
         }
 
+
         const result = [];
+
 
         for (
             let i = 0;
             i < count;
             i++
         ) {
+
             result.push(
                 this.readInt32()
             );
         }
+
 
         return result;
     }
@@ -1296,13 +1518,19 @@ class GodotVariantReader {
         const count =
             this.readUint32();
 
-        if (count > 1000000) {
+
+        if (
+            count > 1000000
+        ) {
+
             throw new Error(
                 "PackedInt64Array muito grande."
             );
         }
 
+
         const result = [];
+
 
         for (
             let i = 0;
@@ -1317,6 +1545,7 @@ class GodotVariantReader {
             );
         }
 
+
         return result;
     }
 
@@ -1326,13 +1555,19 @@ class GodotVariantReader {
         const count =
             this.readUint32();
 
-        if (count > 1000000) {
+
+        if (
+            count > 1000000
+        ) {
+
             throw new Error(
                 "PackedFloat32Array muito grande."
             );
         }
 
+
         const result = [];
+
 
         for (
             let i = 0;
@@ -1345,6 +1580,7 @@ class GodotVariantReader {
             );
         }
 
+
         return result;
     }
 
@@ -1354,13 +1590,19 @@ class GodotVariantReader {
         const count =
             this.readUint32();
 
-        if (count > 1000000) {
+
+        if (
+            count > 1000000
+        ) {
+
             throw new Error(
                 "PackedFloat64Array muito grande."
             );
         }
 
+
         const result = [];
+
 
         for (
             let i = 0;
@@ -1373,6 +1615,7 @@ class GodotVariantReader {
             );
         }
 
+
         return result;
     }
 
@@ -1382,13 +1625,19 @@ class GodotVariantReader {
         const count =
             this.readUint32();
 
-        if (count > 1000000) {
+
+        if (
+            count > 1000000
+        ) {
+
             throw new Error(
                 "PackedStringArray muito grande."
             );
         }
 
+
         const result = [];
+
 
         for (
             let i = 0;
@@ -1401,28 +1650,29 @@ class GodotVariantReader {
             );
         }
 
+
         return result;
     }
 
-
-    /*
-     * Os tipos matemáticos abaixo não são necessários para
-     * achievements.bin, mas são lidos para que o parser não
-     * quebre simplesmente ao encontrar um tipo válido.
-     */
 
     readPackedVector2Array() {
 
         const count =
             this.readUint32();
 
-        if (count > 1000000) {
+
+        if (
+            count > 1000000
+        ) {
+
             throw new Error(
                 "PackedVector2Array muito grande."
             );
         }
 
+
         const result = [];
+
 
         for (
             let i = 0;
@@ -1431,10 +1681,14 @@ class GodotVariantReader {
         ) {
 
             result.push({
-                x: this.readFloat32(),
-                y: this.readFloat32()
+                x:
+                    this.readFloat32(),
+
+                y:
+                    this.readFloat32()
             });
         }
+
 
         return result;
     }
@@ -1445,13 +1699,19 @@ class GodotVariantReader {
         const count =
             this.readUint32();
 
-        if (count > 1000000) {
+
+        if (
+            count > 1000000
+        ) {
+
             throw new Error(
                 "PackedVector3Array muito grande."
             );
         }
 
+
         const result = [];
+
 
         for (
             let i = 0;
@@ -1460,11 +1720,17 @@ class GodotVariantReader {
         ) {
 
             result.push({
-                x: this.readFloat32(),
-                y: this.readFloat32(),
-                z: this.readFloat32()
+                x:
+                    this.readFloat32(),
+
+                y:
+                    this.readFloat32(),
+
+                z:
+                    this.readFloat32()
             });
         }
+
 
         return result;
     }
@@ -1475,13 +1741,19 @@ class GodotVariantReader {
         const count =
             this.readUint32();
 
-        if (count > 1000000) {
+
+        if (
+            count > 1000000
+        ) {
+
             throw new Error(
                 "PackedColorArray muito grande."
             );
         }
 
+
         const result = [];
+
 
         for (
             let i = 0;
@@ -1490,12 +1762,20 @@ class GodotVariantReader {
         ) {
 
             result.push({
-                r: this.readFloat32(),
-                g: this.readFloat32(),
-                b: this.readFloat32(),
-                a: this.readFloat32()
+                r:
+                    this.readFloat32(),
+
+                g:
+                    this.readFloat32(),
+
+                b:
+                    this.readFloat32(),
+
+                a:
+                    this.readFloat32()
             });
         }
+
 
         return result;
     }
@@ -1504,13 +1784,18 @@ class GodotVariantReader {
 
 /*
  * ============================================================
- * PARSER DE achievements.bin
+ * PARSE achievements.bin
  * ============================================================
  */
 
-function parseGodotAchievements(arrayBuffer) {
+function parseGodotAchievements(
+    arrayBuffer
+) {
 
-    if (!arrayBuffer) {
+    if (
+        !arrayBuffer
+    ) {
+
         throw new Error(
             "O arquivo achievements.bin está vazio."
         );
@@ -1518,27 +1803,32 @@ function parseGodotAchievements(arrayBuffer) {
 
 
     const fileBytes =
-        new Uint8Array(arrayBuffer);
+        new Uint8Array(
+            arrayBuffer
+        );
 
 
-    if (fileBytes.length < 8) {
+    if (
+        fileBytes.length < 8
+    ) {
+
         throw new Error(
             "achievements.bin é pequeno demais para ser um arquivo Godot válido."
         );
     }
 
 
-    /*
-     * FileAccess.store_var() escreve primeiro:
-     *
-     * uint32 tamanho
-     *
-     * Depois vem o Variant.
-     */
     const fileView =
-        new DataView(arrayBuffer);
+        new DataView(
+            arrayBuffer
+        );
 
 
+    /*
+     * Primeiros 4 bytes:
+     *
+     * tamanho do Variant.
+     */
     const encodedLength =
         fileView.getUint32(
             0,
@@ -1553,9 +1843,14 @@ function parseGodotAchievements(arrayBuffer) {
     console.log(
         "[Fluffy Community] achievements.bin:",
         {
-            fileSize: fileBytes.length,
-            encodedLength: encodedLength,
-            availableLength: availableLength
+            fileSize:
+                fileBytes.length,
+
+            encodedLength:
+                encodedLength,
+
+            availableLength:
+                availableLength
         }
     );
 
@@ -1577,7 +1872,7 @@ function parseGodotAchievements(arrayBuffer) {
 
 
     /*
-     * Não passamos o prefixo para o VariantReader.
+     * Remove o prefixo de 4 bytes.
      */
     const encodedBuffer =
         arrayBuffer.slice(
@@ -1607,7 +1902,10 @@ function parseGodotAchievements(arrayBuffer) {
                 value =>
                     value
                         .toString(16)
-                        .padStart(2, "0")
+                        .padStart(
+                            2,
+                            "0"
+                        )
             )
             .join(" ")
     );
@@ -1619,14 +1917,12 @@ function parseGodotAchievements(arrayBuffer) {
         );
 
 
-    /*
-     * O primeiro Variant deve ser o Dictionary.
-     */
     const firstHeader =
         reader.view.getUint32(
             0,
             true
         );
+
 
     const firstType =
         firstHeader & 0xFF;
@@ -1639,7 +1935,10 @@ function parseGodotAchievements(arrayBuffer) {
                 "0x" +
                 firstHeader
                     .toString(16)
-                    .padStart(8, "0"),
+                    .padStart(
+                        8,
+                        "0"
+                    ),
 
             type:
                 firstType,
@@ -1648,6 +1947,26 @@ function parseGodotAchievements(arrayBuffer) {
                 reader.offset
         }
     );
+
+
+    /*
+     * O seu arquivo deve começar com:
+     *
+     * header = 27
+     *
+     * Dictionary.
+     */
+    if (
+        firstType !== 27
+    ) {
+
+        throw new Error(
+            "O primeiro Variant de achievements.bin não é um Dictionary. " +
+            "Tipo encontrado: " +
+            firstType +
+            "."
+        );
+    }
 
 
     const decoded =
@@ -1667,17 +1986,11 @@ function parseGodotAchievements(arrayBuffer) {
     }
 
 
-    /*
-     * Se sobrar conteúdo significativo, isso é um forte
-     * indicativo de arquivo incompatível ou parser desalinhado.
-     *
-     * Porém não abortamos por alguns bytes finais, porque
-     * versões/formatos podem possuir dados adicionais.
-     */
     console.log(
-        "[Fluffy Community] Variant decodificado:",
+        "[Fluffy Community] Dictionary decodificado:",
         decoded
     );
+
 
     console.log(
         "[Fluffy Community] Offset final:",
@@ -1693,17 +2006,20 @@ function parseGodotAchievements(arrayBuffer) {
 
 /*
  * ============================================================
- * CONVERTE O DICTIONARY DO GODOT PARA IDs DE CONQUISTAS
+ * EXTRAI CONQUISTAS DESBLOQUEADAS
  * ============================================================
  */
 
-function extractUnlockedAchievementIds(decoded) {
+function extractUnlockedAchievementIds(
+    decoded
+) {
 
     if (
         !decoded ||
         typeof decoded !== "object" ||
         Array.isArray(decoded)
     ) {
+
         throw new Error(
             "Dictionary de conquistas inválido."
         );
@@ -1714,19 +2030,20 @@ function extractUnlockedAchievementIds(decoded) {
 
 
     for (
-        const [id, value]
+        const [
+            id,
+            value
+        ]
         of Object.entries(decoded)
     ) {
 
-        /*
-         * Achievements.gd salva:
-         *
-         * unlocked_achievements[id] = true
-         *
-         * Portanto somente valores verdadeiros contam.
-         */
-        if (value === true) {
-            unlockedIds.push(id);
+        if (
+            value === true
+        ) {
+
+            unlockedIds.push(
+                id
+            );
         }
     }
 
@@ -1752,7 +2069,9 @@ async function loadAchievementsCatalog() {
         );
 
 
-    if (!response.ok) {
+    if (
+        !response.ok
+    ) {
 
         throw new Error(
             "Não foi possível carregar o catálogo de conquistas. " +
@@ -1784,30 +2103,20 @@ async function loadAchievementsCatalog() {
 
 /*
  * ============================================================
- * NORMALIZA CATALOGO
+ * NORMALIZA CATÁLOGO
  * ============================================================
  */
 
-function normalizeCatalog(catalog) {
+function normalizeCatalog(
+    catalog
+) {
 
-    /*
-     * O catálogo atual possui os IDs diretamente como chaves.
-     *
-     * Exemplo:
-     *
-     * {
-     *   "alpha": {
-     *      ...
-     *   }
-     * }
-     *
-     * Caso no futuro venha dentro de "achievements", também
-     * aceitamos essa estrutura.
-     */
     if (
         catalog.achievements &&
         typeof catalog.achievements === "object" &&
-        !Array.isArray(catalog.achievements)
+        !Array.isArray(
+            catalog.achievements
+        )
     ) {
 
         return catalog.achievements;
@@ -1829,11 +2138,14 @@ function renderAchievements(
     unlockedIds
 ) {
 
-    achievementsElement.innerHTML = "";
+    achievementsElement.innerHTML =
+        "";
 
 
     const normalizedCatalog =
-        normalizeCatalog(catalog);
+        normalizeCatalog(
+            catalog
+        );
 
 
     const unlockedSet =
@@ -1842,11 +2154,15 @@ function renderAchievements(
         );
 
 
-    let visibleCount = 0;
+    let visibleCount =
+        0;
 
 
     for (
-        const [id, rawData]
+        const [
+            id,
+            rawData
+        ]
         of Object.entries(
             normalizedCatalog
         )
@@ -1856,12 +2172,15 @@ function renderAchievements(
             !rawData ||
             typeof rawData !== "object"
         ) {
+
             continue;
         }
 
 
         const unlocked =
-            unlockedSet.has(id);
+            unlockedSet.has(
+                id
+            );
 
 
         const secret =
@@ -1869,13 +2188,14 @@ function renderAchievements(
 
 
         /*
-         * Conquistas secretas bloqueadas não aparecem
-         * no perfil público.
+         * Conquistas secretas bloqueadas
+         * não aparecem no perfil público.
          */
         if (
             secret &&
             !unlocked
         ) {
+
             continue;
         }
 
@@ -1907,7 +2227,9 @@ function renderAchievements(
 
 
         const card =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
 
         card.className =
@@ -1920,7 +2242,9 @@ function renderAchievements(
 
 
         const iconElement =
-            document.createElement("img");
+            document.createElement(
+                "img"
+            );
 
 
         iconElement.className =
@@ -1928,10 +2252,13 @@ function renderAchievements(
 
 
         iconElement.alt =
-            name || "Conquista";
+            name ||
+            "Conquista";
 
 
-        if (icon) {
+        if (
+            icon
+        ) {
 
             iconElement.src =
                 icon;
@@ -1944,7 +2271,9 @@ function renderAchievements(
 
 
         const info =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
 
         info.className =
@@ -1952,7 +2281,9 @@ function renderAchievements(
 
 
         const nameElement =
-            document.createElement("p");
+            document.createElement(
+                "p"
+            );
 
 
         nameElement.className =
@@ -1960,11 +2291,14 @@ function renderAchievements(
 
 
         nameElement.textContent =
-            name || id;
+            name ||
+            id;
 
 
         const descriptionElement =
-            document.createElement("p");
+            document.createElement(
+                "p"
+            );
 
 
         descriptionElement.className =
@@ -1972,12 +2306,14 @@ function renderAchievements(
 
 
         descriptionElement.textContent =
-            description || "";
+            description ||
+            "";
 
 
         info.appendChild(
             nameElement
         );
+
 
         info.appendChild(
             descriptionElement
@@ -1987,6 +2323,7 @@ function renderAchievements(
         card.appendChild(
             iconElement
         );
+
 
         card.appendChild(
             info
@@ -2002,19 +2339,23 @@ function renderAchievements(
     }
 
 
-    if (visibleCount === 0) {
+    if (
+        visibleCount === 0
+    ) {
 
         achievementsElement.innerHTML =
-            '<div class="empty">' +
-            'Nenhuma conquista desbloqueada ainda.' +
-            '</div>';
+            `
+            <div class="empty">
+                Nenhuma conquista desbloqueada ainda.
+            </div>
+            `;
     }
 }
 
 
 /*
  * ============================================================
- * BUSCA ARQUIVO PRIVADO DO SUPABASE
+ * DOWNLOAD achievements.bin
  * ============================================================
  */
 
@@ -2041,14 +2382,19 @@ async function downloadAchievementsBin(
     } =
         await supabaseClient
             .storage
-            .from(SAVE_BUCKET)
+            .from(
+                SAVE_BUCKET
+            )
             .createSignedUrl(
                 filePath,
                 60
             );
 
 
-    if (error) {
+    if (
+        error
+    ) {
+
         throw error;
     }
 
@@ -2073,7 +2419,9 @@ async function downloadAchievementsBin(
         );
 
 
-    if (!response.ok) {
+    if (
+        !response.ok
+    ) {
 
         throw new Error(
             "Não foi possível baixar achievements.bin. " +
@@ -2087,7 +2435,9 @@ async function downloadAchievementsBin(
         await response.arrayBuffer();
 
 
-    if (arrayBuffer.byteLength === 0) {
+    if (
+        arrayBuffer.byteLength === 0
+    ) {
 
         throw new Error(
             "achievements.bin está vazio."
@@ -2118,6 +2468,7 @@ async function synchronizeAchievements(
 
     syncButton.disabled =
         true;
+
 
     setSyncStatus(
         "Baixando achievements.bin..."
@@ -2175,13 +2526,16 @@ async function synchronizeAchievements(
                 );
 
 
-        if (error) {
+        if (
+            error
+        ) {
+
             throw error;
         }
 
 
         /*
-         * Recarrega o catálogo e redesenha.
+         * Atualiza a interface.
          */
         const catalog =
             await loadAchievementsCatalog();
@@ -2216,6 +2570,7 @@ async function synchronizeAchievements(
             )
         );
 
+
     } finally {
 
         syncButton.disabled =
@@ -2236,7 +2591,9 @@ async function loadProfile() {
         getProfileIdFromUrl();
 
 
-    if (!profileId) {
+    if (
+        !profileId
+    ) {
 
         showError(
             "Nenhum ID de perfil foi informado na URL."
@@ -2282,12 +2639,17 @@ async function loadProfile() {
                 .single();
 
 
-        if (error) {
+        if (
+            error
+        ) {
+
             throw error;
         }
 
 
-        if (!profile) {
+        if (
+            !profile
+        ) {
 
             throw new Error(
                 "Perfil não encontrado."
@@ -2296,15 +2658,19 @@ async function loadProfile() {
 
 
         /*
-         * Informações básicas.
+         * Nome.
          */
         usernameElement.textContent =
-            escapeText(
-                profile.username
-            );
+            profile.username ||
+            "Usuário";
 
 
-        if (profile.avatar_url) {
+        /*
+         * Avatar.
+         */
+        if (
+            profile.avatar_url
+        ) {
 
             avatarElement.src =
                 profile.avatar_url;
@@ -2326,12 +2692,14 @@ async function loadProfile() {
                             height="200"
                             fill="#252c38"
                         />
+
                         <circle
                             cx="100"
                             cy="78"
                             r="35"
                             fill="#8c98aa"
                         />
+
                         <path
                             d="M40 180c8-40 32-60 60-60s52 20 60 60"
                             fill="#8c98aa"
@@ -2342,7 +2710,12 @@ async function loadProfile() {
         }
 
 
-        if (profile.created_at) {
+        /*
+         * Data de criação.
+         */
+        if (
+            profile.created_at
+        ) {
 
             const date =
                 new Date(
@@ -2363,7 +2736,12 @@ async function loadProfile() {
         }
 
 
-        if (profile.bio) {
+        /*
+         * Bio.
+         */
+        if (
+            profile.bio
+        ) {
 
             bioElement.textContent =
                 profile.bio;
@@ -2376,14 +2754,15 @@ async function loadProfile() {
 
 
         /*
-         * Catálogo.
+         * Carrega catálogo.
          */
         const catalog =
             await loadAchievementsCatalog();
 
 
         /*
-         * Conquistas já sincronizadas no perfil.
+         * Conquistas atualmente salvas
+         * no perfil.
          */
         const profileAchievements =
             Array.isArray(
@@ -2400,29 +2779,32 @@ async function loadProfile() {
 
 
         /*
-         * Botão de sincronização:
-         *
-         * SOMENTE o dono do perfil pode vê-lo.
+         * O botão de sincronização só aparece
+         * para o dono do perfil.
          */
         const isOwner =
             !!session &&
             !!session.user &&
-            session.user.id === profile.id;
+            session.user.id ===
+                profile.id;
 
 
-        if (isOwner) {
+        if (
+            isOwner
+        ) {
 
             ownerActionsElement.style.display =
                 "block";
 
 
             syncButton.onclick =
-                async () => {
+                async function() {
 
                     await synchronizeAchievements(
                         profile.id
                     );
                 };
+
 
         } else {
 
@@ -2433,6 +2815,7 @@ async function loadProfile() {
 
         loadingElement.style.display =
             "none";
+
 
         contentElement.style.display =
             "block";
