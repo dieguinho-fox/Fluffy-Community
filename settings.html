@@ -291,6 +291,57 @@
             display: none;
         }
 
+        /* DISPOSITIVO ATUAL */
+
+        .device-box {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: #f7f7f7;
+            border-radius: 10px;
+            border: 1px solid #e5e5e5;
+        }
+
+        .device-icon {
+            width: 42px;
+            height: 42px;
+            min-width: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #e5e5e5;
+            border-radius: 10px;
+            font-size: 21px;
+        }
+
+        .device-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .device-name {
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .device-details {
+            color: #666;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .current-badge {
+            display: inline-block;
+            margin-top: 6px;
+            padding: 3px 7px;
+            border-radius: 6px;
+            background: #e5f5ea;
+            color: #16803c;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
         @media (max-width: 600px) {
             .container {
                 padding: 20px 15px 40px;
@@ -317,6 +368,10 @@
                 width: 90px;
                 height: 90px;
                 min-width: 90px;
+            }
+
+            .device-box {
+                align-items: flex-start;
             }
         }
     </style>
@@ -351,8 +406,6 @@
             <p class="description">
                 Essas informações aparecem no seu perfil público.
             </p>
-
-            <!-- FOTO -->
 
             <label>Foto de perfil</label>
 
@@ -604,6 +657,56 @@
                 Controle o acesso à sua conta.
             </p>
 
+            <!-- DISPOSITIVO ATUAL -->
+
+            <div class="security-item">
+
+                <h3>
+                    Dispositivo atual
+                </h3>
+
+                <p>
+                    Este é o dispositivo e navegador usados
+                    nesta sessão.
+                </p>
+
+                <div class="device-box">
+
+                    <div
+                        id="deviceIcon"
+                        class="device-icon"
+                    >
+                        💻
+                    </div>
+
+                    <div class="device-info">
+
+                        <div
+                            id="deviceName"
+                            class="device-name"
+                        >
+                            Detectando dispositivo...
+                        </div>
+
+                        <div
+                            id="deviceDetails"
+                            class="device-details"
+                        >
+                            Detectando navegador...
+                        </div>
+
+                        <span class="current-badge">
+                            SESSÃO ATUAL
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- TODAS AS SESSÕES -->
+
             <div class="security-item">
 
                 <h3>
@@ -612,7 +715,8 @@
 
                 <p>
                     Encerra as sessões da sua conta em outros
-                    dispositivos e navegadores.
+                    dispositivos e navegadores. A sessão atual
+                    também será encerrada.
                 </p>
 
                 <button
@@ -623,6 +727,8 @@
                 </button>
 
             </div>
+
+            <!-- SESSÃO ATUAL -->
 
             <div class="security-item">
 
@@ -785,6 +891,15 @@
         document.getElementById(
             "passwordSaveStatus"
         );
+
+    const deviceIcon =
+        document.getElementById("deviceIcon");
+
+    const deviceName =
+        document.getElementById("deviceName");
+
+    const deviceDetails =
+        document.getElementById("deviceDetails");
 
     function showError(message) {
 
@@ -958,6 +1073,81 @@
         }
     }
 
+    function detectDevice() {
+
+        const userAgent =
+            navigator.userAgent || "";
+
+        let os = "Sistema desconhecido";
+        let browser = "Navegador desconhecido";
+        let icon = "💻";
+        let device = "Computador";
+
+        if (/Android/i.test(userAgent)) {
+
+            os = "Android";
+            icon = "📱";
+            device = "Celular / tablet";
+
+        } else if (/iPhone|iPad|iPod/i.test(userAgent)) {
+
+            os = "iOS";
+            icon = "📱";
+            device = "iPhone / iPad";
+
+        } else if (/Windows/i.test(userAgent)) {
+
+            os = "Windows";
+            icon = "💻";
+            device = "Computador";
+
+        } else if (/Mac OS X/i.test(userAgent)) {
+
+            os = "macOS";
+            icon = "💻";
+            device = "Mac";
+
+        } else if (/Linux/i.test(userAgent)) {
+
+            os = "Linux";
+            icon = "💻";
+            device = "Computador";
+        }
+
+        if (/Edg\//i.test(userAgent)) {
+
+            browser = "Microsoft Edge";
+
+        } else if (/OPR\//i.test(userAgent)) {
+
+            browser = "Opera";
+
+        } else if (/Chrome\//i.test(userAgent)) {
+
+            browser = "Google Chrome";
+
+        } else if (/Firefox\//i.test(userAgent)) {
+
+            browser = "Mozilla Firefox";
+
+        } else if (
+            /Safari\//i.test(userAgent) &&
+            !/Chrome\//i.test(userAgent)
+        ) {
+
+            browser = "Safari";
+        }
+
+        deviceIcon.textContent =
+            icon;
+
+        deviceName.textContent =
+            device;
+
+        deviceDetails.textContent =
+            `${browser} • ${os}`;
+    }
+
     async function loadAccount() {
 
         try {
@@ -1031,6 +1221,8 @@
             updateCounters();
 
             updateLoginMethods();
+
+            detectDevice();
 
             loading.classList.add(
                 "hidden"
@@ -1189,10 +1381,13 @@
                 return;
             }
 
-            const path =
+            let path =
                 oldAvatarUrl.substring(
                     index + marker.length
                 );
+
+            path =
+                path.split("?")[0];
 
             if (!path) {
                 return;
@@ -1699,7 +1894,7 @@
 
             const confirmed =
                 confirm(
-                    "Isso encerrará todas as sessões da sua conta em outros dispositivos. Continuar?"
+                    "Isso encerrará todas as sessões da sua conta, incluindo a sessão deste dispositivo. Continuar?"
                 );
 
             if (!confirmed) {
