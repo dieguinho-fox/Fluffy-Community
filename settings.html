@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Preferências - Fluffy Community</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+    <style>
+        main {
+            max-width: 700px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .settings-card {
+            background: #ffffff;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow:
+                0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .settings-card h2 {
+            margin-top: 0;
+        }
+
+        .section {
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 1px solid #eeeeee;
+        }
+
+        .section:first-of-type {
+            margin-top: 20px;
+            padding-top: 0;
+            border-top: none;
+        }
+
+        .field {
+            margin-top: 20px;
+        }
+
+        .field label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+        }
+
+        .field input,
+        .field textarea {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 11px;
+            border: 1px solid #cccccc;
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: inherit;
+        }
+
+        .field textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .field small {
+            display: block;
+            margin-top: 5px;
+            color: #777777;
+        }
+
+        .account-email {
+            color: #555555;
+            word-break: break-word;
+        }
+
+        .login-method {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 15px;
+            margin-top: 12px;
+            border: 1px solid #eeeeee;
+            border-radius: 10px;
+        }
+
+        .login-method-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .login-method-icon {
+            font-size: 24px;
+        }
+
+        .login-method-name {
+            font-weight: bold;
+        }
+
+        .login-method-status {
+            font-size: 13px;
+            color: #777777;
+            margin-top: 3px;
+        }
+
+        .connected {
+            color: #16803c;
+        }
+
+        .not-connected {
+            color: #777777;
+        }
+
+        .buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 11px 18px;
+            border: none;
+            border-radius: 8px;
+            background: #5865f2;
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .button:hover {
+            opacity: 0.9;
+        }
+
+        .secondary-button {
+            background: #777777;
+        }
+
+        .logout-button {
+            background: #e53935;
+        }
+
+        .message {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .success {
+            display: block;
+            background: #e8f5e9;
+            color: #1b5e20;
+        }
+
+        .error {
+            display: block;
+            background: #ffebee;
+            color: #b71c1c;
+        }
+
+        .loading {
+            text-align: center;
+            color: #666666;
+        }
+
+        .disabled-button {
+            background: #aaaaaa;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Fluffy Community</h1>
+
+        <p>
+            Preferências da conta
+        </p>
+    </header>
+
+    <main>
+
+        <div id="settingsContainer">
+            <p class="loading">
+                Carregando suas configurações...
+            </p>
+        </div>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script>
+        const SETTINGS_SUPABASE_URL =
+            "https://wnihobtfpmabgfwoddye.supabase.co";
+
+        const SETTINGS_SUPABASE_KEY =
+            "sb_publishable_Y-S1kbAXQE-Y4j-seMaHrQ_u_vUoTFF";
+
+        const settingsSupabase =
+            window.supabase.createClient(
+                SETTINGS_SUPABASE_URL,
+                SETTINGS_SUPABASE_KEY
+            );
+
+        const settingsContainer =
+            document.getElementById(
+                "settingsContainer"
+            );
+
+        let currentUser = null;
+        let currentProfile = null;
+
+        async function loadSettings() {
+
+            try {
+
+                const sessionResult =
+                    await settingsSupabase.auth.getSession();
+
+                const session =
+                    sessionResult.data.session;
+
+                if (
+                    sessionResult.error ||
+                    !session
+                ) {
+                    window.location.href =
+                        "login.html";
+
+                    return;
+                }
+
+                currentUser =
+                    session.user;
+
+                const profileResult =
+                    await settingsSupabase
+                        .from("profiles")
+                        .select(
+                            "id, username, created_at, avatar_url, bio"
+                        )
+                        .eq(
+                            "id",
+                            currentUser.id
+                        )
+                        .maybeSingle();
+
+                if (profileResult.error) {
+
+                    console.error(
+                        "Erro ao carregar perfil:",
+                        profileResult.error
+                    );
+
+                    showError(
+                        "Não foi possível carregar suas configurações."
+                    );
+
+                    return;
+                }
+
+                if (!profileResult.data) {
+
+                    showError(
+                        "Seu perfil ainda não foi criado."
+                    );
+
+                    return;
+                }
+
+                currentProfile =
+                    profileResult.data;
+
+                displaySettings();
+
+            } catch (error) {
+
+                console.error(
+                    "Erro inesperado:",
+                    error
+                );
+
+                showError(
+                    "Ocorreu um erro ao carregar as configurações."
+                );
+            }
+        }
+
+        function displaySettings() {
+
+            settingsContainer.innerHTML = "";
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+            card.className =
+                "settings-card";
+
+            const title =
+                document.createElement(
+                    "h2"
+                );
+
+            title.textContent =
+                "Preferências da conta";
+
+            card.appendChild(
+                title
+            );
+
+            /*
+             * PERFIL
+             */
+
+            const profileSection =
+                document.createElement(
+                    "div"
+                );
+
+            profileSection.className =
+                "section";
+
+            const profileTitle =
+                document.createElement(
+                    "h3"
+                );
+
+            profileTitle.textContent =
+                "Perfil";
+
+            profileSection.appendChild(
+                profileTitle
+            );
+
+            /*
+             * USERNAME
+             */
+
+            const usernameField =
+                document.createElement(
+                    "div"
+                );
+
+            usernameField.className =
+                "field";
+
+            const usernameLabel =
+                document.createElement(
+                    "label"
+                );
+
+            usernameLabel.textContent =
+                "Nome de usuário";
+
+            const usernameInput =
+                document.createElement(
+                    "input"
+                );
+
+            usernameInput.type =
+                "text";
+
+            usernameInput.id =
+                "usernameInput";
+
+            usernameInput.value =
+                currentProfile.username;
+
+            usernameInput.maxLength =
+                20;
+
+            usernameInput.autocomplete =
+                "username";
+
+            usernameField.appendChild(
+                usernameLabel
+            );
+
+            usernameField.appendChild(
+                usernameInput
+            );
+
+            profileSection.appendChild(
+                usernameField
+            );
+
+            /*
+             * AVATAR
+             */
+
+            const avatarField =
+                document.createElement(
+                    "div"
+                );
+
+            avatarField.className =
+                "field";
+
+            const avatarLabel =
+                document.createElement(
+                    "label"
+                );
+
+            avatarLabel.textContent =
+                "Foto de perfil";
+
+            const avatarInput =
+                document.createElement(
+                    "input"
+                );
+
+            avatarInput.type =
+                "url";
+
+            avatarInput.id =
+                "avatarInput";
+
+            avatarInput.value =
+                currentProfile.avatar_url ||
+                "";
+
+            avatarInput.placeholder =
+                "https://exemplo.com/imagem.png";
+
+            const avatarHelp =
+                document.createElement(
+                    "small"
+                );
+
+            avatarHelp.textContent =
+                "O envio de imagens diretamente pelo site será adicionado depois.";
+
+            avatarField.appendChild(
+                avatarLabel
+            );
+
+            avatarField.appendChild(
+                avatarInput
+            );
+
+            avatarField.appendChild(
+                avatarHelp
+            );
+
+            profileSection.appendChild(
+                avatarField
+            );
+
+            /*
+             * BIO
+             */
+
+            const bioField =
+                document.createElement(
+                    "div"
+                );
+
+            bioField.className =
+                "field";
+
+            const bioLabel =
+                document.createElement(
+                    "label"
+                );
+
+            bioLabel.textContent =
+                "Bio";
+
+            const bioInput =
+                document.createElement(
+                    "textarea"
+                );
+
+            bioInput.id =
+                "bioInput";
+
+            bioInput.maxLength =
+                300;
+
+            bioInput.placeholder =
+                "Conte um pouco sobre você...";
+
+            bioInput.value =
+                currentProfile.bio ||
+                "";
+
+            bioField.appendChild(
+                bioLabel
+            );
+
+            bioField.appendChild(
+                bioInput
+            );
+
+            profileSection.appendChild(
+                bioField
+            );
+
+            /*
+             * EMAIL
+             */
+
+            const emailField =
+                document.createElement(
+                    "div"
+                );
+
+            emailField.className =
+                "field";
+
+            const emailLabel =
+                document.createElement(
+                    "label"
+                );
+
+            emailLabel.textContent =
+                "E-mail da conta";
+
+            const email =
+                document.createElement(
+                    "p"
+                );
+
+            email.className =
+                "account-email";
+
+            email.textContent =
+                currentUser.email ||
+                "E-mail não disponível";
+
+            emailField.appendChild(
+                emailLabel
+            );
+
+            emailField.appendChild(
+                email
+            );
+
+            profileSection.appendChild(
+                emailField
+            );
+
+            /*
+             * DATA DE CRIAÇÃO
+             */
+
+            const createdField =
+                document.createElement(
+                    "div"
+                );
+
+            createdField.className =
+                "field";
+
+            const createdLabel =
+                document.createElement(
+                    "label"
+                );
+
+            createdLabel.textContent =
+                "Conta criada em";
+
+            const createdDate =
+                document.createElement(
+                    "p"
+                );
+
+            const date =
+                new Date(
+                    currentProfile.created_at
+                );
+
+            createdDate.textContent =
+                date.toLocaleDateString(
+                    "pt-BR",
+                    {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "numeric"
+                    }
+                );
+
+            createdField.appendChild(
+                createdLabel
+            );
+
+            createdField.appendChild(
+                createdDate
+            );
+
+            profileSection.appendChild(
+                createdField
+            );
+
+            card.appendChild(
+                profileSection
+            );
+
+            /*
+             * MÉTODOS DE LOGIN
+             */
+
+            const loginSection =
+                document.createElement(
+                    "div"
+                );
+
+            loginSection.className =
+                "section";
+
+            const loginTitle =
+                document.createElement(
+                    "h3"
+                );
+
+            loginTitle.textContent =
+                "Métodos de login";
+
+            loginSection.appendChild(
+                loginTitle
+            );
+
+            /*
+             * GOOGLE
+             */
+
+            const googleMethod =
+                document.createElement(
+                    "div"
+                );
+
+            googleMethod.className =
+                "login-method";
+
+            const googleInfo =
+                document.createElement(
+                    "div"
+                );
+
+            googleInfo.className =
+                "login-method-info";
+
+            const googleIcon =
+                document.createElement(
+                    "div"
+                );
+
+            googleIcon.className =
+                "login-method-icon";
+
+            googleIcon.textContent =
+                "🔵";
+
+            const googleText =
+                document.createElement(
+                    "div"
+                );
+
+            const googleName =
+                document.createElement(
+                    "div"
+                );
+
+            googleName.className =
+                "login-method-name";
+
+            googleName.textContent =
+                "Google";
+
+            const googleStatus =
+                document.createElement(
+                    "div"
+                );
+
+            googleStatus.className =
+                "login-method-status";
+
+            const googleIdentity =
+                currentUser.identities
+                    ? currentUser.identities.find(
+                        function(identity) {
+                            return (
+                                identity.provider ===
+                                "google"
+                            );
+                        }
+                    )
+                    : null;
+
+            if (googleIdentity) {
+
+                googleStatus.textContent =
+                    "Conectado";
+
+                googleStatus.classList.add(
+                    "connected"
+                );
+
+            } else {
+
+                googleStatus.textContent =
+                    "Não conectado";
+
+                googleStatus.classList.add(
+                    "not-connected"
+                );
+            }
+
+            googleText.appendChild(
+                googleName
+            );
+
+            googleText.appendChild(
+                googleStatus
+            );
+
+            googleInfo.appendChild(
+                googleIcon
+            );
+
+            googleInfo.appendChild(
+                googleText
+            );
+
+            googleMethod.appendChild(
+                googleInfo
+            );
+
+            if (!googleIdentity) {
+
+                const googleButton =
+                    document.createElement(
+                        "button"
+                    );
+
+                googleButton.className =
+                    "button";
+
+                googleButton.textContent =
+                    "Adicionar";
+
+                googleButton.addEventListener(
+                    "click",
+                    connectGoogle
+                );
+
+                googleMethod.appendChild(
+                    googleButton
+                );
+            }
+
+            loginSection.appendChild(
+                googleMethod
+            );
+
+            /*
+             * SENHA
+             */
+
+            const passwordMethod =
+                document.createElement(
+                    "div"
+                );
+
+            passwordMethod.className =
+                "login-method";
+
+            const passwordInfo =
+                document.createElement(
+                    "div"
+                );
+
+            passwordInfo.className =
+                "login-method-info";
+
+            const passwordIcon =
+                document.createElement(
+                    "div"
+                );
+
+            passwordIcon.className =
+                "login-method-icon";
+
+            passwordIcon.textContent =
+                "🔑";
+
+            const passwordText =
+                document.createElement(
+                    "div"
+                );
+
+            const passwordName =
+                document.createElement(
+                    "div"
+                );
+
+            passwordName.className =
+                "login-method-name";
+
+            passwordName.textContent =
+                "Senha";
+
+            const passwordStatus =
+                document.createElement(
+                    "div"
+                );
+
+            passwordStatus.className =
+                "login-method-status";
+
+            const passwordIdentity =
+                currentUser.identities
+                    ? currentUser.identities.find(
+                        function(identity) {
+                            return (
+                                identity.provider ===
+                                "email"
+                            );
+                        }
+                    )
+                    : null;
+
+            if (passwordIdentity) {
+
+                passwordStatus.textContent =
+                    "Configurada";
+
+                passwordStatus.classList.add(
+                    "connected"
+                );
+
+            } else {
+
+                passwordStatus.textContent =
+                    "Ainda não configurada";
+
+                passwordStatus.classList.add(
+                    "not-connected"
+                );
+            }
+
+            passwordText.appendChild(
+                passwordName
+            );
+
+            passwordText.appendChild(
+                passwordStatus
+            );
+
+            passwordInfo.appendChild(
+                passwordIcon
+            );
+
+            passwordInfo.appendChild(
+                passwordText
+            );
+
+            passwordMethod.appendChild(
+                passwordInfo
+            );
+
+            const passwordButton =
+                document.createElement(
+                    "button"
+                );
+
+            passwordButton.className =
+                "button";
+
+            passwordButton.textContent =
+                passwordIdentity
+                    ? "Alterar"
+                    : "Adicionar";
+
+            passwordButton.addEventListener(
+                "click",
+                function() {
+
+                    alert(
+                        "A configuração de senha será adicionada na próxima etapa."
+                    );
+
+                }
+            );
+
+            passwordMethod.appendChild(
+                passwordButton
+            );
+
+            loginSection.appendChild(
+                passwordMethod
+            );
+
+            card.appendChild(
+                loginSection
+            );
+
+            /*
+             * MENSAGEM
+             */
+
+            const message =
+                document.createElement(
+                    "div"
+                );
+
+            message.id =
+                "message";
+
+            message.className =
+                "message";
+
+            card.appendChild(
+                message
+            );
+
+            /*
+             * BOTÕES
+             */
+
+            const buttons =
+                document.createElement(
+                    "div"
+                );
+
+            buttons.className =
+                "buttons";
+
+            const saveButton =
+                document.createElement(
+                    "button"
+                );
+
+            saveButton.className =
+                "button";
+
+            saveButton.textContent =
+                "Salvar alterações";
+
+            saveButton.addEventListener(
+                "click",
+                saveProfile
+            );
+
+            const backButton =
+                document.createElement(
+                    "a"
+                );
+
+            backButton.className =
+                "button secondary-button";
+
+            backButton.textContent =
+                "Voltar ao perfil";
+
+            backButton.href =
+                "profile.html?id=" +
+                encodeURIComponent(
+                    currentProfile.id
+                );
+
+            const logoutButton =
+                document.createElement(
+                    "button"
+                );
+
+            logoutButton.className =
+                "button logout-button";
+
+            logoutButton.textContent =
+                "Sair";
+
+            logoutButton.addEventListener(
+                "click",
+                logout
+            );
+
+            buttons.appendChild(
+                saveButton
+            );
+
+            buttons.appendChild(
+                backButton
+            );
+
+            buttons.appendChild(
+                logoutButton
+            );
+
+            card.appendChild(
+                buttons
+            );
+
+            settingsContainer.appendChild(
+                card
+            );
+        }
+
+        async function saveProfile() {
+
+            const username =
+                document.getElementById(
+                    "usernameInput"
+                ).value.trim();
+
+            const avatarUrl =
+                document.getElementById(
+                    "avatarInput"
+                ).value.trim();
+
+            const bio =
+                document.getElementById(
+                    "bioInput"
+                ).value.trim();
+
+            if (!username) {
+
+                showMessage(
+                    "O nome de usuário não pode ficar vazio.",
+                    true
+                );
+
+                return;
+            }
+
+            if (username.length > 20) {
+
+                showMessage(
+                    "O nome de usuário pode ter no máximo 20 caracteres.",
+                    true
+                );
+
+                return;
+            }
+
+            try {
+
+                const result =
+                    await settingsSupabase
+                        .from("profiles")
+                        .update({
+                            username: username,
+                            avatar_url:
+                                avatarUrl ||
+                                null,
+                            bio:
+                                bio ||
+                                null
+                        })
+                        .eq(
+                            "id",
+                            currentUser.id
+                        );
+
+                if (result.error) {
+
+                    console.error(
+                        "Erro ao salvar perfil:",
+                        result.error
+                    );
+
+                    showMessage(
+                        "Não foi possível salvar as alterações: " +
+                        result.error.message,
+                        true
+                    );
+
+                    return;
+                }
+
+                currentProfile.username =
+                    username;
+
+                currentProfile.avatar_url =
+                    avatarUrl ||
+                    null;
+
+                currentProfile.bio =
+                    bio ||
+                    null;
+
+                showMessage(
+                    "Alterações salvas com sucesso!",
+                    false
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "Erro inesperado:",
+                    error
+                );
+
+                showMessage(
+                    "Ocorreu um erro ao salvar as alterações.",
+                    true
+                );
+            }
+        }
+
+        async function connectGoogle() {
+
+            try {
+
+                const result =
+                    await settingsSupabase.auth
+                        .linkIdentity({
+                            provider: "google",
+                            options: {
+                                redirectTo:
+                                    window.location.origin +
+                                    window.location.pathname
+                            }
+                        });
+
+                if (result.error) {
+
+                    console.error(
+                        "Erro ao conectar Google:",
+                        result.error
+                    );
+
+                    showMessage(
+                        "Não foi possível conectar o Google: " +
+                        result.error.message,
+                        true
+                    );
+                }
+
+            } catch (error) {
+
+                console.error(
+                    "Erro inesperado:",
+                    error
+                );
+
+                showMessage(
+                    "Ocorreu um erro ao conectar o Google.",
+                    true
+                );
+            }
+        }
+
+        async function logout() {
+
+            const result =
+                await settingsSupabase.auth.signOut();
+
+            if (result.error) {
+
+                console.error(
+                    "Erro ao sair:",
+                    result.error
+                );
+
+                showMessage(
+                    "Não foi possível sair da conta.",
+                    true
+                );
+
+                return;
+            }
+
+            window.location.href =
+                "login.html";
+        }
+
+        function showMessage(
+            message,
+            isError
+        ) {
+
+            const element =
+                document.getElementById(
+                    "message"
+                );
+
+            if (!element) {
+                return;
+            }
+
+            element.textContent =
+                message;
+
+            element.className =
+                "message " +
+                (
+                    isError
+                        ? "error"
+                        : "success"
+                );
+        }
+
+        function showError(message) {
+
+            settingsContainer.innerHTML = "";
+
+            const error =
+                document.createElement(
+                    "div"
+                );
+
+            error.className =
+                "error";
+
+            error.textContent =
+                message;
+
+            settingsContainer.appendChild(
+                error
+            );
+        }
+
+        loadSettings();
+    </script>
+
+</body>
+</html>
