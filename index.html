@@ -1,44 +1,514 @@
 <!DOCTYPE html>
-
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-<title>Fluffy Community</title>
+    <title>Fluffy Community</title>
 
-<link rel="stylesheet" href="style.css">
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
 
+    <style>
+        .account-container {
+            max-width: 700px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .account-card {
+            background: #ffffff;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            box-shadow:
+                0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .account-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: #ddd;
+            margin-bottom: 15px;
+        }
+
+        .account-name {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .account-handle {
+            margin-top: 5px;
+            color: #777;
+        }
+
+        .account-date {
+            margin-top: 20px;
+            color: #666;
+        }
+
+        .account-buttons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        .account-button {
+            display: inline-block;
+            padding: 10px 18px;
+            border-radius: 8px;
+            border: none;
+            background: #5865f2;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .account-button:hover {
+            opacity: 0.9;
+        }
+
+        .logout-button {
+            background: #e53935;
+        }
+
+        .loading {
+            text-align: center;
+            color: #666;
+        }
+
+        .error {
+            background: #ffffff;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            color: #c62828;
+        }
+    </style>
 </head>
 
 <body>
 
-<header>
-    <h1>Fluffy Community</h1>
-    <p>A comunidade oficial da Fluffy Studios</p>
+    <header>
+        <h1>Fluffy Community</h1>
 
-    <nav>
-        <a href="login.html">Entrar</a>
-        <a href="register.html">Criar conta</a>
-    </nav>
-</header>
+        <p>
+            A comunidade oficial da Fluffy Studios
+        </p>
+    </header>
 
-<main>
+    <main>
 
-    <div id="announcementContainer"></div>
+        <div class="account-container">
 
-    <h2>Bem-vindo!</h2>
+            <div id="accountContainer">
+                <p class="loading">
+                    Carregando sua conta...
+                </p>
+            </div>
 
-    <p>
-        Aqui você poderá encontrar nossos jogos,
-        notícias e, futuramente, os fóruns da comunidade.
-    </p>
+            <div id="announcementContainer"></div>
 
-</main>
+        </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="script.js"></script>
-<script src="announcements.js"></script>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="announcements.js"></script>
+
+    <script>
+        const SUPABASE_URL =
+            "https://wnihobtfpmabgfwoddye.supabase.co";
+
+        const SUPABASE_KEY =
+            "sb_publishable_Y-S1kbAXQE-Y4j-seMaHrQ_u_vUoTFF";
+
+        const supabaseClient =
+            window.supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_KEY
+            );
+
+        const accountContainer =
+            document.getElementById(
+                "accountContainer"
+            );
+
+        async function loadAccount() {
+
+            try {
+
+                const sessionResult =
+                    await supabaseClient.auth.getSession();
+
+                const session =
+                    sessionResult.data.session;
+
+                const sessionError =
+                    sessionResult.error;
+
+                if (sessionError) {
+
+                    console.error(
+                        "Erro ao verificar sessão:",
+                        sessionError
+                    );
+
+                    redirectToLogin();
+
+                    return;
+                }
+
+                if (!session) {
+
+                    redirectToLogin();
+
+                    return;
+                }
+
+                const user =
+                    session.user;
+
+                const profileResult =
+                    await supabaseClient
+                        .from("profiles")
+                        .select(
+                            "id, username, created_at, avatar_url, bio"
+                        )
+                        .eq("id", user.id)
+                        .maybeSingle();
+
+                const profile =
+                    profileResult.data;
+
+                const profileError =
+                    profileResult.error;
+
+                if (profileError) {
+
+                    console.error(
+                        "Erro ao carregar perfil:",
+                        profileError
+                    );
+
+                    showError(
+                        "Não foi possível carregar seu perfil."
+                    );
+
+                    return;
+                }
+
+                if (!profile) {
+
+                    showError(
+                        "Seu perfil ainda não foi criado."
+                    );
+
+                    return;
+                }
+
+                displayAccount(profile);
+
+            } catch (error) {
+
+                console.error(
+                    "Erro inesperado:",
+                    error
+                );
+
+                showError(
+                    "Ocorreu um erro ao carregar sua conta."
+                );
+            }
+        }
+
+        function displayAccount(profile) {
+
+            accountContainer.innerHTML = "";
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+            card.className =
+                "account-card";
+
+            const avatar =
+                document.createElement(
+                    "img"
+                );
+
+            avatar.className =
+                "account-avatar";
+
+            avatar.alt =
+                "Foto de perfil de " +
+                profile.username;
+
+            if (profile.avatar_url) {
+
+                avatar.src =
+                    profile.avatar_url;
+
+            } else {
+
+                avatar.src =
+                    "data:image/svg+xml," +
+                    encodeURIComponent(`
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="100"
+                            height="100"
+                            viewBox="0 0 100 100"
+                        >
+                            <rect
+                                width="100"
+                                height="100"
+                                rx="50"
+                                fill="#dddddd"
+                            />
+
+                            <circle
+                                cx="50"
+                                cy="37"
+                                r="18"
+                                fill="#999999"
+                            />
+
+                            <path
+                                d="M20 90
+                                   C20 69 33 56 50 56
+                                   C67 56 80 69 80 90"
+                                fill="#999999"
+                            />
+                        </svg>
+                    `);
+            }
+
+            const name =
+                document.createElement(
+                    "h2"
+                );
+
+            name.className =
+                "account-name";
+
+            name.textContent =
+                profile.username;
+
+            const handle =
+                document.createElement(
+                    "div"
+                );
+
+            handle.className =
+                "account-handle";
+
+            handle.textContent =
+                "@" +
+                profile.username;
+
+            const date =
+                document.createElement(
+                    "p"
+                );
+
+            date.className =
+                "account-date";
+
+            const createdAt =
+                new Date(
+                    profile.created_at
+                );
+
+            date.textContent =
+                "Membro desde " +
+                createdAt.toLocaleDateString(
+                    "pt-BR",
+                    {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "numeric"
+                    }
+                );
+
+            const buttons =
+                document.createElement(
+                    "div"
+                );
+
+            buttons.className =
+                "account-buttons";
+
+            const profileButton =
+                document.createElement(
+                    "a"
+                );
+
+            profileButton.className =
+                "account-button";
+
+            profileButton.textContent =
+                "Ver meu perfil";
+
+            profileButton.href =
+                "profile.html?id=" +
+                encodeURIComponent(
+                    profile.id
+                );
+
+            const settingsButton =
+                document.createElement(
+                    "a"
+                );
+
+            settingsButton.className =
+                "account-button";
+
+            settingsButton.textContent =
+                "Preferências";
+
+            settingsButton.href =
+                "settings.html";
+
+            const logoutButton =
+                document.createElement(
+                    "button"
+                );
+
+            logoutButton.className =
+                "account-button logout-button";
+
+            logoutButton.textContent =
+                "Sair";
+
+            logoutButton.addEventListener(
+                "click",
+                logout
+            );
+
+            buttons.appendChild(
+                profileButton
+            );
+
+            buttons.appendChild(
+                settingsButton
+            );
+
+            buttons.appendChild(
+                logoutButton
+            );
+
+            card.appendChild(
+                avatar
+            );
+
+            card.appendChild(
+                name
+            );
+
+            card.appendChild(
+                handle
+            );
+
+            card.appendChild(
+                date
+            );
+
+            card.appendChild(
+                buttons
+            );
+
+            accountContainer.appendChild(
+                card
+            );
+        }
+
+        async function logout() {
+
+            const result =
+                await supabaseClient.auth.signOut();
+
+            if (result.error) {
+
+                console.error(
+                    "Erro ao sair:",
+                    result.error
+                );
+
+                alert(
+                    "Não foi possível sair da conta."
+                );
+
+                return;
+            }
+
+            window.location.href =
+                "login.html";
+        }
+
+        function redirectToLogin() {
+
+            window.location.href =
+                "login.html";
+        }
+
+        function showError(message) {
+
+            accountContainer.innerHTML = "";
+
+            const error =
+                document.createElement(
+                    "div"
+                );
+
+            error.className =
+                "error";
+
+            const title =
+                document.createElement(
+                    "h2"
+                );
+
+            title.textContent =
+                "Ops!";
+
+            const text =
+                document.createElement(
+                    "p"
+                );
+
+            text.textContent =
+                message;
+
+            error.appendChild(
+                title
+            );
+
+            error.appendChild(
+                text
+            );
+
+            accountContainer.appendChild(
+                error
+            );
+        }
+
+        loadAccount();
+    </script>
 
 </body>
 </html>
