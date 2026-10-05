@@ -16,85 +16,398 @@
     >
 
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100%;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #10131a;
+            color: #ffffff;
+        }
+
+        body {
+            padding-bottom: 50px;
+        }
+
+        header {
+            width: min(1000px, calc(100% - 30px));
+            margin: 30px auto 0;
+            padding: 28px;
+            background: #181d27;
+            border: 1px solid #293140;
+            border-radius: 18px;
+            box-shadow:
+                0 10px 35px rgba(0, 0, 0, 0.25);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 32px;
+        }
+
+        header p {
+            margin: 8px 0 0;
+            color: #9ca8ba;
+            font-size: 15px;
+        }
+
+        /* ============================================================
+         * NAVEGAÇÃO
+         * ============================================================ */
+
+        .top-navigation {
+            width: min(1000px, calc(100% - 30px));
+            margin: 18px auto 0;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .navigation-button {
+            border: 1px solid #293140;
+            border-radius: 10px;
+
+            padding: 10px 15px;
+
+            background: #181d27;
+            color: #ffffff;
+
+            font-size: 14px;
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.15s;
+        }
+
+        .navigation-button:hover {
+            background: #202631;
+            border-color: #3a4353;
+        }
+
+        .account-area {
+            position: relative;
+        }
+
+        .account-button {
+            border: 1px solid #293140;
+            border-radius: 10px;
+
+            padding: 10px 15px;
+
+            background: #181d27;
+            color: #ffffff;
+
+            font-size: 14px;
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.15s;
+        }
+
+        .account-button:hover {
+            background: #202631;
+            border-color: #3a4353;
+        }
+
+        .account-menu {
+            position: absolute;
+
+            top: calc(100% + 8px);
+            right: 0;
+
+            width: 190px;
+
+            background: #181d27;
+            border: 1px solid #293140;
+            border-radius: 12px;
+
+            padding: 7px;
+
+            box-shadow:
+                0 10px 30px rgba(0, 0, 0, 0.35);
+
+            z-index: 100;
+
+            display: none;
+        }
+
+        .account-menu.open {
+            display: block;
+        }
+
+        .account-menu-button {
+            width: 100%;
+
+            border: 0;
+            border-radius: 8px;
+
+            padding: 10px 12px;
+
+            background: transparent;
+            color: #ffffff;
+
+            text-align: left;
+            font-size: 14px;
+
+            cursor: pointer;
+        }
+
+        .account-menu-button:hover {
+            background: #252c38;
+        }
+
+        .account-menu-button.danger {
+            color: #ff8f8f;
+        }
+
+        .account-menu-divider {
+            height: 1px;
+            background: #293140;
+            margin: 6px 0;
+        }
+
+        /* ============================================================
+         * CONTEÚDO
+         * ============================================================ */
+
+        main {
+            width: min(1000px, calc(100% - 30px));
+            margin: 24px auto 0;
+        }
+
         .account-container {
-            max-width: 700px;
-            margin: 30px auto;
-            padding: 20px;
+            width: 100%;
+            margin: 0;
+            padding: 0;
         }
 
         .account-card {
-            background: #ffffff;
-            border-radius: 15px;
+            background: #181d27;
+
+            border: 1px solid #293140;
+            border-radius: 18px;
+
             padding: 30px;
+
             text-align: center;
+
             box-shadow:
-                0 4px 15px rgba(0, 0, 0, 0.08);
+                0 10px 35px rgba(0, 0, 0, 0.25);
         }
 
         .account-avatar {
-            width: 100px;
-            height: 100px;
+            width: 110px;
+            height: 110px;
+
             border-radius: 50%;
+
             object-fit: cover;
-            background: #ddd;
+
+            background: #252c38;
+
+            border: 3px solid #3a4353;
+
             margin-bottom: 15px;
         }
 
         .account-name {
             margin: 0;
-            font-size: 28px;
+
+            font-size: 30px;
+
+            word-break: break-word;
         }
 
         .account-handle {
-            margin-top: 5px;
-            color: #777;
+            margin-top: 7px;
+
+            color: #9ca8ba;
+
+            font-size: 14px;
         }
 
         .account-date {
-            margin-top: 20px;
-            color: #666;
+            margin-top: 18px;
+
+            color: #aeb8c8;
+
+            font-size: 14px;
+        }
+
+        .account-bio {
+            margin: 16px auto 0;
+
+            max-width: 650px;
+
+            color: #dce2eb;
+
+            white-space: pre-wrap;
+            word-break: break-word;
+
+            line-height: 1.5;
         }
 
         .account-buttons {
             display: flex;
+
             justify-content: center;
+
             flex-wrap: wrap;
+
             gap: 10px;
+
             margin-top: 25px;
         }
 
-        .account-button {
+        .account-action {
             display: inline-block;
-            padding: 10px 18px;
-            border-radius: 8px;
-            border: none;
+
+            padding: 11px 17px;
+
+            border-radius: 10px;
+
+            border: 1px solid transparent;
+
             background: #5865f2;
-            color: white;
+
+            color: #ffffff;
+
             text-decoration: none;
+
             font-weight: bold;
+
             cursor: pointer;
+
             font-size: 14px;
+
+            transition: 0.15s;
         }
 
-        .account-button:hover {
-            opacity: 0.9;
+        .account-action:hover {
+            filter: brightness(1.1);
         }
 
         .logout-button {
-            background: #e53935;
+            background: #2b1c20;
+            border-color: #603039;
+            color: #ff8f8f;
+        }
+
+        .logout-button:hover {
+            background: #382328;
+            filter: none;
         }
 
         .loading {
+            color: #aeb8c8;
+
             text-align: center;
-            color: #666;
+
+            padding: 50px 10px;
         }
 
         .error {
-            background: #ffffff;
-            border-radius: 15px;
-            padding: 30px;
+            color: #ff8f8f;
+
+            background: #2b1c20;
+
+            border: 1px solid #603039;
+
+            padding: 20px;
+
+            border-radius: 14px;
+
             text-align: center;
-            color: #c62828;
+
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .announcement-container {
+            margin-top: 24px;
+        }
+
+        /* ============================================================
+         * RESPONSIVO
+         * ============================================================ */
+
+        @media (max-width: 600px) {
+
+            header {
+                width: min(100% - 18px, 1000px);
+
+                margin-top: 12px;
+
+                padding: 18px;
+
+                border-radius: 14px;
+            }
+
+            header h1 {
+                font-size: 25px;
+            }
+
+            .top-navigation {
+                width: min(100% - 18px, 1000px);
+
+                margin-top: 12px;
+
+                align-items: stretch;
+            }
+
+            .navigation-button,
+            .account-area,
+            .account-button {
+                width: 100%;
+            }
+
+            .account-menu {
+                position: static;
+
+                width: 100%;
+
+                margin-top: 8px;
+            }
+
+            main {
+                width: min(100% - 18px, 1000px);
+
+                margin-top: 18px;
+            }
+
+            .account-card {
+                padding: 22px 18px;
+
+                border-radius: 14px;
+            }
+
+            .account-avatar {
+                width: 85px;
+                height: 85px;
+            }
+
+            .account-name {
+                font-size: 25px;
+            }
+
+            .account-buttons {
+                flex-direction: column;
+            }
+
+            .account-action {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -102,39 +415,129 @@
 <body>
 
     <header>
-        <h1>Fluffy Community</h1>
+
+        <h1>
+            Fluffy Community
+        </h1>
 
         <p>
             A comunidade oficial da Fluffy Studios
         </p>
+
     </header>
+
+
+    <div class="top-navigation">
+
+        <button
+            id="homeButton"
+            class="navigation-button"
+            type="button"
+        >
+            🏠 Página inicial
+        </button>
+
+
+        <div
+            id="accountArea"
+            class="account-area"
+        >
+
+            <button
+                id="accountButton"
+                class="account-button"
+                type="button"
+            >
+                👤 Conta ▾
+            </button>
+
+
+            <div
+                id="accountMenu"
+                class="account-menu"
+            >
+
+                <button
+                    id="profileMenuButton"
+                    class="account-menu-button"
+                    type="button"
+                >
+                    👤 Meu perfil
+                </button>
+
+
+                <button
+                    id="settingsMenuButton"
+                    class="account-menu-button"
+                    type="button"
+                >
+                    ⚙️ Preferências
+                </button>
+
+
+                <div class="account-menu-divider"></div>
+
+
+                <button
+                    id="logoutMenuButton"
+                    class="account-menu-button danger"
+                    type="button"
+                >
+                    🚪 Sair da conta
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
 
     <main>
 
         <div class="account-container">
 
             <div id="accountContainer">
+
                 <p class="loading">
                     Carregando sua conta...
                 </p>
+
             </div>
 
-            <div id="announcementContainer"></div>
+
+            <div
+                id="announcementContainer"
+                class="announcement-container"
+            ></div>
 
         </div>
 
     </main>
 
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <script src="announcements.js"></script>
 
+
     <script>
+        "use strict";
+
+
+        /*
+         * ============================================================
+         * SUPABASE
+         * ============================================================
+         */
+
         const ACCOUNT_SUPABASE_URL =
             "https://wnihobtfpmabgfwoddye.supabase.co";
 
+
         const ACCOUNT_SUPABASE_KEY =
             "sb_publishable_Y-S1kbAXQE-Y4j-seMaHrQ_u_vUoTFF";
+
 
         const accountSupabase =
             window.supabase.createClient(
@@ -142,25 +545,202 @@
                 ACCOUNT_SUPABASE_KEY
             );
 
+
+        /*
+         * ============================================================
+         * ELEMENTOS
+         * ============================================================
+         */
+
         const accountContainer =
             document.getElementById(
                 "accountContainer"
             );
+
+
+        const homeButton =
+            document.getElementById(
+                "homeButton"
+            );
+
+
+        const accountArea =
+            document.getElementById(
+                "accountArea"
+            );
+
+
+        const accountButton =
+            document.getElementById(
+                "accountButton"
+            );
+
+
+        const accountMenu =
+            document.getElementById(
+                "accountMenu"
+            );
+
+
+        const profileMenuButton =
+            document.getElementById(
+                "profileMenuButton"
+            );
+
+
+        const settingsMenuButton =
+            document.getElementById(
+                "settingsMenuButton"
+            );
+
+
+        const logoutMenuButton =
+            document.getElementById(
+                "logoutMenuButton"
+            );
+
+
+        /*
+         * ============================================================
+         * NAVEGAÇÃO
+         * ============================================================
+         */
+
+        homeButton.addEventListener(
+            "click",
+            function() {
+
+                /*
+                 * Já estamos na página inicial.
+                 *
+                 * O botão é mantido para deixar a navegação
+                 * consistente com profile.html.
+                 */
+                window.location.href =
+                    "index.html";
+            }
+        );
+
+
+        accountButton.addEventListener(
+            "click",
+            function(event) {
+
+                event.stopPropagation();
+
+                accountMenu.classList.toggle(
+                    "open"
+                );
+            }
+        );
+
+
+        document.addEventListener(
+            "click",
+            function(event) {
+
+                if (
+                    !accountArea.contains(
+                        event.target
+                    )
+                ) {
+
+                    accountMenu.classList.remove(
+                        "open"
+                    );
+                }
+            }
+        );
+
+
+        profileMenuButton.addEventListener(
+            "click",
+            async function() {
+
+                accountMenu.classList.remove(
+                    "open"
+                );
+
+
+                const sessionResult =
+                    await accountSupabase
+                        .auth
+                        .getSession();
+
+
+                const session =
+                    sessionResult.data.session;
+
+
+                if (
+                    session &&
+                    session.user
+                ) {
+
+                    window.location.href =
+                        "profile.html?id=" +
+                        encodeURIComponent(
+                            session.user.id
+                        );
+                }
+            }
+        );
+
+
+        settingsMenuButton.addEventListener(
+            "click",
+            function() {
+
+                accountMenu.classList.remove(
+                    "open"
+                );
+
+                window.location.href =
+                    "settings.html";
+            }
+        );
+
+
+        logoutMenuButton.addEventListener(
+            "click",
+            async function() {
+
+                accountMenu.classList.remove(
+                    "open"
+                );
+
+                await logout();
+            }
+        );
+
+
+        /*
+         * ============================================================
+         * CARREGA CONTA
+         * ============================================================
+         */
 
         async function loadAccount() {
 
             try {
 
                 const sessionResult =
-                    await accountSupabase.auth.getSession();
+                    await accountSupabase
+                        .auth
+                        .getSession();
+
 
                 const session =
                     sessionResult.data.session;
 
+
                 const sessionError =
                     sessionResult.error;
 
-                if (sessionError) {
+
+                if (
+                    sessionError
+                ) {
 
                     console.error(
                         "Erro ao verificar sessão:",
@@ -172,15 +752,28 @@
                     return;
                 }
 
-                if (!session) {
+
+                if (
+                    !session
+                ) {
 
                     redirectToLogin();
 
                     return;
                 }
 
+
+                /*
+                 * A conta está logada, então
+                 * mostramos o menu.
+                 */
+                accountArea.style.display =
+                    "block";
+
+
                 const user =
                     session.user;
+
 
                 const profileResult =
                     await accountSupabase
@@ -188,16 +781,24 @@
                         .select(
                             "id, username, created_at, avatar_url, bio"
                         )
-                        .eq("id", user.id)
+                        .eq(
+                            "id",
+                            user.id
+                        )
                         .maybeSingle();
+
 
                 const profile =
                     profileResult.data;
 
+
                 const profileError =
                     profileResult.error;
 
-                if (profileError) {
+
+                if (
+                    profileError
+                ) {
 
                     console.error(
                         "Erro ao carregar perfil:",
@@ -211,7 +812,10 @@
                     return;
                 }
 
-                if (!profile) {
+
+                if (
+                    !profile
+                ) {
 
                     showError(
                         "Seu perfil ainda não foi criado."
@@ -220,7 +824,11 @@
                     return;
                 }
 
-                displayAccount(profile);
+
+                displayAccount(
+                    profile
+                );
+
 
             } catch (error) {
 
@@ -229,37 +837,56 @@
                     error
                 );
 
+
                 showError(
                     "Ocorreu um erro ao carregar sua conta."
                 );
             }
         }
 
-        function displayAccount(profile) {
 
-            accountContainer.innerHTML = "";
+        /*
+         * ============================================================
+         * EXIBE CONTA
+         * ============================================================
+         */
+
+        function displayAccount(
+            profile
+        ) {
+
+            accountContainer.innerHTML =
+                "";
+
 
             const card =
                 document.createElement(
                     "div"
                 );
 
+
             card.className =
                 "account-card";
+
 
             const avatar =
                 document.createElement(
                     "img"
                 );
 
+
             avatar.className =
                 "account-avatar";
+
 
             avatar.alt =
                 "Foto de perfil de " +
                 profile.username;
 
-            if (profile.avatar_url) {
+
+            if (
+                profile.avatar_url
+            ) {
 
                 avatar.src =
                     profile.avatar_url;
@@ -268,7 +895,8 @@
 
                 avatar.src =
                     "data:image/svg+xml," +
-                    encodeURIComponent(`
+                    encodeURIComponent(
+                        `
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="100"
@@ -279,61 +907,76 @@
                                 width="100"
                                 height="100"
                                 rx="50"
-                                fill="#dddddd"
+                                fill="#252c38"
                             />
 
                             <circle
                                 cx="50"
                                 cy="37"
                                 r="18"
-                                fill="#999999"
+                                fill="#8c98aa"
                             />
 
                             <path
                                 d="M20 90
                                    C20 69 33 56 50 56
                                    C67 56 80 69 80 90"
-                                fill="#999999"
+                                fill="#8c98aa"
                             />
                         </svg>
-                    `);
+                        `
+                    );
             }
+
 
             const name =
                 document.createElement(
                     "h2"
                 );
 
+
             name.className =
                 "account-name";
 
+
             name.textContent =
-                profile.username;
+                profile.username ||
+                "Usuário";
+
 
             const handle =
                 document.createElement(
                     "div"
                 );
 
+
             handle.className =
                 "account-handle";
 
+
             handle.textContent =
                 "@" +
-                profile.username;
+                (
+                    profile.username ||
+                    "usuario"
+                );
+
 
             const date =
                 document.createElement(
                     "p"
                 );
 
+
             date.className =
                 "account-date";
+
 
             const createdAt =
                 new Date(
                     profile.created_at
                 );
+
 
             date.textContent =
                 "Membro desde " +
@@ -346,24 +989,45 @@
                     }
                 );
 
+
+            const bio =
+                document.createElement(
+                    "div"
+                );
+
+
+            bio.className =
+                "account-bio";
+
+
+            bio.textContent =
+                profile.bio ||
+                "Este usuário ainda não adicionou uma biografia.";
+
+
             const buttons =
                 document.createElement(
                     "div"
                 );
 
+
             buttons.className =
                 "account-buttons";
+
 
             const profileButton =
                 document.createElement(
                     "a"
                 );
 
+
             profileButton.className =
-                "account-button";
+                "account-action";
+
 
             profileButton.textContent =
-                "Ver meu perfil";
+                "👤 Ver meu perfil";
+
 
             profileButton.href =
                 "profile.html?id=" +
@@ -371,95 +1035,139 @@
                     profile.id
                 );
 
+
             const settingsButton =
                 document.createElement(
                     "a"
                 );
 
+
             settingsButton.className =
-                "account-button";
+                "account-action";
+
 
             settingsButton.textContent =
-                "Preferências";
+                "⚙️ Preferências";
+
 
             settingsButton.href =
                 "settings.html";
+
 
             const logoutButton =
                 document.createElement(
                     "button"
                 );
 
+
             logoutButton.className =
-                "account-button logout-button";
+                "account-action logout-button";
+
 
             logoutButton.textContent =
-                "Sair";
+                "🚪 Sair";
+
 
             logoutButton.addEventListener(
                 "click",
                 logout
             );
 
+
             buttons.appendChild(
                 profileButton
             );
+
 
             buttons.appendChild(
                 settingsButton
             );
 
+
             buttons.appendChild(
                 logoutButton
             );
+
 
             card.appendChild(
                 avatar
             );
 
+
             card.appendChild(
                 name
             );
+
 
             card.appendChild(
                 handle
             );
 
+
             card.appendChild(
                 date
             );
 
+
+            card.appendChild(
+                bio
+            );
+
+
             card.appendChild(
                 buttons
             );
+
 
             accountContainer.appendChild(
                 card
             );
         }
 
+
+        /*
+         * ============================================================
+         * LOGOUT
+         * ============================================================
+         */
+
         async function logout() {
 
             const result =
-                await accountSupabase.auth.signOut();
+                await accountSupabase
+                    .auth
+                    .signOut();
 
-            if (result.error) {
+
+            if (
+                result.error
+            ) {
 
                 console.error(
                     "Erro ao sair:",
                     result.error
                 );
 
+
                 alert(
                     "Não foi possível sair da conta."
                 );
 
+
                 return;
             }
+
 
             window.location.href =
                 "login.html";
         }
+
+
+        /*
+         * ============================================================
+         * LOGIN
+         * ============================================================
+         */
 
         function redirectToLogin() {
 
@@ -467,48 +1175,75 @@
                 "login.html";
         }
 
-        function showError(message) {
 
-            accountContainer.innerHTML = "";
+        /*
+         * ============================================================
+         * ERRO
+         * ============================================================
+         */
+
+        function showError(
+            message
+        ) {
+
+            accountContainer.innerHTML =
+                "";
+
 
             const error =
                 document.createElement(
                     "div"
                 );
 
+
             error.className =
                 "error";
+
 
             const title =
                 document.createElement(
                     "h2"
                 );
 
+
             title.textContent =
                 "Ops!";
+
 
             const text =
                 document.createElement(
                     "p"
                 );
 
+
             text.textContent =
                 message;
+
 
             error.appendChild(
                 title
             );
 
+
             error.appendChild(
                 text
             );
+
 
             accountContainer.appendChild(
                 error
             );
         }
 
+
+        /*
+         * ============================================================
+         * INICIALIZAÇÃO
+         * ============================================================
+         */
+
         loadAccount();
+
     </script>
 
 </body>
