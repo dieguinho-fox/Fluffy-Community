@@ -13,20 +13,26 @@
             box-sizing: border-box;
         }
 
+        html,
         body {
             margin: 0;
-            min-height: 100vh;
-            font-family: Arial, sans-serif;
-            background: #f4f4f4;
-            color: #222;
+            padding: 0;
+            min-height: 100%;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #10131a;
+            color: #ffffff;
+        }
+
+        body {
+            padding-bottom: 50px;
         }
 
         .container {
-            width: 100%;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 30px 20px 50px;
+            width: min(1000px, calc(100% - 30px));
+            margin: 30px auto;
         }
+
+        /* CABEÇALHO */
 
         .header {
             display: flex;
@@ -36,68 +42,92 @@
         }
 
         .back-button {
-            border: none;
-            background: #e5e5e5;
+            border: 1px solid #293140;
+            background: #181d27;
+            color: #ffffff;
             border-radius: 10px;
             padding: 10px 15px;
             cursor: pointer;
             font-size: 14px;
+            transition: background 0.15s ease, border-color 0.15s ease;
         }
 
         .back-button:hover {
-            background: #d8d8d8;
+            background: #202631;
+            border-color: #394354;
         }
 
         h1 {
             margin: 0;
-            font-size: 28px;
+            font-size: 30px;
+            color: #ffffff;
         }
 
+        /* CARDS */
+
         .card {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
+            background: #181d27;
+            border: 1px solid #293140;
+            border-radius: 18px;
+            padding: 28px;
             margin-bottom: 20px;
-            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.25);
         }
 
         .card h2 {
             margin-top: 0;
             margin-bottom: 8px;
+            color: #ffffff;
+            font-size: 22px;
         }
 
         .description {
-            color: #666;
+            color: #9ca8ba;
             font-size: 14px;
             margin-top: 0;
             margin-bottom: 20px;
+            line-height: 1.5;
         }
+
+        /* FORMULÁRIOS */
 
         label {
             display: block;
             font-weight: bold;
             margin-bottom: 7px;
+            color: #ffffff;
         }
 
         input,
         textarea {
             width: 100%;
-            border: 1px solid #ccc;
+            border: 1px solid #303948;
             border-radius: 9px;
             padding: 11px 12px;
             font-size: 15px;
             outline: none;
             margin-bottom: 16px;
+            background: #11151d;
+            color: #ffffff;
+            font-family: Arial, Helvetica, sans-serif;
+            transition: border-color 0.15s ease, background 0.15s ease;
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: #687487;
         }
 
         input:focus,
         textarea:focus {
-            border-color: #777;
+            border-color: #5865f2;
+            background: #141923;
         }
 
         input[readonly] {
-            background: #f2f2f2;
-            color: #666;
+            background: #202631;
+            color: #9ca8ba;
+            cursor: default;
         }
 
         textarea {
@@ -110,8 +140,10 @@
             margin-top: -12px;
             margin-bottom: 16px;
             font-size: 12px;
-            color: #777;
+            color: #748094;
         }
+
+        /* BOTÕES */
 
         button {
             border: none;
@@ -119,6 +151,7 @@
             padding: 11px 16px;
             font-size: 14px;
             cursor: pointer;
+            transition: background 0.15s ease, opacity 0.15s ease;
         }
 
         button:disabled {
@@ -127,31 +160,35 @@
         }
 
         .primary {
-            background: #222;
-            color: white;
+            background: #5865f2;
+            color: #ffffff;
+            font-weight: bold;
         }
 
         .primary:hover:not(:disabled) {
-            background: #333;
+            background: #4752c4;
         }
 
         .secondary {
-            background: #e9e9e9;
-            color: #222;
+            background: #252c38;
+            color: #ffffff;
+            border: 1px solid #303948;
         }
 
         .secondary:hover:not(:disabled) {
-            background: #ddd;
+            background: #303846;
         }
 
         .danger {
-            background: #d93025;
-            color: white;
+            background: #8e3d45;
+            color: #ffffff;
         }
 
         .danger:hover:not(:disabled) {
-            background: #b9231a;
+            background: #a44852;
         }
+
+        /* STATUS */
 
         .save-area {
             display: flex;
@@ -163,15 +200,18 @@
 
         .status {
             font-size: 14px;
+            color: #aeb8c8;
         }
 
         .success {
-            color: #16803c;
+            color: #70d69a;
         }
 
         .warning {
-            color: #a56600;
+            color: #f0b45c;
         }
+
+        /* MÉTODOS DE LOGIN */
 
         .method {
             display: flex;
@@ -179,7 +219,7 @@
             justify-content: space-between;
             gap: 15px;
             padding: 15px 0;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid #293140;
         }
 
         .method:last-child {
@@ -198,16 +238,19 @@
         .method-title {
             font-weight: bold;
             margin-bottom: 4px;
+            color: #ffffff;
         }
 
         .method-status {
             font-size: 13px;
-            color: #666;
+            color: #9ca8ba;
         }
+
+        /* SEGURANÇA */
 
         .security-item {
             padding: 15px 0;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid #293140;
         }
 
         .security-item:last-child {
@@ -218,41 +261,20 @@
         .security-item h3 {
             margin: 0 0 6px;
             font-size: 16px;
+            color: #ffffff;
         }
 
         .security-item p {
             margin: 0 0 12px;
-            color: #666;
+            color: #9ca8ba;
             font-size: 14px;
-            line-height: 1.4;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 40px 20px;
-            color: #666;
-        }
-
-        .error-box {
-            background: #ffe8e6;
-            color: #a51d14;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 20px;
+            line-height: 1.5;
         }
 
         .password-form {
             margin-top: 15px;
             padding-top: 15px;
-            border-top: 1px solid #eee;
-        }
-
-        .account-danger {
-            border: 1px solid #f0b5b0;
+            border-top: 1px solid #293140;
         }
 
         /* FOTO DE PERFIL */
@@ -270,8 +292,8 @@
             min-width: 110px;
             border-radius: 50%;
             object-fit: cover;
-            border: 3px solid #e5e5e5;
-            background: #eee;
+            border: 3px solid #303948;
+            background: #252c38;
         }
 
         .avatar-actions {
@@ -282,7 +304,7 @@
 
         .avatar-help {
             margin: 0;
-            color: #777;
+            color: #748094;
             font-size: 12px;
             line-height: 1.4;
         }
@@ -298,9 +320,9 @@
             align-items: center;
             gap: 15px;
             padding: 15px;
-            background: #f7f7f7;
+            background: #11151d;
             border-radius: 10px;
-            border: 1px solid #e5e5e5;
+            border: 1px solid #293140;
         }
 
         .device-icon {
@@ -310,7 +332,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: #e5e5e5;
+            background: #252c38;
             border-radius: 10px;
             font-size: 21px;
         }
@@ -323,10 +345,11 @@
         .device-name {
             font-weight: bold;
             margin-bottom: 4px;
+            color: #ffffff;
         }
 
         .device-details {
-            color: #666;
+            color: #9ca8ba;
             font-size: 13px;
             line-height: 1.4;
         }
@@ -336,19 +359,67 @@
             margin-top: 6px;
             padding: 3px 7px;
             border-radius: 6px;
-            background: #e5f5ea;
-            color: #16803c;
+            background: #193326;
+            color: #70d69a;
             font-size: 11px;
             font-weight: bold;
         }
 
+        /* ESTADOS */
+
+        .hidden {
+            display: none !important;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px 20px;
+            color: #9ca8ba;
+        }
+
+        .error-box {
+            background: #2b1c20;
+            color: #ff8f8f;
+            border: 1px solid #603039;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        /* CONTA */
+
+        .account-danger {
+            border: 1px solid #603039;
+        }
+
+        /* MOBILE */
+
         @media (max-width: 600px) {
             .container {
-                padding: 20px 15px 40px;
+                width: min(100% - 18px, 1000px);
+                margin: 12px auto;
+            }
+
+            .header {
+                gap: 10px;
+                margin-bottom: 18px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .back-button {
+                padding: 9px 12px;
             }
 
             .card {
-                padding: 20px;
+                padding: 18px;
+                border-radius: 14px;
+            }
+
+            .card h2 {
+                font-size: 20px;
             }
 
             .method {
@@ -451,10 +522,7 @@
 
             </div>
 
-            <div
-                id="avatarStatus"
-                class="status"
-            ></div>
+            <div id="avatarStatus" class="status"></div>
 
             <label for="username">
                 Nome de usuário
@@ -467,10 +535,7 @@
                 autocomplete="username"
             >
 
-            <div
-                class="counter"
-                id="usernameCounter"
-            >
+            <div class="counter" id="usernameCounter">
                 0/20
             </div>
 
@@ -484,10 +549,7 @@
                 placeholder="Conte um pouco sobre você..."
             ></textarea>
 
-            <div
-                class="counter"
-                id="bioCounter"
-            >
+            <div class="counter" id="bioCounter">
                 0/300
             </div>
 
@@ -657,8 +719,6 @@
                 Controle o acesso à sua conta.
             </p>
 
-            <!-- DISPOSITIVO ATUAL -->
-
             <div class="security-item">
 
                 <h3>
@@ -705,8 +765,6 @@
 
             </div>
 
-            <!-- TODAS AS SESSÕES -->
-
             <div class="security-item">
 
                 <h3>
@@ -727,8 +785,6 @@
                 </button>
 
             </div>
-
-            <!-- SESSÃO ATUAL -->
 
             <div class="security-item">
 
@@ -986,7 +1042,7 @@
                         width="200"
                         height="200"
                         rx="100"
-                        fill="#e5e5e5"
+                        fill="#252c38"
                     />
                     <text
                         x="100"
@@ -994,7 +1050,7 @@
                         text-anchor="middle"
                         font-family="Arial"
                         font-size="90"
-                        fill="#555"
+                        fill="#9ca8ba"
                     >${letter}</text>
                 </svg>
             `)
