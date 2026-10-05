@@ -32,6 +32,102 @@
             margin: 30px auto;
         }
 
+        /* ============================================================
+         * NAVEGAÇÃO
+         * ============================================================ */
+
+        .top-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+        }
+
+        .navigation-button {
+            border: 1px solid #293140;
+            border-radius: 10px;
+            padding: 10px 15px;
+            background: #181d27;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+
+        .navigation-button:hover {
+            background: #202631;
+            border-color: #3a4353;
+        }
+
+        .account-area {
+            position: relative;
+            display: none;
+        }
+
+        .account-button {
+            border: 1px solid #293140;
+            border-radius: 10px;
+            padding: 10px 15px;
+            background: #181d27;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+
+        .account-button:hover {
+            background: #202631;
+            border-color: #3a4353;
+        }
+
+        .account-menu {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            width: 190px;
+            background: #181d27;
+            border: 1px solid #293140;
+            border-radius: 12px;
+            padding: 7px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+            z-index: 100;
+            display: none;
+        }
+
+        .account-menu.open {
+            display: block;
+        }
+
+        .account-menu-button {
+            width: 100%;
+            border: 0;
+            border-radius: 8px;
+            padding: 10px 12px;
+            background: transparent;
+            color: #ffffff;
+            text-align: left;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .account-menu-button:hover {
+            background: #252c38;
+        }
+
+        .account-menu-button.danger {
+            color: #ff8f8f;
+        }
+
+        .account-menu-divider {
+            height: 1px;
+            background: #293140;
+            margin: 6px 0;
+        }
+
         .profile-card {
             background: #181d27;
             border: 1px solid #293140;
@@ -240,6 +336,22 @@
             .achievement {
                 padding: 12px;
             }
+
+            .top-navigation {
+                align-items: stretch;
+            }
+
+            .navigation-button,
+            .account-area,
+            .account-button {
+                width: 100%;
+            }
+
+            .account-menu {
+                width: 100%;
+                position: static;
+                margin-top: 8px;
+            }
         }
     </style>
 </head>
@@ -248,9 +360,71 @@
 
 <div class="container">
 
+    <div class="top-navigation">
+
+        <button
+            id="homeButton"
+            class="navigation-button"
+            type="button"
+        >
+            🏠 Página inicial
+        </button>
+
+        <div
+            id="accountArea"
+            class="account-area"
+        >
+
+            <button
+                id="accountButton"
+                class="account-button"
+                type="button"
+            >
+                👤 Conta ▾
+            </button>
+
+            <div
+                id="accountMenu"
+                class="account-menu"
+            >
+
+                <button
+                    id="editProfileButton"
+                    class="account-menu-button"
+                    type="button"
+                >
+                    ✏️ Editar perfil
+                </button>
+
+                <button
+                    id="syncAccountButton"
+                    class="account-menu-button"
+                    type="button"
+                >
+                    🔄 Sincronizar conquistas
+                </button>
+
+                <div class="account-menu-divider"></div>
+
+                <button
+                    id="logoutButton"
+                    class="account-menu-button danger"
+                    type="button"
+                >
+                    🚪 Sair da conta
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
     <div id="loading" class="loading">
         Carregando perfil...
     </div>
+
 
     <div id="content" style="display:none;">
 
@@ -380,21 +554,6 @@ const SUPABASE_ANON_KEY =
     "sb_publishable_Y-S1kbAXQE-Y4j-seMaHrQ_u_vUoTFF";
 
 
-/*
- * Catálogo das conquistas.
- *
- * IMPORTANTE:
- *
- * Este JSON NÃO é o save do jogo.
- *
- * Ele serve apenas para obter:
- * - nome
- * - descrição
- * - ícone
- * - secret
- *
- * O progresso vem de achievements.bin.
- */
 const ACHIEVEMENTS_JSON_URL =
     "https://raw.githubusercontent.com/dieguinho-fox/Fluffy-Adventure/main/Conquistas/achievements.json";
 
@@ -403,9 +562,6 @@ const ACHIEVEMENTS_BASE_URL =
     "https://raw.githubusercontent.com/dieguinho-fox/Fluffy-Adventure/main/";
 
 
-/*
- * Storage privado.
- */
 const SAVE_BUCKET =
     "saves";
 
@@ -434,45 +590,206 @@ const supabaseClient =
 const loadingElement =
     document.getElementById("loading");
 
-
 const contentElement =
     document.getElementById("content");
-
 
 const errorElement =
     document.getElementById("error");
 
-
 const avatarElement =
     document.getElementById("avatar");
-
 
 const usernameElement =
     document.getElementById("username");
 
-
 const createdElement =
     document.getElementById("created");
-
 
 const bioElement =
     document.getElementById("bio");
 
-
 const ownerActionsElement =
     document.getElementById("ownerActions");
-
 
 const syncButton =
     document.getElementById("syncButton");
 
-
 const syncStatus =
     document.getElementById("syncStatus");
 
-
 const achievementsElement =
     document.getElementById("achievements");
+
+const homeButton =
+    document.getElementById("homeButton");
+
+const accountArea =
+    document.getElementById("accountArea");
+
+const accountButton =
+    document.getElementById("accountButton");
+
+const accountMenu =
+    document.getElementById("accountMenu");
+
+const editProfileButton =
+    document.getElementById("editProfileButton");
+
+const syncAccountButton =
+    document.getElementById("syncAccountButton");
+
+const logoutButton =
+    document.getElementById("logoutButton");
+
+
+/*
+ * ============================================================
+ * NAVEGAÇÃO
+ * ============================================================
+ */
+
+homeButton.addEventListener(
+    "click",
+    function() {
+
+        window.location.href =
+            "index.html";
+    }
+);
+
+
+accountButton.addEventListener(
+    "click",
+    function(event) {
+
+        event.stopPropagation();
+
+        accountMenu.classList.toggle(
+            "open"
+        );
+    }
+);
+
+
+document.addEventListener(
+    "click",
+    function(event) {
+
+        if (
+            !accountArea.contains(event.target)
+        ) {
+
+            accountMenu.classList.remove(
+                "open"
+            );
+        }
+    }
+);
+
+
+/*
+ * A página de edição é separada.
+ *
+ * Se ela ainda não existir, o botão mostra
+ * uma mensagem em vez de quebrar o perfil.
+ */
+editProfileButton.addEventListener(
+    "click",
+    function() {
+
+        accountMenu.classList.remove(
+            "open"
+        );
+
+        window.location.href =
+            "edit-profile.html";
+    }
+);
+
+
+syncAccountButton.addEventListener(
+    "click",
+    async function() {
+
+        accountMenu.classList.remove(
+            "open"
+        );
+
+        const profileId =
+            getProfileIdFromUrl();
+
+        if (
+            profileId
+        ) {
+
+            await synchronizeAchievements(
+                profileId
+            );
+        }
+    }
+);
+
+
+logoutButton.addEventListener(
+    "click",
+    async function() {
+
+        accountMenu.classList.remove(
+            "open"
+        );
+
+        logoutButton.disabled =
+            true;
+
+        logoutButton.textContent =
+            "Saindo...";
+
+        try {
+
+            const {
+                error
+            } =
+                await supabaseClient
+                    .auth
+                    .signOut();
+
+
+            if (
+                error
+            ) {
+
+                throw error;
+            }
+
+
+            window.location.href =
+                "index.html";
+
+        } catch (error) {
+
+            console.error(
+                "[Fluffy Community] Erro ao sair:",
+                error
+            );
+
+            alert(
+                "Não foi possível sair da conta.\n\n" +
+                (
+                    error &&
+                    error.message
+                        ? error.message
+                        : String(error)
+                )
+            );
+
+            logoutButton.disabled =
+                false;
+
+            logoutButton.textContent =
+                "🚪 Sair da conta";
+        }
+    }
+);
 
 
 /*
@@ -529,6 +846,7 @@ function getLocalizedValue(
         !value ||
         typeof value !== "object"
     ) {
+
         return "";
     }
 
@@ -539,6 +857,7 @@ function getLocalizedValue(
             language
         )
     ) {
+
         return value[language];
     }
 
@@ -549,6 +868,7 @@ function getLocalizedValue(
             DEFAULT_LANGUAGE
         )
     ) {
+
         return value[DEFAULT_LANGUAGE];
     }
 
@@ -558,6 +878,7 @@ function getLocalizedValue(
 
 
     if (firstKey) {
+
         return value[firstKey];
     }
 
@@ -569,6 +890,7 @@ function getLocalizedValue(
 function buildIconUrl(iconPath) {
 
     if (!iconPath) {
+
         return "";
     }
 
@@ -607,36 +929,6 @@ function buildIconUrl(iconPath) {
  * ============================================================
  * GODOT VARIANT READER
  * ============================================================
- *
- * FileAccess.store_var() grava:
- *
- * [4 bytes] tamanho do Variant
- * [N bytes] Variant serializado
- *
- *
- * No Godot 4.x:
- *
- * 0  = NIL
- * 1  = BOOL
- * 2  = INT
- * 3  = FLOAT
- * 4  = STRING
- *
- * ...
- *
- * 27 = DICTIONARY
- * 28 = ARRAY
- * 29 = PACKED_BYTE_ARRAY
- * 30 = PACKED_INT32_ARRAY
- * 31 = PACKED_INT64_ARRAY
- * 32 = PACKED_FLOAT32_ARRAY
- * 33 = PACKED_FLOAT64_ARRAY
- * 34 = PACKED_STRING_ARRAY
- * 35 = PACKED_VECTOR2_ARRAY
- * 36 = PACKED_VECTOR3_ARRAY
- * 37 = PACKED_COLOR_ARRAY
- *
- * ============================================================
  */
 
 class GodotVariantReader {
@@ -648,16 +940,13 @@ class GodotVariantReader {
                 arrayBuffer
             );
 
-
         this.view =
             new DataView(
                 arrayBuffer
             );
 
-
         this.offset =
             0;
-
 
         this.decoder =
             new TextDecoder(
@@ -710,15 +999,12 @@ class GodotVariantReader {
             "uint8"
         );
 
-
         const value =
             this.view.getUint8(
                 this.offset
             );
 
-
         this.offset += 1;
-
 
         return value;
     }
@@ -731,16 +1017,13 @@ class GodotVariantReader {
             "uint32"
         );
 
-
         const value =
             this.view.getUint32(
                 this.offset,
                 true
             );
 
-
         this.offset += 4;
-
 
         return value;
     }
@@ -753,16 +1036,13 @@ class GodotVariantReader {
             "int32"
         );
 
-
         const value =
             this.view.getInt32(
                 this.offset,
                 true
             );
 
-
         this.offset += 4;
-
 
         return value;
     }
@@ -775,16 +1055,13 @@ class GodotVariantReader {
             "int64"
         );
 
-
         const value =
             this.view.getBigInt64(
                 this.offset,
                 true
             );
 
-
         this.offset += 8;
-
 
         return value;
     }
@@ -797,16 +1074,13 @@ class GodotVariantReader {
             "float32"
         );
 
-
         const value =
             this.view.getFloat32(
                 this.offset,
                 true
             );
 
-
         this.offset += 4;
-
 
         return value;
     }
@@ -819,28 +1093,18 @@ class GodotVariantReader {
             "float64"
         );
 
-
         const value =
             this.view.getFloat64(
                 this.offset,
                 true
             );
 
-
         this.offset += 8;
-
 
         return value;
     }
 
 
-    /*
-     * String Godot:
-     *
-     * uint32 = quantidade de bytes
-     * UTF-8
-     * padding para múltiplo de 4
-     */
     readString() {
 
         const length =
@@ -895,10 +1159,6 @@ class GodotVariantReader {
     }
 
 
-    /*
-     * O Godot usa os 8 bits inferiores do header
-     * para identificar o tipo Variant.
-     */
     getBaseType(header) {
 
         return header & 0xFF;
@@ -943,7 +1203,6 @@ class GodotVariantReader {
                 const builtinType =
                     this.readUint32();
 
-
                 return {
                     kind: "builtin",
                     type: builtinType
@@ -956,7 +1215,6 @@ class GodotVariantReader {
                 const className =
                     this.readString();
 
-
                 return {
                     kind: "class_name",
                     name: className
@@ -968,7 +1226,6 @@ class GodotVariantReader {
 
                 const scriptPath =
                     this.readString();
-
 
                 return {
                     kind: "script",
@@ -989,12 +1246,6 @@ class GodotVariantReader {
         }
     }
 
-
-    /*
-     * ========================================================
-     * VARIANT
-     * ========================================================
-     */
 
     readVariant(
         depth = 0
@@ -1047,17 +1298,11 @@ class GodotVariantReader {
 
         switch (type) {
 
-            /*
-             * NIL
-             */
             case 0:
 
                 return null;
 
 
-            /*
-             * BOOL
-             */
             case 1:
 
                 return (
@@ -1065,9 +1310,6 @@ class GodotVariantReader {
                 );
 
 
-            /*
-             * INT
-             */
             case 2:
 
                 if (
@@ -1081,13 +1323,9 @@ class GodotVariantReader {
                     );
                 }
 
-
                 return this.readInt32();
 
 
-            /*
-             * FLOAT
-             */
             case 3:
 
                 if (
@@ -1099,35 +1337,19 @@ class GodotVariantReader {
                     return this.readFloat64();
                 }
 
-
                 return this.readFloat32();
 
 
-            /*
-             * STRING
-             */
             case 4:
 
                 return this.readString();
 
 
-            /*
-             * STRING_NAME
-             */
             case 21:
 
                 return this.readString();
 
 
-            /*
-             * DICTIONARY
-             *
-             * ESTE É O PONTO PRINCIPAL:
-             *
-             * Godot 4.x:
-             *
-             * DICTIONARY = 27
-             */
             case 27:
 
                 return this.readDictionary(
@@ -1136,9 +1358,6 @@ class GodotVariantReader {
                 );
 
 
-            /*
-             * ARRAY
-             */
             case 28:
 
                 return this.readArray(
@@ -1147,73 +1366,46 @@ class GodotVariantReader {
                 );
 
 
-            /*
-             * PACKED BYTE ARRAY
-             */
             case 29:
 
                 return this.readPackedByteArray();
 
 
-            /*
-             * PACKED INT32 ARRAY
-             */
             case 30:
 
                 return this.readPackedInt32Array();
 
 
-            /*
-             * PACKED INT64 ARRAY
-             */
             case 31:
 
                 return this.readPackedInt64Array();
 
 
-            /*
-             * PACKED FLOAT32 ARRAY
-             */
             case 32:
 
                 return this.readPackedFloat32Array();
 
 
-            /*
-             * PACKED FLOAT64 ARRAY
-             */
             case 33:
 
                 return this.readPackedFloat64Array();
 
 
-            /*
-             * PACKED STRING ARRAY
-             */
             case 34:
 
                 return this.readPackedStringArray();
 
 
-            /*
-             * PACKED VECTOR2 ARRAY
-             */
             case 35:
 
                 return this.readPackedVector2Array();
 
 
-            /*
-             * PACKED VECTOR3 ARRAY
-             */
             case 36:
 
                 return this.readPackedVector3Array();
 
 
-            /*
-             * PACKED COLOR ARRAY
-             */
             case 37:
 
                 return this.readPackedColorArray();
@@ -1239,27 +1431,11 @@ class GodotVariantReader {
     }
 
 
-    /*
-     * ========================================================
-     * DICTIONARY
-     * ========================================================
-     */
-
     readDictionary(
         header,
         depth
     ) {
 
-        /*
-         * Bits 16-17:
-         * tipo das chaves.
-         *
-         * Bits 18-19:
-         * tipo dos valores.
-         *
-         * No seu achievements.bin,
-         * ambos são 0.
-         */
         const keyKind =
             this.getContainerKind(
                 header,
@@ -1274,10 +1450,6 @@ class GodotVariantReader {
             );
 
 
-        /*
-         * Só existem metadados adicionais
-         * quando o Dictionary é tipado.
-         */
         if (
             keyKind !== 0
         ) {
@@ -1300,13 +1472,6 @@ class GodotVariantReader {
         }
 
 
-        /*
-         * Seu arquivo mostrou:
-         *
-         * 09 00 00 00
-         *
-         * Portanto existem 9 entradas.
-         */
         const count =
             this.readUint32() &
             0x7FFFFFFF;
@@ -1352,12 +1517,6 @@ class GodotVariantReader {
         return result;
     }
 
-
-    /*
-     * ========================================================
-     * ARRAY
-     * ========================================================
-     */
 
     readArray(
         header,
@@ -1417,12 +1576,6 @@ class GodotVariantReader {
         return result;
     }
 
-
-    /*
-     * ========================================================
-     * PACKED ARRAYS
-     * ========================================================
-     */
 
     readPackedByteArray() {
 
@@ -1824,11 +1977,6 @@ function parseGodotAchievements(
         );
 
 
-    /*
-     * Primeiros 4 bytes:
-     *
-     * tamanho do Variant.
-     */
     const encodedLength =
         fileView.getUint32(
             0,
@@ -1871,9 +2019,6 @@ function parseGodotAchievements(
     }
 
 
-    /*
-     * Remove o prefixo de 4 bytes.
-     */
     const encodedBuffer =
         arrayBuffer.slice(
             4,
@@ -1949,13 +2094,6 @@ function parseGodotAchievements(
     );
 
 
-    /*
-     * O seu arquivo deve começar com:
-     *
-     * header = 27
-     *
-     * Dictionary.
-     */
     if (
         firstType !== 27
     ) {
@@ -2006,7 +2144,7 @@ function parseGodotAchievements(
 
 /*
  * ============================================================
- * EXTRAI CONQUISTAS DESBLOQUEADAS
+ * EXTRAI CONQUISTAS
  * ============================================================
  */
 
@@ -2162,8 +2300,7 @@ function renderAchievements(
         const [
             id,
             rawData
-        ]
-        of Object.entries(
+        ] of Object.entries(
             normalizedCatalog
         )
     ) {
@@ -2187,10 +2324,6 @@ function renderAchievements(
             rawData.secret === true;
 
 
-        /*
-         * Conquistas secretas bloqueadas
-         * não aparecem no perfil público.
-         */
         if (
             secret &&
             !unlocked
@@ -2469,6 +2602,9 @@ async function synchronizeAchievements(
     syncButton.disabled =
         true;
 
+    syncAccountButton.disabled =
+        true;
+
 
     setSyncStatus(
         "Baixando achievements.bin..."
@@ -2534,9 +2670,6 @@ async function synchronizeAchievements(
         }
 
 
-        /*
-         * Atualiza a interface.
-         */
         const catalog =
             await loadAchievementsCatalog();
 
@@ -2575,6 +2708,9 @@ async function synchronizeAchievements(
 
         syncButton.disabled =
             false;
+
+        syncAccountButton.disabled =
+            false;
     }
 }
 
@@ -2605,9 +2741,6 @@ async function loadProfile() {
 
     try {
 
-        /*
-         * Sessão atual.
-         */
         const {
             data: sessionData
         } =
@@ -2620,9 +2753,6 @@ async function loadProfile() {
             sessionData.session;
 
 
-        /*
-         * Perfil público.
-         */
         const {
             data: profile,
             error
@@ -2657,17 +2787,11 @@ async function loadProfile() {
         }
 
 
-        /*
-         * Nome.
-         */
         usernameElement.textContent =
             profile.username ||
             "Usuário";
 
 
-        /*
-         * Avatar.
-         */
         if (
             profile.avatar_url
         ) {
@@ -2710,9 +2834,6 @@ async function loadProfile() {
         }
 
 
-        /*
-         * Data de criação.
-         */
         if (
             profile.created_at
         ) {
@@ -2736,9 +2857,6 @@ async function loadProfile() {
         }
 
 
-        /*
-         * Bio.
-         */
         if (
             profile.bio
         ) {
@@ -2753,17 +2871,10 @@ async function loadProfile() {
         }
 
 
-        /*
-         * Carrega catálogo.
-         */
         const catalog =
             await loadAchievementsCatalog();
 
 
-        /*
-         * Conquistas atualmente salvas
-         * no perfil.
-         */
         const profileAchievements =
             Array.isArray(
                 profile.achievements
@@ -2778,10 +2889,6 @@ async function loadProfile() {
         );
 
 
-        /*
-         * O botão de sincronização só aparece
-         * para o dono do perfil.
-         */
         const isOwner =
             !!session &&
             !!session.user &&
@@ -2797,6 +2904,10 @@ async function loadProfile() {
                 "block";
 
 
+            accountArea.style.display =
+                "block";
+
+
             syncButton.onclick =
                 async function() {
 
@@ -2805,10 +2916,12 @@ async function loadProfile() {
                     );
                 };
 
-
         } else {
 
             ownerActionsElement.style.display =
+                "none";
+
+            accountArea.style.display =
                 "none";
         }
 
