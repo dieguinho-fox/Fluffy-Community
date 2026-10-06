@@ -2,7 +2,11 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Perfil - Fluffy Community</title>
 
@@ -93,7 +97,8 @@
             border: 1px solid #293140;
             border-radius: 12px;
             padding: 7px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+            box-shadow:
+                0 10px 30px rgba(0, 0, 0, 0.35);
             z-index: 100;
             display: none;
         }
@@ -128,12 +133,17 @@
             margin: 6px 0;
         }
 
+        /* ============================================================
+         * PERFIL
+         * ============================================================ */
+
         .profile-card {
             background: #181d27;
             border: 1px solid #293140;
             border-radius: 18px;
             padding: 28px;
-            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.25);
+            box-shadow:
+                0 10px 35px rgba(0, 0, 0, 0.25);
         }
 
         .profile-header {
@@ -157,10 +167,49 @@
             min-width: 220px;
         }
 
+        /*
+         * ============================================================
+         * NOME + SELO DE VERIFICAÇÃO
+         * ============================================================
+         */
+
+        .username-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
         .username {
             margin: 0;
             font-size: 32px;
             word-break: break-word;
+        }
+
+        .verified-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            width: 22px;
+            height: 22px;
+
+            border-radius: 50%;
+
+            background: #5865f2;
+            color: #ffffff;
+
+            font-size: 14px;
+            font-weight: bold;
+
+            line-height: 1;
+
+            cursor: default;
+
+            flex-shrink: 0;
+
+            box-shadow:
+                0 2px 8px rgba(88, 101, 242, 0.35);
         }
 
         .created {
@@ -209,6 +258,10 @@
             white-space: pre-wrap;
         }
 
+        /* ============================================================
+         * JOGOS / CONQUISTAS
+         * ============================================================ */
+
         .section {
             margin-top: 24px;
             background: #181d27;
@@ -244,7 +297,11 @@
 
         .achievements-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(250px, 1fr)
+                );
             gap: 14px;
         }
 
@@ -312,7 +369,12 @@
             padding: 50px 10px;
         }
 
+        /* ============================================================
+         * RESPONSIVO
+         * ============================================================ */
+
         @media (max-width: 600px) {
+
             .container {
                 width: min(100% - 18px, 1000px);
                 margin: 12px auto;
@@ -331,6 +393,12 @@
 
             .username {
                 font-size: 25px;
+            }
+
+            .verified-badge {
+                width: 20px;
+                height: 20px;
+                font-size: 13px;
             }
 
             .achievement {
@@ -370,6 +438,7 @@
             🏠 Página inicial
         </button>
 
+
         <div
             id="accountArea"
             class="account-area"
@@ -382,6 +451,7 @@
             >
                 👤 Conta ▾
             </button>
+
 
             <div
                 id="accountMenu"
@@ -396,6 +466,7 @@
                     ✏️ Editar perfil
                 </button>
 
+
                 <button
                     id="syncAccountButton"
                     class="account-menu-button"
@@ -404,7 +475,9 @@
                     🔄 Sincronizar conquistas
                 </button>
 
+
                 <div class="account-menu-divider"></div>
+
 
                 <button
                     id="logoutButton"
@@ -421,12 +494,18 @@
     </div>
 
 
-    <div id="loading" class="loading">
+    <div
+        id="loading"
+        class="loading"
+    >
         Carregando perfil...
     </div>
 
 
-    <div id="content" style="display:none;">
+    <div
+        id="content"
+        style="display:none;"
+    >
 
         <section class="profile-card">
 
@@ -439,17 +518,24 @@
                     alt="Avatar"
                 >
 
+
                 <div class="profile-info">
 
-                    <h1
-                        id="username"
-                        class="username"
-                    ></h1>
+                    <div class="username-row">
+
+                        <h1
+                            id="username"
+                            class="username"
+                        ></h1>
+
+                    </div>
+
 
                     <div
                         id="created"
                         class="created"
                     ></div>
+
 
                     <div
                         id="bio"
@@ -459,6 +545,7 @@
                 </div>
 
             </div>
+
 
             <div
                 id="ownerActions"
@@ -472,6 +559,7 @@
                 >
                     🔄 Sincronizar conquistas
                 </button>
+
 
                 <div
                     id="syncStatus"
@@ -489,6 +577,7 @@
                 Jogos
             </h2>
 
+
             <div class="game-header">
 
                 <img
@@ -499,11 +588,13 @@
                     onerror="this.style.display='none';"
                 >
 
+
                 <div class="game-name">
                     Fluffy Adventure
                 </div>
 
             </div>
+
 
             <div
                 id="achievements"
@@ -518,6 +609,7 @@
             <h2 class="section-title">
                 Atividade
             </h2>
+
 
             <div class="empty">
                 Nenhuma atividade disponível ainda.
@@ -549,6 +641,7 @@
 
 const SUPABASE_URL =
     "https://wnihobtfpmabgfwoddye.supabase.co";
+
 
 const SUPABASE_ANON_KEY =
     "sb_publishable_Y-S1kbAXQE-Y4j-seMaHrQ_u_vUoTFF";
@@ -588,58 +681,117 @@ const supabaseClient =
  */
 
 const loadingElement =
-    document.getElementById("loading");
+    document.getElementById(
+        "loading"
+    );
+
 
 const contentElement =
-    document.getElementById("content");
+    document.getElementById(
+        "content"
+    );
+
 
 const errorElement =
-    document.getElementById("error");
+    document.getElementById(
+        "error"
+    );
+
 
 const avatarElement =
-    document.getElementById("avatar");
+    document.getElementById(
+        "avatar"
+    );
+
 
 const usernameElement =
-    document.getElementById("username");
+    document.getElementById(
+        "username"
+    );
+
+
+const usernameRowElement =
+    document.querySelector(
+        ".username-row"
+    );
+
 
 const createdElement =
-    document.getElementById("created");
+    document.getElementById(
+        "created"
+    );
+
 
 const bioElement =
-    document.getElementById("bio");
+    document.getElementById(
+        "bio"
+    );
+
 
 const ownerActionsElement =
-    document.getElementById("ownerActions");
+    document.getElementById(
+        "ownerActions"
+    );
+
 
 const syncButton =
-    document.getElementById("syncButton");
+    document.getElementById(
+        "syncButton"
+    );
+
 
 const syncStatus =
-    document.getElementById("syncStatus");
+    document.getElementById(
+        "syncStatus"
+    );
+
 
 const achievementsElement =
-    document.getElementById("achievements");
+    document.getElementById(
+        "achievements"
+    );
+
 
 const homeButton =
-    document.getElementById("homeButton");
+    document.getElementById(
+        "homeButton"
+    );
+
 
 const accountArea =
-    document.getElementById("accountArea");
+    document.getElementById(
+        "accountArea"
+    );
+
 
 const accountButton =
-    document.getElementById("accountButton");
+    document.getElementById(
+        "accountButton"
+    );
+
 
 const accountMenu =
-    document.getElementById("accountMenu");
+    document.getElementById(
+        "accountMenu"
+    );
+
 
 const editProfileButton =
-    document.getElementById("editProfileButton");
+    document.getElementById(
+        "editProfileButton"
+    );
+
 
 const syncAccountButton =
-    document.getElementById("syncAccountButton");
+    document.getElementById(
+        "syncAccountButton"
+    );
+
 
 const logoutButton =
-    document.getElementById("logoutButton");
+    document.getElementById(
+        "logoutButton"
+    );
 
 
 /*
@@ -676,7 +828,9 @@ document.addEventListener(
     function(event) {
 
         if (
-            !accountArea.contains(event.target)
+            !accountArea.contains(
+                event.target
+            )
         ) {
 
             accountMenu.classList.remove(
@@ -687,12 +841,6 @@ document.addEventListener(
 );
 
 
-/*
- * A página de edição é separada.
- *
- * Se ela ainda não existir, o botão mostra
- * uma mensagem em vez de quebrar o perfil.
- */
 editProfileButton.addEventListener(
     "click",
     function() {
@@ -700,6 +848,7 @@ editProfileButton.addEventListener(
         accountMenu.classList.remove(
             "open"
         );
+
 
         window.location.href =
             "edit-profile.html";
@@ -715,8 +864,10 @@ syncAccountButton.addEventListener(
             "open"
         );
 
+
         const profileId =
             getProfileIdFromUrl();
+
 
         if (
             profileId
@@ -738,11 +889,14 @@ logoutButton.addEventListener(
             "open"
         );
 
+
         logoutButton.disabled =
             true;
 
+
         logoutButton.textContent =
             "Saindo...";
+
 
         try {
 
@@ -765,12 +919,14 @@ logoutButton.addEventListener(
             window.location.href =
                 "index.html";
 
+
         } catch (error) {
 
             console.error(
                 "[Fluffy Community] Erro ao sair:",
                 error
             );
+
 
             alert(
                 "Não foi possível sair da conta.\n\n" +
@@ -782,8 +938,10 @@ logoutButton.addEventListener(
                 )
             );
 
+
             logoutButton.disabled =
                 false;
+
 
             logoutButton.textContent =
                 "🚪 Sair da conta";
@@ -798,28 +956,36 @@ logoutButton.addEventListener(
  * ============================================================
  */
 
-function showError(message) {
+function showError(
+    message
+) {
 
     console.error(
         "[Fluffy Community]",
         message
     );
 
+
     loadingElement.style.display =
         "none";
+
 
     contentElement.style.display =
         "none";
 
+
     errorElement.textContent =
         message;
+
 
     errorElement.style.display =
         "block";
 }
 
 
-function setSyncStatus(message) {
+function setSyncStatus(
+    message
+) {
 
     syncStatus.textContent =
         message;
@@ -833,7 +999,10 @@ function getProfileIdFromUrl() {
             window.location.search
         );
 
-    return params.get("id");
+
+    return params.get(
+        "id"
+    );
 }
 
 
@@ -877,7 +1046,9 @@ function getLocalizedValue(
         Object.keys(value)[0];
 
 
-    if (firstKey) {
+    if (
+        firstKey
+    ) {
 
         return value[firstKey];
     }
@@ -887,9 +1058,13 @@ function getLocalizedValue(
 }
 
 
-function buildIconUrl(iconPath) {
+function buildIconUrl(
+    iconPath
+) {
 
-    if (!iconPath) {
+    if (
+        !iconPath
+    ) {
 
         return "";
     }
@@ -900,11 +1075,15 @@ function buildIconUrl(iconPath) {
 
 
     if (
-        normalized.startsWith("res://")
+        normalized.startsWith(
+            "res://"
+        )
     ) {
 
         normalized =
-            normalized.substring(6);
+            normalized.substring(
+                6
+            );
     }
 
 
@@ -913,7 +1092,9 @@ function buildIconUrl(iconPath) {
             .split("/")
             .map(
                 part =>
-                    encodeURIComponent(part)
+                    encodeURIComponent(
+                        part
+                    )
             )
             .join("/");
 
@@ -927,26 +1108,128 @@ function buildIconUrl(iconPath) {
 
 /*
  * ============================================================
+ * SELO DE VERIFICAÇÃO
+ * ============================================================
+ */
+
+function addVerificationBadge(
+    profile
+) {
+
+    /*
+     * Evita duplicar o selo caso a função
+     * seja chamada novamente.
+     */
+
+    const existingBadge =
+        usernameRowElement.querySelector(
+            ".verified-badge"
+        );
+
+
+    if (
+        existingBadge
+    ) {
+
+        existingBadge.remove();
+    }
+
+
+    /*
+     * O mesmo campo usado no index.html:
+     *
+     * is_verified
+     */
+
+    if (
+        profile.is_verified !== true
+    ) {
+
+        return;
+    }
+
+
+    const verifiedBadge =
+        document.createElement(
+            "span"
+        );
+
+
+    verifiedBadge.className =
+        "verified-badge";
+
+
+    verifiedBadge.textContent =
+        "✓";
+
+
+    /*
+     * O mesmo sistema de tipos
+     * utilizado no index.html.
+     */
+
+    const verificationLabels = {
+
+        creator:
+            "Criador de conteúdo verificado",
+
+        team:
+            "Membro da equipe Fluffy verificado",
+
+        developer:
+            "Desenvolvedor verificado",
+
+        official:
+            "Conta oficial verificada"
+    };
+
+
+    verifiedBadge.title =
+        verificationLabels[
+            profile.verification_type
+        ] ||
+        "Conta verificada";
+
+
+    verifiedBadge.setAttribute(
+        "aria-label",
+        verifiedBadge.title
+    );
+
+
+    usernameRowElement.appendChild(
+        verifiedBadge
+    );
+}
+
+
+/*
+ * ============================================================
  * GODOT VARIANT READER
  * ============================================================
  */
 
 class GodotVariantReader {
 
-    constructor(arrayBuffer) {
+    constructor(
+        arrayBuffer
+    ) {
 
         this.bytes =
             new Uint8Array(
                 arrayBuffer
             );
 
+
         this.view =
             new DataView(
                 arrayBuffer
             );
 
+
         this.offset =
             0;
+
 
         this.decoder =
             new TextDecoder(
@@ -973,7 +1256,9 @@ class GodotVariantReader {
     ) {
 
         if (
-            !Number.isInteger(size) ||
+            !Number.isInteger(
+                size
+            ) ||
             size < 0 ||
             this.offset + size >
                 this.bytes.length
@@ -999,12 +1284,16 @@ class GodotVariantReader {
             "uint8"
         );
 
+
         const value =
             this.view.getUint8(
                 this.offset
             );
 
-        this.offset += 1;
+
+        this.offset +=
+            1;
+
 
         return value;
     }
@@ -1017,13 +1306,17 @@ class GodotVariantReader {
             "uint32"
         );
 
+
         const value =
             this.view.getUint32(
                 this.offset,
                 true
             );
 
-        this.offset += 4;
+
+        this.offset +=
+            4;
+
 
         return value;
     }
@@ -1036,13 +1329,17 @@ class GodotVariantReader {
             "int32"
         );
 
+
         const value =
             this.view.getInt32(
                 this.offset,
                 true
             );
 
-        this.offset += 4;
+
+        this.offset +=
+            4;
+
 
         return value;
     }
@@ -1055,13 +1352,17 @@ class GodotVariantReader {
             "int64"
         );
 
+
         const value =
             this.view.getBigInt64(
                 this.offset,
                 true
             );
 
-        this.offset += 8;
+
+        this.offset +=
+            8;
+
 
         return value;
     }
@@ -1074,13 +1375,17 @@ class GodotVariantReader {
             "float32"
         );
 
+
         const value =
             this.view.getFloat32(
                 this.offset,
                 true
             );
 
-        this.offset += 4;
+
+        this.offset +=
+            4;
+
 
         return value;
     }
@@ -1093,13 +1398,17 @@ class GodotVariantReader {
             "float64"
         );
 
+
         const value =
             this.view.getFloat64(
                 this.offset,
                 true
             );
 
-        this.offset += 8;
+
+        this.offset +=
+            8;
+
 
         return value;
     }
@@ -1122,7 +1431,8 @@ class GodotVariantReader {
 
 
         const end =
-            start + length;
+            start +
+            length;
 
 
         const stringBytes =
@@ -1139,7 +1449,10 @@ class GodotVariantReader {
         const padding =
             (
                 4 -
-                (length % 4)
+                (
+                    length %
+                    4
+                )
             ) % 4;
 
 
@@ -1159,16 +1472,23 @@ class GodotVariantReader {
     }
 
 
-    getBaseType(header) {
+    getBaseType(
+        header
+    ) {
 
         return header & 0xFF;
     }
 
 
-    has64BitFlag(header) {
+    has64BitFlag(
+        header
+    ) {
 
         return (
-            (header & 0x00010000) !== 0
+            (
+                header &
+                0x00010000
+            ) !== 0
         );
     }
 
@@ -1179,7 +1499,10 @@ class GodotVariantReader {
     ) {
 
         return (
-            (header >> shift) & 0x03
+            (
+                header >>
+                shift
+            ) & 0x03
         );
     }
 
@@ -1189,12 +1512,15 @@ class GodotVariantReader {
         label
     ) {
 
-        switch (kind) {
+        switch (
+            kind
+        ) {
 
             case 0:
 
                 return {
-                    kind: "none"
+                    kind:
+                        "none"
                 };
 
 
@@ -1203,9 +1529,13 @@ class GodotVariantReader {
                 const builtinType =
                     this.readUint32();
 
+
                 return {
-                    kind: "builtin",
-                    type: builtinType
+                    kind:
+                        "builtin",
+
+                    type:
+                        builtinType
                 };
             }
 
@@ -1215,9 +1545,13 @@ class GodotVariantReader {
                 const className =
                     this.readString();
 
+
                 return {
-                    kind: "class_name",
-                    name: className
+                    kind:
+                        "class_name",
+
+                    name:
+                        className
                 };
             }
 
@@ -1227,9 +1561,13 @@ class GodotVariantReader {
                 const scriptPath =
                     this.readString();
 
+
                 return {
-                    kind: "script",
-                    path: scriptPath
+                    kind:
+                        "script",
+
+                    path:
+                        scriptPath
                 };
             }
 
@@ -1296,7 +1634,9 @@ class GodotVariantReader {
         );
 
 
-        switch (type) {
+        switch (
+            type
+        ) {
 
             case 0:
 
@@ -1323,6 +1663,7 @@ class GodotVariantReader {
                     );
                 }
 
+
                 return this.readInt32();
 
 
@@ -1336,6 +1677,7 @@ class GodotVariantReader {
 
                     return this.readFloat64();
                 }
+
 
                 return this.readFloat32();
 
@@ -1602,7 +1944,8 @@ class GodotVariantReader {
         const result =
             this.bytes.slice(
                 this.offset,
-                this.offset + count
+                this.offset +
+                count
             );
 
 
@@ -1613,7 +1956,10 @@ class GodotVariantReader {
         const padding =
             (
                 4 -
-                (count % 4)
+                (
+                    count %
+                    4
+                )
             ) % 4;
 
 
@@ -1985,7 +2331,8 @@ function parseGodotAchievements(
 
 
     const availableLength =
-        fileBytes.length - 4;
+        fileBytes.length -
+        4;
 
 
     console.log(
@@ -2022,7 +2369,8 @@ function parseGodotAchievements(
     const encodedBuffer =
         arrayBuffer.slice(
             4,
-            4 + encodedLength
+            4 +
+            encodedLength
         );
 
 
@@ -2070,7 +2418,8 @@ function parseGodotAchievements(
 
 
     const firstType =
-        firstHeader & 0xFF;
+        firstHeader &
+        0xFF;
 
 
     console.log(
@@ -2172,7 +2521,9 @@ function extractUnlockedAchievementIds(
             id,
             value
         ]
-        of Object.entries(decoded)
+        of Object.entries(
+            decoded
+        )
     ) {
 
         if (
@@ -2202,7 +2553,8 @@ async function loadAchievementsCatalog() {
         await fetch(
             ACHIEVEMENTS_JSON_URL,
             {
-                cache: "no-store"
+                cache:
+                    "no-store"
             }
         );
 
@@ -2547,7 +2899,8 @@ async function downloadAchievementsBin(
         await fetch(
             data.signedUrl,
             {
-                cache: "no-store"
+                cache:
+                    "no-store"
             }
         );
 
@@ -2601,6 +2954,7 @@ async function synchronizeAchievements(
 
     syncButton.disabled =
         true;
+
 
     syncAccountButton.disabled =
         true;
@@ -2685,7 +3039,9 @@ async function synchronizeAchievements(
         );
 
 
-    } catch (error) {
+    } catch (
+        error
+    ) {
 
         console.error(
             "[Fluffy Community] Erro ao sincronizar conquistas:",
@@ -2708,6 +3064,7 @@ async function synchronizeAchievements(
 
         syncButton.disabled =
             false;
+
 
         syncAccountButton.disabled =
             false;
@@ -2735,6 +3092,7 @@ async function loadProfile() {
             "Nenhum ID de perfil foi informado na URL."
         );
 
+
         return;
     }
 
@@ -2760,7 +3118,7 @@ async function loadProfile() {
             await supabaseClient
                 .from("profiles")
                 .select(
-                    "id, username, created_at, avatar_url, bio, achievements"
+                    "id, username, created_at, avatar_url, bio, achievements, is_verified, verification_type"
                 )
                 .eq(
                     "id",
@@ -2790,6 +3148,16 @@ async function loadProfile() {
         usernameElement.textContent =
             profile.username ||
             "Usuário";
+
+
+        /*
+         * Adiciona o mesmo selo de verificação
+         * utilizado no index.html.
+         */
+
+        addVerificationBadge(
+            profile
+        );
 
 
         if (
@@ -2921,6 +3289,7 @@ async function loadProfile() {
             ownerActionsElement.style.display =
                 "none";
 
+
             accountArea.style.display =
                 "none";
         }
@@ -2934,7 +3303,9 @@ async function loadProfile() {
             "block";
 
 
-    } catch (error) {
+    } catch (
+        error
+    ) {
 
         console.error(
             "[Fluffy Community] Erro ao carregar perfil:",
