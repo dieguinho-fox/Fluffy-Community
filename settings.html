@@ -365,6 +365,163 @@
             font-weight: bold;
         }
 
+        /* VERIFICAÇÃO DE E-MAIL */
+
+        .verification-email {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 15px;
+            background: #11151d;
+            border: 1px solid #293140;
+            border-radius: 10px;
+        }
+
+        .verification-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .verification-email-address {
+            color: #ffffff;
+            font-weight: bold;
+            word-break: break-word;
+            margin-bottom: 5px;
+        }
+
+        .verification-status {
+            font-size: 13px;
+        }
+
+        .verification-status.not-verified {
+            color: #f0b45c;
+        }
+
+        .verification-status.verified {
+            color: #70d69a;
+        }
+
+        /* MODAL DE VERIFICAÇÃO */
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.72);
+            z-index: 9999;
+        }
+
+        .modal-overlay.hidden {
+            display: none !important;
+        }
+
+        .verification-modal {
+            width: min(100%, 470px);
+            background: #181d27;
+            border: 1px solid #293140;
+            border-radius: 18px;
+            padding: 26px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 18px;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 22px;
+            color: #ffffff;
+        }
+
+        .modal-close {
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            border: 1px solid #303948;
+            background: #252c38;
+            color: #ffffff;
+            border-radius: 9px;
+            font-size: 20px;
+            line-height: 1;
+        }
+
+        .modal-close:hover:not(:disabled) {
+            background: #303846;
+        }
+
+        .verification-destination {
+            color: #9ca8ba;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .verification-destination strong {
+            color: #ffffff;
+            word-break: break-word;
+        }
+
+        .verification-code {
+            text-align: center;
+            letter-spacing: 7px;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .verification-code::placeholder {
+            letter-spacing: 2px;
+            font-size: 14px;
+            font-weight: normal;
+        }
+
+        .verification-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .resend-area {
+            margin-top: 18px;
+            padding-top: 18px;
+            border-top: 1px solid #293140;
+            text-align: center;
+        }
+
+        .resend-text {
+            color: #9ca8ba;
+            font-size: 13px;
+            margin: 0 0 10px;
+        }
+
+        .spam-notice {
+            margin: 16px 0 0;
+            padding: 11px 12px;
+            border-radius: 9px;
+            background: #252c38;
+            border: 1px solid #303948;
+            color: #9ca8ba;
+            font-size: 12px;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        .verification-modal-status {
+            min-height: 20px;
+            margin-top: 14px;
+            text-align: center;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
         /* ESTADOS */
 
         .hidden {
@@ -395,6 +552,7 @@
         /* MOBILE */
 
         @media (max-width: 600px) {
+
             .container {
                 width: min(100% - 18px, 1000px);
                 margin: 12px auto;
@@ -443,6 +601,20 @@
 
             .device-box {
                 align-items: flex-start;
+            }
+
+            .verification-email {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .verification-email button {
+                width: 100%;
+            }
+
+            .verification-modal {
+                padding: 20px;
+                border-radius: 14px;
             }
         }
     </style>
@@ -586,6 +758,49 @@
                     id="saveStatus"
                     class="status"
                 ></span>
+
+            </div>
+
+        </div>
+
+        <!-- VERIFICAÇÃO -->
+
+        <div class="card">
+
+            <h2>Verificação</h2>
+
+            <p class="description">
+                Verifique seu e-mail para ter acesso aos recursos
+                que exigem uma conta confirmada.
+            </p>
+
+            <div class="verification-email">
+
+                <div class="verification-info">
+
+                    <div
+                        id="verificationEmailAddress"
+                        class="verification-email-address"
+                    >
+                        Carregando...
+                    </div>
+
+                    <div
+                        id="verificationStatus"
+                        class="verification-status not-verified"
+                    >
+                        Verificando...
+                    </div>
+
+                </div>
+
+                <button
+                    id="verifyEmailButton"
+                    class="primary"
+                    type="button"
+                >
+                    Verificar e-mail
+                </button>
 
             </div>
 
@@ -844,6 +1059,104 @@
 
 </div>
 
+<!-- MODAL DE VERIFICAÇÃO -->
+
+<div
+    id="verificationModal"
+    class="modal-overlay hidden"
+>
+
+    <div
+        class="verification-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="verificationModalTitle"
+    >
+
+        <div class="modal-header">
+
+            <h2 id="verificationModalTitle">
+                Verificar e-mail
+            </h2>
+
+            <button
+                id="closeVerificationModal"
+                class="modal-close"
+                type="button"
+                aria-label="Fechar"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <div class="verification-destination">
+
+            Enviamos um código de verificação para:
+
+            <br><br>
+
+            <strong id="verificationModalEmail">
+                seu e-mail
+            </strong>
+
+        </div>
+
+        <label for="verificationCode">
+            Código de verificação
+        </label>
+
+        <input
+            id="verificationCode"
+            class="verification-code"
+            type="text"
+            inputmode="numeric"
+            autocomplete="one-time-code"
+            maxlength="8"
+            placeholder="Digite o código"
+        >
+
+        <div class="verification-actions">
+
+            <button
+                id="confirmVerification"
+                class="primary"
+                type="button"
+            >
+                Verificar
+            </button>
+
+        </div>
+
+        <div class="resend-area">
+
+            <p class="resend-text">
+                Não recebeu o código?
+            </p>
+
+            <button
+                id="resendVerification"
+                class="secondary"
+                type="button"
+            >
+                Reenviar e-mail
+            </button>
+
+        </div>
+
+        <p class="spam-notice">
+            📩 Verifique também sua caixa de spam ou lixo eletrônico.
+        </p>
+
+        <div
+            id="verificationModalStatus"
+            class="verification-modal-status"
+        ></div>
+
+    </div>
+
+</div>
+
 <script>
 
     const ACCOUNT_SUPABASE_URL =
@@ -867,6 +1180,11 @@
     let currentProfile = null;
     let avatarUrl = null;
     let avatarWasRemoved = false;
+
+    let emailVerified = false;
+
+    let resendCooldownTimer = null;
+    let resendCooldownSeconds = 0;
 
     const loading =
         document.getElementById("loading");
@@ -956,6 +1274,58 @@
 
     const deviceDetails =
         document.getElementById("deviceDetails");
+
+    /* VERIFICAÇÃO */
+
+    const verificationEmailAddress =
+        document.getElementById(
+            "verificationEmailAddress"
+        );
+
+    const verificationStatus =
+        document.getElementById(
+            "verificationStatus"
+        );
+
+    const verifyEmailButton =
+        document.getElementById(
+            "verifyEmailButton"
+        );
+
+    const verificationModal =
+        document.getElementById(
+            "verificationModal"
+        );
+
+    const closeVerificationModal =
+        document.getElementById(
+            "closeVerificationModal"
+        );
+
+    const verificationModalEmail =
+        document.getElementById(
+            "verificationModalEmail"
+        );
+
+    const verificationCode =
+        document.getElementById(
+            "verificationCode"
+        );
+
+    const confirmVerification =
+        document.getElementById(
+            "confirmVerification"
+        );
+
+    const resendVerification =
+        document.getElementById(
+            "resendVerification"
+        );
+
+    const verificationModalStatus =
+        document.getElementById(
+            "verificationModalStatus"
+        );
 
     function showError(message) {
 
@@ -1129,6 +1499,453 @@
         }
     }
 
+    /* ============================================================
+       VERIFICAÇÃO DE E-MAIL
+       ============================================================ */
+
+    function updateVerificationUI() {
+
+        verificationEmailAddress.textContent =
+            currentUser?.email ||
+            "E-mail não informado";
+
+        verificationModalEmail.textContent =
+            currentUser?.email ||
+            "E-mail não informado";
+
+        if (emailVerified) {
+
+            verificationStatus.textContent =
+                "✓ E-mail verificado";
+
+            verificationStatus.className =
+                "verification-status verified";
+
+            verifyEmailButton.textContent =
+                "E-mail verificado";
+
+            verifyEmailButton.disabled =
+                true;
+
+        } else {
+
+            verificationStatus.textContent =
+                "⚠️ E-mail não verificado";
+
+            verificationStatus.className =
+                "verification-status not-verified";
+
+            verifyEmailButton.textContent =
+                "Verificar e-mail";
+
+            verifyEmailButton.disabled =
+                false;
+        }
+    }
+
+    function openVerificationModal() {
+
+        if (emailVerified) {
+            return;
+        }
+
+        verificationCode.value = "";
+
+        verificationModalStatus.textContent =
+            "";
+
+        verificationModalStatus.className =
+            "verification-modal-status";
+
+        verificationModal.classList.remove(
+            "hidden"
+        );
+
+        verificationCode.focus();
+
+        sendVerificationEmail(false);
+    }
+
+    function closeVerification() {
+
+        verificationModal.classList.add(
+            "hidden"
+        );
+
+        verificationCode.value = "";
+
+        verificationModalStatus.textContent =
+            "";
+    }
+
+    function setVerificationStatus(
+        message,
+        type = ""
+    ) {
+
+        verificationModalStatus.textContent =
+            message;
+
+        if (type === "success") {
+
+            verificationModalStatus.className =
+                "verification-modal-status success";
+
+        } else if (type === "warning") {
+
+            verificationModalStatus.className =
+                "verification-modal-status warning";
+
+        } else {
+
+            verificationModalStatus.className =
+                "verification-modal-status";
+        }
+    }
+
+    async function callVerifyEmailFunction(
+        action,
+        code = null
+    ) {
+
+        const body = {
+            action: action
+        };
+
+        if (code !== null) {
+            body.code = code;
+        }
+
+        const {
+            data,
+            error
+        } =
+            await accountSupabase.functions.invoke(
+                "verify-email",
+                {
+                    body: body
+                }
+            );
+
+        if (error) {
+
+            let message =
+                error.message ||
+                "Não foi possível comunicar com o servidor.";
+
+            if (
+                data &&
+                typeof data === "object" &&
+                data.error
+            ) {
+                message = data.error;
+            }
+
+            throw new Error(message);
+        }
+
+        return data;
+    }
+
+    async function sendVerificationEmail(
+        showMessage = true
+    ) {
+
+        if (emailVerified) {
+            return;
+        }
+
+        if (
+            resendCooldownSeconds > 0
+        ) {
+
+            if (showMessage) {
+
+                setVerificationStatus(
+                    `Aguarde ${resendCooldownSeconds}s para reenviar o código.`,
+                    "warning"
+                );
+            }
+
+            return;
+        }
+
+        resendVerification.disabled = true;
+        verifyEmailButton.disabled = true;
+
+        if (showMessage) {
+
+            setVerificationStatus(
+                "Enviando código..."
+            );
+
+        } else {
+
+            setVerificationStatus(
+                "Enviando código..."
+            );
+        }
+
+        try {
+
+            const result =
+                await callVerifyEmailFunction(
+                    "send"
+                );
+
+            if (
+                !result ||
+                result.success !== true
+            ) {
+
+                throw new Error(
+                    result?.error ||
+                    "Não foi possível enviar o código."
+                );
+            }
+
+            setVerificationStatus(
+                "Código enviado! Verifique seu e-mail.",
+                "success"
+            );
+
+            startResendCooldown(30);
+
+        } catch (error) {
+
+            console.error(
+                "Erro ao enviar código de verificação:",
+                error
+            );
+
+            setVerificationStatus(
+                "Não foi possível enviar o código: " +
+                (
+                    error.message ||
+                    "erro desconhecido"
+                ),
+                "warning"
+            );
+
+        } finally {
+
+            if (!emailVerified) {
+
+                verifyEmailButton.disabled =
+                    false;
+
+            }
+
+            if (
+                resendCooldownSeconds <= 0
+            ) {
+
+                resendVerification.disabled =
+                    false;
+            }
+        }
+    }
+
+    function startResendCooldown(seconds) {
+
+        if (resendCooldownTimer) {
+
+            clearInterval(
+                resendCooldownTimer
+            );
+        }
+
+        resendCooldownSeconds =
+            seconds;
+
+        updateResendButton();
+
+        resendCooldownTimer =
+            setInterval(
+                () => {
+
+                    resendCooldownSeconds--;
+
+                    updateResendButton();
+
+                    if (
+                        resendCooldownSeconds <= 0
+                    ) {
+
+                        clearInterval(
+                            resendCooldownTimer
+                        );
+
+                        resendCooldownTimer =
+                            null;
+
+                        if (!emailVerified) {
+
+                            resendVerification.disabled =
+                                false;
+                        }
+                    }
+
+                },
+                1000
+            );
+    }
+
+    function updateResendButton() {
+
+        if (
+            resendCooldownSeconds > 0
+        ) {
+
+            resendVerification.disabled =
+                true;
+
+            resendVerification.textContent =
+                `Reenviar e-mail (${resendCooldownSeconds}s)`;
+
+        } else {
+
+            resendVerification.textContent =
+                "Reenviar e-mail";
+
+            resendVerification.disabled =
+                emailVerified;
+        }
+    }
+
+    async function verifyEmailCode() {
+
+        const code =
+            verificationCode.value
+                .trim();
+
+        if (!code) {
+
+            setVerificationStatus(
+                "Digite o código recebido por e-mail.",
+                "warning"
+            );
+
+            verificationCode.focus();
+
+            return;
+        }
+
+        if (!/^\d{4,8}$/.test(code)) {
+
+            setVerificationStatus(
+                "Digite um código numérico válido.",
+                "warning"
+            );
+
+            verificationCode.focus();
+
+            return;
+        }
+
+        confirmVerification.disabled =
+            true;
+
+        resendVerification.disabled =
+            true;
+
+        verificationCode.disabled =
+            true;
+
+        setVerificationStatus(
+            "Verificando código..."
+        );
+
+        try {
+
+            const result =
+                await callVerifyEmailFunction(
+                    "verify",
+                    code
+                );
+
+            if (
+                !result ||
+                result.success !== true ||
+                result.verified !== true
+            ) {
+
+                let message =
+                    "Código incorreto ou expirado.";
+
+                if (
+                    result &&
+                    result.reason ===
+                    "incorrect_code"
+                ) {
+                    message =
+                        "O código informado está incorreto.";
+                }
+
+                throw new Error(message);
+            }
+
+            emailVerified =
+                true;
+
+            if (currentProfile) {
+
+                currentProfile.email_verified =
+                    true;
+            }
+
+            updateVerificationUI();
+
+            setVerificationStatus(
+                "E-mail verificado com sucesso!",
+                "success"
+            );
+
+            setTimeout(
+                () => {
+
+                    closeVerification();
+
+                },
+                900
+            );
+
+        } catch (error) {
+
+            console.error(
+                "Erro ao verificar e-mail:",
+                error
+            );
+
+            setVerificationStatus(
+                error.message ||
+                "Não foi possível verificar o código.",
+                "warning"
+            );
+
+        } finally {
+
+            verificationCode.disabled =
+                false;
+
+            confirmVerification.disabled =
+                false;
+
+            if (
+                !emailVerified &&
+                resendCooldownSeconds <= 0
+            ) {
+
+                resendVerification.disabled =
+                    false;
+            }
+        }
+    }
+
+    /* ============================================================
+       DISPOSITIVO
+       ============================================================ */
+
     function detectDevice() {
 
         const userAgent =
@@ -1204,6 +2021,10 @@
             `${browser} • ${os}`;
     }
 
+    /* ============================================================
+       CARREGAMENTO DA CONTA
+       ============================================================ */
+
     async function loadAccount() {
 
         try {
@@ -1239,7 +2060,7 @@
                 await accountSupabase
                     .from("profiles")
                     .select(
-                        "id, username, created_at, avatar_url, bio"
+                        "id, username, created_at, avatar_url, bio, email_verified"
                     )
                     .eq("id", user.id)
                     .single();
@@ -1255,6 +2076,9 @@
                 profile.avatar_url || null;
 
             avatarWasRemoved = false;
+
+            emailVerified =
+                profile.email_verified === true;
 
             usernameInput.value =
                 profile.username || "";
@@ -1277,6 +2101,8 @@
             updateCounters();
 
             updateLoginMethods();
+
+            updateVerificationUI();
 
             detectDevice();
 
@@ -1308,6 +2134,10 @@
             );
         }
     }
+
+    /* ============================================================
+       EVENTOS DO PERFIL
+       ============================================================ */
 
     usernameInput.addEventListener(
         "input",
@@ -1696,6 +2526,78 @@
         }
     );
 
+    /* ============================================================
+       EVENTOS DA VERIFICAÇÃO
+       ============================================================ */
+
+    verifyEmailButton.addEventListener(
+        "click",
+        () => {
+
+            openVerificationModal();
+        }
+    );
+
+    closeVerificationModal.addEventListener(
+        "click",
+        closeVerification
+    );
+
+    verificationModal.addEventListener(
+        "click",
+        event => {
+
+            if (
+                event.target ===
+                verificationModal
+            ) {
+
+                closeVerification();
+            }
+        }
+    );
+
+    verificationCode.addEventListener(
+        "input",
+        () => {
+
+            verificationCode.value =
+                verificationCode.value
+                    .replace(/\D/g, "")
+                    .slice(0, 8);
+        }
+    );
+
+    verificationCode.addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key === "Enter"
+            ) {
+
+                verifyEmailCode();
+            }
+        }
+    );
+
+    confirmVerification.addEventListener(
+        "click",
+        verifyEmailCode
+    );
+
+    resendVerification.addEventListener(
+        "click",
+        () => {
+
+            sendVerificationEmail(true);
+        }
+    );
+
+    /* ============================================================
+       GOOGLE
+       ============================================================ */
+
     googleButton.addEventListener(
         "click",
         async () => {
@@ -1746,6 +2648,10 @@
             }
         }
     );
+
+    /* ============================================================
+       SENHA
+       ============================================================ */
 
     passwordButton.addEventListener(
         "click",
@@ -1905,6 +2811,10 @@
         }
     );
 
+    /* ============================================================
+       LOGOUT
+       ============================================================ */
+
     document.getElementById(
         "logout"
     ).addEventListener(
@@ -2003,6 +2913,10 @@
             }
         }
     );
+
+    /* ============================================================
+       VOLTAR
+       ============================================================ */
 
     function goBack() {
 
