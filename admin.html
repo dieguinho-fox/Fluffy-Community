@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Administração — Fluffy Community</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 24px 0;
+            min-height: 100vh;
+            background: #10131a;
+            color: #ffffff;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .container {
+            width: calc(100% - 36px);
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        .header {
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            margin: 0 0 8px;
+            font-size: 28px;
+        }
+
+        .header p {
+            margin: 0;
+            color: #9ca8ba;
+            font-size: 15px;
+        }
+
+        .card {
+            background: #181d27;
+            border: 1px solid #293140;
+            border-radius: 18px;
+            padding: 22px;
+            margin-bottom: 16px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
+        }
+
+        .card h2 {
+            margin: 0 0 8px;
+            font-size: 20px;
+        }
+
+        .card-description {
+            margin: 0 0 18px;
+            color: #9ca8ba;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .search-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 13px 14px;
+            border-radius: 10px;
+            border: 1px solid #293140;
+            background: #11151d;
+            color: #ffffff;
+            outline: none;
+            font-size: 15px;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #5865f2;
+        }
+
+        .search-row input {
+            flex: 1;
+        }
+
+        button {
+            border: 0;
+            border-radius: 10px;
+            padding: 13px 17px;
+            background: #5865f2;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.15s ease;
+        }
+
+        button:hover {
+            background: #4752c4;
+        }
+
+        button:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+        }
+
+        .secondary-button {
+            background: #293140;
+        }
+
+        .secondary-button:hover {
+            background: #343d4e;
+        }
+
+        .danger-button {
+            background: #8f3545;
+        }
+
+        .danger-button:hover {
+            background: #a63f51;
+        }
+
+        .message {
+            display: none;
+            margin-top: 14px;
+            padding: 12px 14px;
+            border-radius: 10px;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .message.error {
+            display: block;
+            background: #2b1c20;
+            border: 1px solid #603039;
+            color: #ff8f8f;
+        }
+
+        .message.success {
+            display: block;
+            background: #193326;
+            border: 1px solid #2d6545;
+            color: #70d69a;
+        }
+
+        .loading {
+            display: none;
+            margin-top: 18px;
+            color: #9ca8ba;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .results {
+            margin-top: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .user-card {
+            border: 1px solid #293140;
+            background: #11151d;
+            border-radius: 14px;
+            padding: 16px;
+        }
+
+        .user-top {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+
+        .avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: #293140;
+            flex-shrink: 0;
+        }
+
+        .avatar-placeholder {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #293140;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #9ca8ba;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .user-info {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .username {
+            font-size: 16px;
+            font-weight: bold;
+            word-break: break-word;
+        }
+
+        .user-id {
+            margin-top: 4px;
+            color: #707b8d;
+            font-size: 11px;
+            word-break: break-all;
+        }
+
+        .verification-status {
+            margin-top: 13px;
+            padding: 11px 12px;
+            border-radius: 10px;
+            background: #181d27;
+            border: 1px solid #293140;
+            font-size: 13px;
+            color: #9ca8ba;
+        }
+
+        .verified {
+            color: #70d69a;
+        }
+
+        .not-verified {
+            color: #9ca8ba;
+        }
+
+        .verified-icon {
+            color: #5865f2;
+            font-weight: bold;
+        }
+
+        .actions {
+            margin-top: 14px;
+            display: flex;
+            gap: 9px;
+            flex-wrap: wrap;
+        }
+
+        .actions button {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .verify-form {
+            display: none;
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 1px solid #293140;
+        }
+
+        .verify-form.visible {
+            display: block;
+        }
+
+        .verify-form label {
+            display: block;
+            margin-bottom: 7px;
+            color: #aeb8c8;
+            font-size: 13px;
+        }
+
+        .empty {
+            display: none;
+            padding: 22px;
+            text-align: center;
+            color: #9ca8ba;
+            border: 1px dashed #293140;
+            border-radius: 14px;
+        }
+
+        .admin-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .admin-role {
+            color: #70d69a;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 14px 0;
+            }
+
+            .container {
+                width: calc(100% - 18px);
+            }
+
+            .card {
+                padding: 17px;
+                border-radius: 14px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .search-row {
+                flex-direction: column;
+            }
+
+            .search-row button {
+                width: 100%;
+            }
+
+            .admin-info {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h1>Administração</h1>
+        <p>Painel de gerenciamento da Fluffy Community.</p>
+    </div>
+
+    <div id="loadingAdmin" class="card">
+        <p style="margin: 0; color: #9ca8ba;">
+            Verificando permissões de administrador...
+        </p>
+    </div>
+
+    <div id="accessDenied" class="card hidden">
+        <h2>Acesso negado</h2>
+
+        <p class="card-description">
+            Você não possui permissão para acessar o painel administrativo.
+        </p>
+
+        <button
+            type="button"
+            onclick="window.location.href = 'index.html';"
+        >
+            Voltar
+        </button>
+    </div>
+
+    <main id="adminPanel" class="hidden">
+
+        <div class="card">
+            <div class="admin-info">
+                <div>
+                    <h2 style="margin-bottom: 5px;">Painel de verificação</h2>
+                    <p class="card-description" style="margin: 0;">
+                        Gerencie as contas oficiais da Fluffy Community.
+                    </p>
+                </div>
+
+                <div class="admin-role">
+                    ADMINISTRADOR
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+
+            <h2>Buscar usuário</h2>
+
+            <p class="card-description">
+                Pesquise pelo nome de usuário para visualizar e gerenciar
+                a verificação da conta.
+            </p>
+
+            <div class="search-row">
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Nome de usuário..."
+                    maxlength="50"
+                    autocomplete="off"
+                >
+
+                <button
+                    type="button"
+                    id="searchButton"
+                >
+                    Buscar
+                </button>
+            </div>
+
+            <div id="searchMessage" class="message"></div>
+
+            <div id="searchLoading" class="loading">
+                Pesquisando...
+            </div>
+
+            <div id="results" class="results"></div>
+
+            <div id="emptyResults" class="empty">
+                Nenhum usuário encontrado.
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+    const SUPABASE_URL =
+        "https://wnihobtfpmabgfwoddye.supabase.co";
+
+    const SUPABASE_KEY =
+        "sb_publishable_Y-S1kbAXQE-Y4j-seMaHrQ_u_vUoTFF";
+
+    const supabaseClient =
+        window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
+
+    const loadingAdmin =
+        document.getElementById("loadingAdmin");
+
+    const accessDenied =
+        document.getElementById("accessDenied");
+
+    const adminPanel =
+        document.getElementById("adminPanel");
+
+    const searchInput =
+        document.getElementById("searchInput");
+
+    const searchButton =
+        document.getElementById("searchButton");
+
+    const searchMessage =
+        document.getElementById("searchMessage");
+
+    const searchLoading =
+        document.getElementById("searchLoading");
+
+    const results =
+        document.getElementById("results");
+
+    const emptyResults =
+        document.getElementById("emptyResults");
+
+
+    function showSearchMessage(message, type) {
+        searchMessage.textContent = message;
+        searchMessage.className = "message " + type;
+    }
+
+
+    function hideSearchMessage() {
+        searchMessage.textContent = "";
+        searchMessage.className = "message";
+    }
+
+
+    function escapeHtml(value) {
+        return String(value ?? "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+
+    function formatVerificationType(type) {
+        const types = {
+            creator: "Criador de conteúdo",
+            team: "Equipe Fluffy",
+            developer: "Desenvolvedor",
+            official: "Conta oficial"
+        };
+
+        return types[type] || "Não informado";
+    }
+
+
+    function formatDate(date) {
+        if (!date) {
+            return "Data não disponível";
+        }
+
+        const parsed = new Date(date);
+
+        if (Number.isNaN(parsed.getTime())) {
+            return "Data não disponível";
+        }
+
+        return parsed.toLocaleDateString(
+            "pt-BR",
+            {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric"
+            }
+        );
+    }
+
+
+    function renderResults(users) {
+        results.innerHTML = "";
+
+        emptyResults.style.display =
+            users.length === 0
+                ? "block"
+                : "none";
+
+        if (users.length === 0) {
+            return;
+        }
+
+        for (const user of users) {
+
+            const card =
+                document.createElement("div");
+
+            card.className = "user-card";
+
+            const username =
+                escapeHtml(
+                    user.username || "Usuário sem nome"
+                );
+
+            const userId =
+                escapeHtml(user.id);
+
+            let avatarHtml = "";
+
+            if (user.avatar_url) {
+                avatarHtml = `
+                    <img
+                        class="avatar"
+                        src="${escapeHtml(user.avatar_url)}"
+                        alt=""
+                        loading="lazy"
+                    >
+                `;
+            } else {
+                const firstLetter =
+                    (user.username || "?")
+                        .charAt(0)
+                        .toUpperCase();
+
+                avatarHtml = `
+                    <div class="avatar-placeholder">
+                        ${escapeHtml(firstLetter)}
+                    </div>
+                `;
+            }
+
+            let verificationHtml;
+
+            if (user.is_verified) {
+                verificationHtml = `
+                    <div class="verification-status">
+                        <span class="verified">
+                            <span class="verified-icon">✓</span>
+                            Conta verificada
+                        </span>
+
+                        <br>
+
+                        Tipo:
+                        ${escapeHtml(
+                            formatVerificationType(
+                                user.verification_type
+                            )
+                        )}
+
+                        <br>
+
+                        Verificada em:
+                        ${escapeHtml(
+                            formatDate(user.verified_at)
+                        )}
+                    </div>
+                `;
+            } else {
+                verificationHtml = `
+                    <div class="verification-status">
+                        <span class="not-verified">
+                            Conta não verificada
+                        </span>
+                    </div>
+                `;
+            }
+
+            card.innerHTML = `
+                <div class="user-top">
+
+                    ${avatarHtml}
+
+                    <div class="user-info">
+                        <div class="username">
+                            ${username}
+                        </div>
+
+                        <div class="user-id">
+                            ID: ${userId}
+                        </div>
+                    </div>
+
+                </div>
+
+                ${verificationHtml}
+
+                <div class="actions">
+
+                    ${
+                        user.is_verified
+                            ? `
+                                <button
+                                    type="button"
+                                    class="danger-button"
+                                    onclick="removeVerification('${escapeHtml(user.id)}', '${username}')"
+                                >
+                                    Remover verificação
+                                </button>
+                            `
+                            : `
+                                <button
+                                    type="button"
+                                    onclick="showVerifyForm('${escapeHtml(user.id)}')"
+                                >
+                                    Verificar conta
+                                </button>
+                            `
+                    }
+
+                </div>
+
+                ${
+                    user.is_verified
+                        ? ""
+                        : `
+                            <div
+                                id="verify-form-${escapeHtml(user.id)}"
+                                class="verify-form"
+                            >
+
+                                <label>
+                                    Tipo de verificação
+                                </label>
+
+                                <select
+                                    id="verify-type-${escapeHtml(user.id)}"
+                                >
+                                    <option value="creator">
+                                        Criador de conteúdo
+                                    </option>
+
+                                    <option value="team">
+                                        Equipe Fluffy
+                                    </option>
+
+                                    <option value="developer">
+                                        Desenvolvedor
+                                    </option>
+
+                                    <option value="official">
+                                        Conta oficial
+                                    </option>
+                                </select>
+
+                                <button
+                                    type="button"
+                                    style="margin-top: 10px; width: 100%;"
+                                    onclick="confirmVerification('${escapeHtml(user.id)}')"
+                                >
+                                    Confirmar verificação
+                                </button>
+
+                            </div>
+                        `
+                }
+            `;
+
+            results.appendChild(card);
+        }
+    }
+
+
+    function showVerifyForm(userId) {
+        const form =
+            document.getElementById(
+                "verify-form-" + userId
+            );
+
+        if (!form) {
+            return;
+        }
+
+        form.classList.add("visible");
+    }
+
+
+    async function getSession() {
+        const {
+            data,
+            error
+        } = await supabaseClient.auth.getSession();
+
+        if (error) {
+            console.error(
+                "Erro ao obter sessão:",
+                error
+            );
+
+            return null;
+        }
+
+        return data.session;
+    }
+
+
+    async function checkAdminAccess() {
+        const session =
+            await getSession();
+
+        if (!session) {
+            window.location.href = "login.html";
+            return;
+        }
+
+        /*
+         * A autorização real deve ser feita pela Edge Function.
+         * Não confiamos em dados enviados pelo navegador.
+         *
+         * A versão atual da manage-verification precisará
+         * receber posteriormente a ação "check_admin".
+         */
+
+        try {
+
+            const {
+                data,
+                error
+            } = await supabaseClient.functions.invoke(
+                "manage-verification",
+                {
+                    body: {
+                        action: "check_admin"
+                    }
+                }
+            );
+
+            if (error) {
+                console.error(
+                    "Erro ao verificar administrador:",
+                    error
+                );
+
+                showAccessDenied();
+                return;
+            }
+
+            if (!data || data.success !== true) {
+                showAccessDenied();
+                return;
+            }
+
+            loadingAdmin.classList.add("hidden");
+            adminPanel.classList.remove("hidden");
+
+        } catch (error) {
+
+            console.error(
+                "Erro inesperado:",
+                error
+            );
+
+            showAccessDenied();
+        }
+    }
+
+
+    function showAccessDenied() {
+        loadingAdmin.classList.add("hidden");
+        adminPanel.classList.add("hidden");
+        accessDenied.classList.remove("hidden");
+    }
+
+
+    async function searchUsers() {
+
+        const query =
+            searchInput.value.trim();
+
+        hideSearchMessage();
+
+        results.innerHTML = "";
+        emptyResults.style.display = "none";
+
+        if (!query) {
+            showSearchMessage(
+                "Digite um nome de usuário para pesquisar.",
+                "error"
+            );
+
+            return;
+        }
+
+        searchButton.disabled = true;
+        searchLoading.style.display = "block";
+
+        try {
+
+            const {
+                data,
+                error
+            } = await supabaseClient.functions.invoke(
+                "manage-verification",
+                {
+                    body: {
+                        action: "search",
+                        query: query
+                    }
+                }
+            );
+
+            if (error) {
+                console.error(
+                    "Erro ao pesquisar:",
+                    error
+                );
+
+                showSearchMessage(
+                    "Não foi possível pesquisar os usuários.",
+                    "error"
+                );
+
+                return;
+            }
+
+            if (!data || data.success !== true) {
+                showSearchMessage(
+                    data?.error ||
+                    "Não foi possível realizar a pesquisa.",
+                    "error"
+                );
+
+                return;
+            }
+
+            renderResults(
+                Array.isArray(data.users)
+                    ? data.users
+                    : []
+            );
+
+        } catch (error) {
+
+            console.error(
+                "Erro inesperado na pesquisa:",
+                error
+            );
+
+            showSearchMessage(
+                "Ocorreu um erro ao pesquisar.",
+                "error"
+            );
+
+        } finally {
+
+            searchButton.disabled = false;
+            searchLoading.style.display = "none";
+        }
+    }
+
+
+    async function confirmVerification(userId) {
+
+        const select =
+            document.getElementById(
+                "verify-type-" + userId
+            );
+
+        if (!select) {
+            return;
+        }
+
+        const verificationType =
+            select.value;
+
+        const confirmed =
+            window.confirm(
+                "Tem certeza que deseja verificar esta conta como \"" +
+                formatVerificationType(
+                    verificationType
+                ) +
+                "\"?"
+            );
+
+        if (!confirmed) {
+            return;
+        }
+
+        try {
+
+            const {
+                data,
+                error
+            } = await supabaseClient.functions.invoke(
+                "manage-verification",
+                {
+                    body: {
+                        action: "verify",
+                        user_id: userId,
+                        verification_type:
+                            verificationType
+                    }
+                }
+            );
+
+            if (error) {
+                console.error(
+                    "Erro ao verificar conta:",
+                    error
+                );
+
+                showSearchMessage(
+                    "Não foi possível verificar a conta.",
+                    "error"
+                );
+
+                return;
+            }
+
+            if (!data || data.success !== true) {
+                showSearchMessage(
+                    data?.error ||
+                    "Não foi possível verificar a conta.",
+                    "error"
+                );
+
+                return;
+            }
+
+            showSearchMessage(
+                "Conta verificada com sucesso.",
+                "success"
+            );
+
+            await searchUsers();
+
+        } catch (error) {
+
+            console.error(
+                "Erro inesperado:",
+                error
+            );
+
+            showSearchMessage(
+                "Ocorreu um erro ao verificar a conta.",
+                "error"
+            );
+        }
+    }
+
+
+    async function removeVerification(
+        userId,
+        username
+    ) {
+
+        const confirmed =
+            window.confirm(
+                "Tem certeza que deseja remover a verificação de @" +
+                username +
+                "?"
+            );
+
+        if (!confirmed) {
+            return;
+        }
+
+        try {
+
+            const {
+                data,
+                error
+            } = await supabaseClient.functions.invoke(
+                "manage-verification",
+                {
+                    body: {
+                        action: "unverify",
+                        user_id: userId
+                    }
+                }
+            );
+
+            if (error) {
+                console.error(
+                    "Erro ao remover verificação:",
+                    error
+                );
+
+                showSearchMessage(
+                    "Não foi possível remover a verificação.",
+                    "error"
+                );
+
+                return;
+            }
+
+            if (!data || data.success !== true) {
+                showSearchMessage(
+                    data?.error ||
+                    "Não foi possível remover a verificação.",
+                    "error"
+                );
+
+                return;
+            }
+
+            showSearchMessage(
+                "Verificação removida com sucesso.",
+                "success"
+            );
+
+            await searchUsers();
+
+        } catch (error) {
+
+            console.error(
+                "Erro inesperado:",
+                error
+            );
+
+            showSearchMessage(
+                "Ocorreu um erro ao remover a verificação.",
+                "error"
+            );
+        }
+    }
+
+
+    searchButton.addEventListener(
+        "click",
+        searchUsers
+    );
+
+
+    searchInput.addEventListener(
+        "keydown",
+        function(event) {
+            if (event.key === "Enter") {
+                searchUsers();
+            }
+        }
+    );
+
+
+    checkAdminAccess();
+</script>
+
+</body>
+</html>
