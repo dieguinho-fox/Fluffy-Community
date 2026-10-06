@@ -98,6 +98,33 @@
             color: #ffffff;
         }
 
+        .username-label-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 7px;
+        }
+
+        .username-label-row label {
+            margin-bottom: 0;
+        }
+
+        .verified-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #5865f2;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: bold;
+            line-height: 1;
+            cursor: default;
+            box-shadow: 0 2px 8px rgba(88, 101, 242, 0.35);
+        }
+
         input,
         textarea {
             width: 100%;
@@ -616,6 +643,12 @@
                 padding: 20px;
                 border-radius: 14px;
             }
+
+            .verified-badge {
+                width: 20px;
+                height: 20px;
+                font-size: 13px;
+            }
         }
     </style>
 </head>
@@ -696,9 +729,22 @@
 
             <div id="avatarStatus" class="status"></div>
 
-            <label for="username">
-                Nome de usuário
-            </label>
+            <div class="username-label-row">
+
+                <label for="username">
+                    Nome de usuário
+                </label>
+
+                <span
+                    id="verifiedBadge"
+                    class="verified-badge hidden"
+                    aria-label="Conta verificada"
+                    title="Conta verificada"
+                >
+                    ✓
+                </span>
+
+            </div>
 
             <input
                 id="username"
@@ -1198,6 +1244,9 @@
     const usernameInput =
         document.getElementById("username");
 
+    const verifiedBadge =
+        document.getElementById("verifiedBadge");
+
     const avatarPreview =
         document.getElementById("avatarPreview");
 
@@ -1265,15 +1314,6 @@
         document.getElementById(
             "passwordSaveStatus"
         );
-
-    const deviceIcon =
-        document.getElementById("deviceIcon");
-
-    const deviceName =
-        document.getElementById("deviceName");
-
-    const deviceDetails =
-        document.getElementById("deviceDetails");
 
     /* VERIFICAÇÃO */
 
@@ -1438,6 +1478,61 @@
             avatarPreview.src =
                 getDefaultAvatar();
         }
+    }
+
+    function updateVerificationBadge() {
+
+        if (
+            !currentProfile ||
+            currentProfile.is_verified !== true
+        ) {
+
+            verifiedBadge.classList.add(
+                "hidden"
+            );
+
+            verifiedBadge.title =
+                "Conta verificada";
+
+            verifiedBadge.setAttribute(
+                "aria-label",
+                "Conta verificada"
+            );
+
+            return;
+        }
+
+        const verificationTitles = {
+            creator:
+                "Criador de conteúdo verificado",
+
+            team:
+                "Membro da equipe Fluffy verificado",
+
+            developer:
+                "Desenvolvedor verificado",
+
+            official:
+                "Conta oficial verificada"
+        };
+
+        const title =
+            verificationTitles[
+                currentProfile.verification_type
+            ] ||
+            "Conta verificada";
+
+        verifiedBadge.title =
+            title;
+
+        verifiedBadge.setAttribute(
+            "aria-label",
+            title
+        );
+
+        verifiedBadge.classList.remove(
+            "hidden"
+        );
     }
 
     function updateLoginMethods() {
@@ -2060,7 +2155,7 @@
                 await accountSupabase
                     .from("profiles")
                     .select(
-                        "id, username, created_at, avatar_url, bio, email_verified"
+                        "id, username, created_at, avatar_url, bio, email_verified, is_verified, verification_type"
                     )
                     .eq("id", user.id)
                     .single();
@@ -2099,6 +2194,8 @@
             );
 
             updateCounters();
+
+            updateVerificationBadge();
 
             updateLoginMethods();
 
