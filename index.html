@@ -229,6 +229,44 @@
             word-break: break-word;
         }
 
+        /*
+         * ============================================================
+         * SELO DE VERIFICAÇÃO
+         * ============================================================
+         */
+
+        .account-name-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .verified-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            width: 22px;
+            height: 22px;
+
+            border-radius: 50%;
+
+            background: #5865f2;
+            color: #ffffff;
+
+            font-size: 14px;
+            font-weight: bold;
+
+            line-height: 1;
+
+            cursor: default;
+
+            box-shadow:
+                0 2px 8px rgba(88, 101, 242, 0.35);
+        }
+
         .account-handle {
             margin-top: 7px;
 
@@ -399,6 +437,13 @@
 
             .account-name {
                 font-size: 25px;
+            }
+
+            .verified-badge {
+                width: 20px;
+                height: 20px;
+
+                font-size: 13px;
             }
 
             .account-buttons {
@@ -616,6 +661,7 @@
                  * O botão é mantido para deixar a navegação
                  * consistente com profile.html.
                  */
+
                 window.location.href =
                     "index.html";
             }
@@ -767,6 +813,7 @@
                  * A conta está logada, então
                  * mostramos o menu.
                  */
+
                 accountArea.style.display =
                     "block";
 
@@ -779,7 +826,7 @@
                     await accountSupabase
                         .from("profiles")
                         .select(
-                            "id, username, created_at, avatar_url, bio"
+                            "id, username, created_at, avatar_url, bio, is_verified, verification_type"
                         )
                         .eq(
                             "id",
@@ -929,6 +976,22 @@
             }
 
 
+            /*
+             * ========================================================
+             * NOME + SELO
+             * ========================================================
+             */
+
+            const nameRow =
+                document.createElement(
+                    "div"
+                );
+
+
+            nameRow.className =
+                "account-name-row";
+
+
             const name =
                 document.createElement(
                     "h2"
@@ -942,6 +1005,68 @@
             name.textContent =
                 profile.username ||
                 "Usuário";
+
+
+            nameRow.appendChild(
+                name
+            );
+
+
+            /*
+             * Mostra o selo somente quando
+             * a conta estiver oficialmente verificada.
+             */
+
+            if (
+                profile.is_verified === true
+            ) {
+
+                const verifiedBadge =
+                    document.createElement(
+                        "span"
+                    );
+
+
+                verifiedBadge.className =
+                    "verified-badge";
+
+
+                verifiedBadge.textContent =
+                    "✓";
+
+
+                const verificationLabels = {
+                    creator:
+                        "Criador de conteúdo verificado",
+
+                    team:
+                        "Membro da equipe Fluffy verificado",
+
+                    developer:
+                        "Desenvolvedor verificado",
+
+                    official:
+                        "Conta oficial verificada"
+                };
+
+
+                verifiedBadge.title =
+                    verificationLabels[
+                        profile.verification_type
+                    ] ||
+                    "Conta verificada";
+
+
+                verifiedBadge.setAttribute(
+                    "aria-label",
+                    verifiedBadge.title
+                );
+
+
+                nameRow.appendChild(
+                    verifiedBadge
+                );
+            }
 
 
             const handle =
@@ -1095,7 +1220,7 @@
 
 
             card.appendChild(
-                name
+                nameRow
             );
 
 
