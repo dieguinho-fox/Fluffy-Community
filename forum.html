@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#10131a">
+    <link rel="icon" type="image/png" href="./favicon.ico">
+
+    <title>Fórum - Fluffy Community</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            color-scheme: dark;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #10131a;
+            color: #ffffff;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        a {
+            color: #8790ff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        button, input, textarea, select {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        button:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+        }
+
+        header {
+            background: #181d27;
+            border-bottom: 1px solid #293140;
+            padding: 16px 22px;
+        }
+
+        .header-inner {
+            max-width: 1100px;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .brand {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .brand span {
+            margin-right: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: #c6cede;
+            font-size: 14px;
+        }
+
+        main {
+            width: min(100% - 28px, 1000px);
+            margin: 32px auto;
+        }
+
+        .hero {
+            margin-bottom: 24px;
+        }
+
+        h1 {
+            margin: 0 0 8px;
+            font-size: clamp(27px, 5vw, 36px);
+        }
+
+        .subtitle {
+            margin: 0;
+            color: #9ca8ba;
+            line-height: 1.6;
+        }
+
+        .panel {
+            background: #181d27;
+            border: 1px solid #293140;
+            border-radius: 14px;
+            padding: 22px;
+            margin-bottom: 22px;
+        }
+
+        .panel h2 {
+            margin: 0 0 18px;
+            font-size: 20px;
+        }
+
+        .field {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        input, textarea, select {
+            display: block;
+            width: 100%;
+            color: #ffffff;
+            background: #11151d;
+            border: 1px solid #303948;
+            border-radius: 9px;
+            padding: 12px;
+            outline: none;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            border-color: #5865f2;
+            box-shadow: 0 0 0 3px rgba(88, 101, 242, 0.13);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 125px;
+            line-height: 1.5;
+        }
+
+        .primary-button {
+            background: #5865f2;
+            color: white;
+            border: none;
+            border-radius: 9px;
+            padding: 12px 17px;
+            font-weight: bold;
+        }
+
+        .primary-button:hover:not(:disabled) {
+            background: #4752c4;
+        }
+
+        .secondary-button {
+            background: #252c38;
+            color: white;
+            border: 1px solid #303948;
+            border-radius: 9px;
+            padding: 10px 14px;
+        }
+
+        .toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+
+        .toolbar select {
+            width: auto;
+            min-width: 155px;
+        }
+
+        .topic-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .topic-card {
+            padding: 18px;
+            background: #181d27;
+            border: 1px solid #293140;
+            border-radius: 12px;
+        }
+
+        .topic-card:hover {
+            border-color: #46516a;
+        }
+
+        .topic-card h3 {
+            margin: 10px 0;
+            font-size: 18px;
+            overflow-wrap: anywhere;
+        }
+
+        .topic-card p {
+            color: #b7c0cf;
+            line-height: 1.55;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+
+        .topic-meta {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            flex-wrap: wrap;
+            color: #9ca8ba;
+            font-size: 12px;
+        }
+
+        .category {
+            display: inline-block;
+            background: #252d40;
+            color: #cbd0ff;
+            border-radius: 6px;
+            padding: 5px 8px;
+            font-size: 12px;
+        }
+
+        .status {
+            color: #f4d58a;
+            font-size: 12px;
+        }
+
+        .topic-author {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .avatar {
+            width: 30px;
+            height: 30px;
+            flex: 0 0 30px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: #303948;
+        }
+
+        .avatar-placeholder {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .notice {
+            display: none;
+            padding: 13px;
+            border-radius: 9px;
+            margin-bottom: 16px;
+            line-height: 1.5;
+            overflow-wrap: anywhere;
+        }
+
+        .notice.info {
+            display: block;
+            background: #1d2738;
+            border: 1px solid #354967;
+            color: #c6dcff;
+        }
+
+        .notice.success {
+            display: block;
+            background: #193326;
+            border: 1px solid #2d6545;
+            color: #70d69a;
+        }
+
+        .notice.error {
+            display: block;
+            background: #2b1c20;
+            border: 1px solid #603039;
+            color: #ff9a9a;
+        }
+
+        .account-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            padding: 13px 16px;
+            background: #181d27;
+            border: 1px solid #293140;
+            border-radius: 12px;
+        }
+
+        .account-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+        }
+
+        .account-name {
+            overflow-wrap: anywhere;
+        }
+
+        .reply {
+            border-top: 1px solid #303948;
+            padding: 17px 0;
+        }
+
+        .reply:first-child {
+            border-top: none;
+        }
+
+        .reply-content {
+            margin: 10px 0 0;
+            color: #d7dce6;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+            line-height: 1.6;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #9ca8ba;
+            padding: 30px 12px;
+            background: #181d27;
+            border: 1px dashed #303948;
+            border-radius: 12px;
+        }
+
+        .back-button {
+            margin-bottom: 18px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #687487;
+            font-size: 12px;
+        }
+
+        [hidden] {
+            display: none !important;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 15px;
+            }
+
+            .header-inner {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            main {
+                margin-top: 22px;
+            }
+
+            .panel {
+                padding: 17px;
+            }
+
+            .toolbar {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .toolbar select {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<header>
+    <div class="header-inner">
+        <a class="brand" href="index.html">
+            <span>🐾</span>Fluffy Community
+        </a>
+
+        <nav class="nav-links">
+            <a href="index.html">Comunidade</a>
+            <a href="profile.html">Meu perfil</a>
+            <a href="login.html" id="loginLink">Entrar</a>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <button class="secondary-button back-button" id="backButton" hidden>
+        ← Voltar aos tópicos
+    </button>
+
+    <section class="hero">
+        <h1 id="pageTitle">Fórum da comunidade</h1>
+        <p class="subtitle" id="pageSubtitle">
+            Converse, tire dúvidas e compartilhe sugestões com a comunidade.
+        </p>
+    </section>
+
+    <div id="globalMessage" class="notice" role="status" aria-live="polite"></div>
+
+    <section id="accountBar" class="account-bar" hidden>
+        <div class="account-info">
+            <div id="accountAvatar"></div>
+            <div>
+                <div class="account-name" id="accountName"></div>
+                <div class="topic-meta" id="accountStatus"></div>
+            </div>
+        </div>
+
+        <button class="secondary-button" id="logoutButton">
+            Sair
+        </button>
+    </section>
+
+    <section id="createPanel" class="panel" hidden>
+        <h2>Criar tópico</h2>
+
+        <form id="topicForm">
+            <div class="field">
+                <label for="topicTitle">Título</label>
+                <input
+                    id="topicTitle"
+                    name="title"
+                    type="text"
+                    minlength="3"
+                    maxlength="120"
+                    placeholder="Sobre o que você quer conversar?"
+                    required
+                >
+            </div>
+
+            <div class="field">
+                <label for="topicCategory">Categoria</label>
+                <select id="topicCategory" name="category">
+                    <option value="Geral">Geral</option>
+                    <option value="Ajuda">Ajuda</option>
+                    <option value="Sugestões">Sugestões</option>
+                    <option value="Problemas">Problemas</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label for="topicContent">Mensagem</label>
+                <textarea
+                    id="topicContent"
+                    name="content"
+                    maxlength="10000"
+                    placeholder="Escreva sua mensagem..."
+                    required
+                ></textarea>
+            </div>
+
+            <button class="primary-button" id="createTopicButton" type="submit">
+                Publicar tópico
+            </button>
+        </form>
+    </section>
+
+    <section id="topicsSection">
+        <div class="toolbar">
+            <h2 style="margin:0;">Tópicos</h2>
+
+            <select id="categoryFilter" aria-label="Filtrar por categoria">
+                <option value="">Todas as categorias</option>
+                <option value="Geral">Geral</option>
+                <option value="Ajuda">Ajuda</option>
+                <option value="Sugestões">Sugestões</option>
+                <option value="Problemas">Problemas</option>
+            </select>
+        </div>
+
+        <div id="topicList" class="topic-list">
+            <div class="empty-state">Carregando tópicos...</div>
+        </div>
+    </section>
+
+    <section id="topicDetail" hidden>
+        <article class="panel">
+            <div class="topic-meta" id="detailMeta"></div>
+            <h2 id="detailTitle" style="margin-top:15px; overflow-wrap:anywhere;"></h2>
+            <div id="detailAuthor" class="topic-author"></div>
+            <p id="detailContent" class="reply-content"></p>
+        </article>
+
+        <section class="panel">
+            <h2>Respostas</h2>
+            <div id="replyList">
+                <div class="empty-state">Carregando respostas...</div>
+            </div>
+        </section>
+
+        <section id="replyPanel" class="panel" hidden>
+            <h2>Responder</h2>
+
+            <form id="replyForm">
+                <div class="field">
+                    <label for="replyContent">Sua resposta</label>
+                    <textarea
+                        id="replyContent"
+                        name="content"
+                        maxlength="5000"
+                        placeholder="Escreva sua resposta..."
+                        required
+                    ></textarea>
+                </div>
+
+                <button class="primary-button" id="sendReplyButton" type="submit">
+                    Enviar resposta
+                </button>
+            </form>
+        </section>
+
+        <div id="lockedNotice" class="notice info" hidden>
+            Este tópico está bloqueado para novas respostas.
+        </div>
+    </section>
+</main>
+
+<footer>
+    Fluffy Studios · Fluffy Community
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+"use strict";
+
+// =====================================================
+// CONFIGURAÇÃO DO SUPABASE
+// =====================================================
+
+const SUPABASE_URL = "https://wnihobtfpmabgfwoddye.supabase.co";
+const SUPABASE_KEY = "sb_publishable_Y-S1kbAXQE-Y4j-seMaHrQ_u_vUoTFF";
+
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+// =====================================================
+// ELEMENTOS E ESTADO
+// =====================================================
+
+const $ = (id) => document.getElementById(id);
+
+let currentUser = null;
+let currentProfile = null;
+let currentTopic = null;
+let topicsCache = [];
+let profilesCache = {};
+let isVerified = false;
+
+function showMessage(text, type = "info") {
+    const box = $("globalMessage");
+    box.textContent = text;
+    box.className = "notice " + type;
+    box.scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+
+function clearMessage() {
+    $("globalMessage").textContent = "";
+    $("globalMessage").className = "notice";
+}
+
+function formatDate(value) {
+    if (!value) return "";
+
+    const date = new Date(value);
+
+    if (Number.isNaN(date.getTime())) return "";
+
+    return date.toLocaleString("pt-BR", {
+        dateStyle: "short",
+        timeStyle: "short"
+    });
+}
+
+function getDisplayName(profile, userId) {
+    if (profile && profile.username) {
+        return profile.username;
+    }
+
+    if (currentUser && currentUser.id === userId && currentUser.email) {
+        return currentUser.email;
+    }
+
+    return "Usuário";
+}
+
+function createAvatar(profile, name) {
+    const wrapper = document.createElement("span");
+    wrapper.className = "topic-author";
+
+    if (profile && profile.avatar_url) {
+        const image = document.createElement("img");
+        image.className = "avatar";
+        image.alt = "";
+        image.loading = "lazy";
+        image.src = profile.avatar_url;
+
+        image.addEventListener("error", () => {
+            const fallback = document.createElement("span");
+            fallback.className = "avatar avatar-placeholder";
+            fallback.textContent = (name || "?").slice(0, 1).toUpperCase();
+            image.replaceWith(fallback);
+        }, { once: true });
+
+        wrapper.appendChild(image);
+    } else {
+        const fallback = document.createElement("span");
+        fallback.className = "avatar avatar-placeholder";
+        fallback.textContent = (name || "?").slice(0, 1).toUpperCase();
+        wrapper.appendChild(fallback);
+    }
+
+    const label = document.createElement("span");
+    label.textContent = name || "Usuário";
+    wrapper.appendChild(label);
+
+    return wrapper;
+}
+
+function setButtonLoading(button, loading, loadingText, normalText) {
+    button.disabled = loading;
+    button.textContent = loading ? loadingText : normalText;
+}
+
+function setPageMode(mode) {
+    const showingDetail = mode === "detail";
+
+    $("topicsSection").hidden = showingDetail;
+    $("topicDetail").hidden = !showingDetail;
+    $("backButton").hidden = !showingDetail;
+    $("createPanel").hidden = showingDetail || !isVerified;
+
+    if (showingDetail) {
+        $("pageTitle").textContent = "Tópico";
+        $("pageSubtitle").textContent = "Leia a conversa e participe da discussão.";
+    } else {
+        $("pageTitle").textContent = "Fórum da comunidade";
+        $("pageSubtitle").textContent =
+            "Converse, tire dúvidas e compartilhe sugestões com a comunidade.";
+    }
+}
+
+// =====================================================
+// PERFIL E AUTENTICAÇÃO
+// =====================================================
+
+async function loadCurrentProfile() {
+    currentProfile = null;
+    isVerified = false;
+
+    if (!currentUser) return;
+
+    const { data, error } = await supabaseClient
+        .from("profiles")
+        .select("id, username, avatar_url, email_verified")
+        .eq("id", currentUser.id)
+        .maybeSingle();
+
+    if (error) {
+        console.error("Erro ao carregar perfil:", error);
+        return;
+    }
+
+    currentProfile = data;
+    isVerified = !!(data && data.email_verified === true);
+}
+
+async function updateAccountUI() {
+    $("accountBar").hidden = !currentUser;
+    $("loginLink").hidden = !!currentUser;
+
+    if (!currentUser) {
+        $("createPanel").hidden = true;
+        $("accountName").textContent = "";
+        $("accountStatus").textContent = "";
+        $("accountAvatar").replaceChildren();
+        return;
+    }
+
+    const name = getDisplayName(currentProfile, currentUser.id);
+
+    $("accountName").textContent = name;
+    $("accountAvatar").replaceChildren(
+        createAvatar(currentProfile, name)
+    );
+
+    if (isVerified) {
+        $("accountStatus").textContent = "E-mail verificado";
+    } else {
+        $("accountStatus").textContent =
+            "E-mail não verificado — leitura disponível";
+    }
+
+    $("createPanel").hidden = !!currentTopic || !isVerified;
+
+    if (!isVerified) {
+        showMessage(
+            "Você pode ler o fórum, mas precisa ter o e-mail verificado para criar tópicos e responder.",
+            "info"
+        );
+    }
+}
+
+async function initializeAuth() {
+    const { data, error } = await supabaseClient.auth.getSession();
+
+    if (error) {
+        console.error("Erro ao recuperar sessão:", error);
+        showMessage("Não foi possível verificar sua sessão. Recarregue a página.", "error");
+    }
+
+    currentUser = data && data.session ? data.session.user : null;
+
+    await loadCurrentProfile();
+    await updateAccountUI();
+}
+
+$("logoutButton").addEventListener("click", async () => {
+    const { error } = await supabaseClient.auth.signOut();
+
+    if (error) {
+        console.error("Erro ao sair:", error);
+        showMessage("Não foi possível sair da conta.", "error");
+        return;
+    }
+
+    window.location.href = "login.html";
+});
+
+// =====================================================
+// CARREGAR PERFIS DOS AUTORES
+// =====================================================
+
+async function loadProfiles(userIds) {
+    const uniqueIds = [...new Set(userIds.filter(Boolean))];
+    const missingIds = uniqueIds.filter(id => !(id in profilesCache));
+
+    if (missingIds.length === 0) return;
+
+    const { data, error } = await supabaseClient
+        .from("profiles")
+        .select("id, username, avatar_url")
+        .in("id", missingIds);
+
+    if (error) {
+        console.error("Erro ao carregar autores:", error);
+        return;
+    }
+
+    for (const id of missingIds) {
+        profilesCache[id] = null;
+    }
+
+    for (const profile of data || []) {
+        profilesCache[profile.id] = profile;
+    }
+}
+
+// =====================================================
+// LISTAGEM DE TÓPICOS
+// =====================================================
+
+async function loadTopics() {
+    const list = $("topicList");
+    list.replaceChildren();
+
+    const { data, error } = await supabaseClient
+        .from("forum_topics")
+        .select("id, user_id, category, title, content, created_at, is_pinned, is_locked")
+        .order("created_at", { ascending: false });
+
+    if (error) {
+        console.error("Erro ao carregar tópicos:", error);
+
+        const message = document.createElement("div");
+        message.className = "empty-state";
+        message.textContent =
+            "Não foi possível carregar os tópicos. Confirme se as tabelas e as políticas RLS foram criadas no Supabase.";
+        list.appendChild(message);
+        return;
+    }
+
+    topicsCache = data || [];
+
+    await loadProfiles(topicsCache.map(topic => topic.user_id));
+
+    const selectedCategory = $("categoryFilter").value;
+
+    const filteredTopics = topicsCache.filter(topic =>
+        !selectedCategory || topic.category === selectedCategory
+    );
+
+    if (filteredTopics.length === 0) {
+        const empty = document.createElement("div");
+        empty.className = "empty-state";
+        empty.textContent = selectedCategory
+            ? "Ainda não existem tópicos nesta categoria."
+            : "Ainda não existem tópicos. Que tal iniciar a conversa?";
+        list.appendChild(empty);
+        return;
+    }
+
+    for (const topic of filteredTopics) {
+        const card = document.createElement("article");
+        card.className = "topic-card";
+
+        const meta = document.createElement("div");
+        meta.className = "topic-meta";
+
+        const category = document.createElement("span");
+        category.className = "category";
+        category.textContent = topic.category;
+        meta.appendChild(category);
+
+        if (topic.is_pinned) {
+            const pinned = document.createElement("span");
+            pinned.className = "status";
+            pinned.textContent = "Fixado";
+            meta.appendChild(pinned);
+        }
+
+        if (topic.is_locked) {
+            const locked = document.createElement("span");
+            locked.className = "status";
+            locked.textContent = "Bloqueado";
+            meta.appendChild(locked);
+        }
+
+        card.appendChild(meta);
+
+        const title = document.createElement("h3");
+        title.textContent = topic.title;
+        card.appendChild(title);
+
+        const content = document.createElement("p");
+        const trimmedContent = topic.content || "";
+        content.textContent = trimmedContent.length > 220
+            ? trimmedContent.slice(0, 220) + "…"
+            : trimmedContent;
+        card.appendChild(content);
+
+        const footer = document.createElement("div");
+        footer.className = "topic-meta";
+
+        const profile = profilesCache[topic.user_id] || null;
+        const name = getDisplayName(profile, topic.user_id);
+        footer.appendChild(createAvatar(profile, name));
+
+        const date = document.createElement("span");
+        date.textContent = formatDate(topic.created_at);
+        footer.appendChild(date);
+
+        card.appendChild(footer);
+
+        const openButton = document.createElement("button");
+        openButton.className = "secondary-button";
+        openButton.style.marginTop = "15px";
+        openButton.textContent = "Abrir tópico";
+        openButton.addEventListener("click", () => openTopic(topic.id));
+        card.appendChild(openButton);
+
+        list.appendChild(card);
+    }
+}
+
+$("categoryFilter").addEventListener("change", loadTopics);
+
+// =====================================================
+// CRIAR TÓPICO
+// =====================================================
+
+$("topicForm").addEventListener("submit", async event => {
+    event.preventDefault();
+    clearMessage();
+
+    if (!currentUser) {
+        showMessage("Entre na sua conta para criar um tópico.", "error");
+        return;
+    }
+
+    if (!isVerified) {
+        showMessage("Verifique seu e-mail antes de publicar.", "error");
+        return;
+    }
+
+    const title = $("topicTitle").value.trim();
+    const category = $("topicCategory").value;
+    const content = $("topicContent").value.trim();
+
+    if (title.length < 3 || title.length > 120) {
+        showMessage("O título deve ter entre 3 e 120 caracteres.", "error");
+        return;
+    }
+
+    if (!content || content.length > 10000) {
+        showMessage("A mensagem deve ter entre 1 e 10.000 caracteres.", "error");
+        return;
+    }
+
+    const button = $("createTopicButton");
+    setButtonLoading(button, true, "Publicando...", "Publicar tópico");
+
+    try {
+        const { data, error } = await supabaseClient
+            .from("forum_topics")
+            .insert({
+                user_id: currentUser.id,
+                category,
+                title,
+                content
+            })
+            .select("id")
+            .single();
+
+        if (error) throw error;
+
+        $("topicForm").reset();
+        showMessage("Tópico publicado com sucesso!", "success");
+
+        await loadTopics();
+        await openTopic(data.id);
+    } catch (error) {
+        console.error("Erro ao criar tópico:", error);
+
+        showMessage(
+            "Não foi possível publicar. Confirme seu e-mail e tente novamente.",
+            "error"
+        );
+    } finally {
+        setButtonLoading(button, false, "Publicando...", "Publicar tópico");
+    }
+});
+
+// =====================================================
+// ABRIR TÓPICO E CARREGAR RESPOSTAS
+// =====================================================
+
+async function openTopic(topicId) {
+    clearMessage();
+
+    const topic = topicsCache.find(item => item.id === topicId);
+
+    if (!topic) {
+        showMessage("Esse tópico não foi encontrado. Atualize a página.", "error");
+        return;
+    }
+
+    currentTopic = topic;
+    setPageMode("detail");
+
+    $("detailTitle").textContent = topic.title;
+    $("detailContent").textContent = topic.content;
+
+    const meta = $("detailMeta");
+    meta.replaceChildren();
+
+    const category = document.createElement("span");
+    category.className = "category";
+    category.textContent = topic.category;
+    meta.appendChild(category);
+
+    const date = document.createElement("span");
+    date.textContent = formatDate(topic.created_at);
+    meta.appendChild(date);
+
+    if (topic.is_pinned) {
+        const pinned = document.createElement("span");
+        pinned.className = "status";
+        pinned.textContent = "Fixado";
+        meta.appendChild(pinned);
+    }
+
+    const profile = profilesCache[topic.user_id] || null;
+    $("detailAuthor").replaceChildren(
+        createAvatar(profile, getDisplayName(profile, topic.user_id))
+    );
+
+    $("lockedNotice").hidden = !topic.is_locked;
+    $("replyPanel").hidden = !currentUser || !isVerified || topic.is_locked;
+
+    const replyList = $("replyList");
+    replyList.replaceChildren();
+
+    const loading = document.createElement("div");
+    loading.className = "empty-state";
+    loading.textContent = "Carregando respostas...";
+    replyList.appendChild(loading);
+
+    const { data: replies, error } = await supabaseClient
+        .from("forum_replies")
+        .select("id, topic_id, user_id, content, created_at")
+        .eq("topic_id", topic.id)
+        .order("created_at", { ascending: true });
+
+    replyList.replaceChildren();
+
+    if (error) {
+        console.error("Erro ao carregar respostas:", error);
+
+        const errorBox = document.createElement("div");
+        errorBox.className = "empty-state";
+        errorBox.textContent = "Não foi possível carregar as respostas.";
+        replyList.appendChild(errorBox);
+        return;
+    }
+
+    await loadProfiles((replies || []).map(reply => reply.user_id));
+
+    if (!replies || replies.length === 0) {
+        const empty = document.createElement("div");
+        empty.className = "empty-state";
+        empty.textContent = "Ainda não existem respostas neste tópico.";
+        replyList.appendChild(empty);
+        return;
+    }
+
+    for (const reply of replies) {
+        const article = document.createElement("article");
+        article.className = "reply";
+
+        const replyProfile = profilesCache[reply.user_id] || null;
+
+        article.appendChild(
+            createAvatar(
+                replyProfile,
+                getDisplayName(replyProfile, reply.user_id)
+            )
+        );
+
+        const replyDate = document.createElement("div");
+        replyDate.className = "topic-meta";
+        replyDate.style.marginTop = "8px";
+        replyDate.textContent = formatDate(reply.created_at);
+        article.appendChild(replyDate);
+
+        const replyContent = document.createElement("p");
+        replyContent.className = "reply-content";
+        replyContent.textContent = reply.content;
+        article.appendChild(replyContent);
+
+        replyList.appendChild(article);
+    }
+}
+
+$("backButton").addEventListener("click", () => {
+    currentTopic = null;
+    setPageMode("list");
+    clearMessage();
+    loadTopics();
+});
+
+// =====================================================
+// RESPONDER
+// =====================================================
+
+$("replyForm").addEventListener("submit", async event => {
+    event.preventDefault();
+    clearMessage();
+
+    if (!currentUser || !isVerified) {
+        showMessage("Entre e verifique seu e-mail para responder.", "error");
+        return;
+    }
+
+    if (!currentTopic || currentTopic.is_locked) {
+        showMessage("Este tópico não aceita novas respostas.", "error");
+        return;
+    }
+
+    const content = $("replyContent").value.trim();
+
+    if (!content || content.length > 5000) {
+        showMessage("A resposta deve ter entre 1 e 5.000 caracteres.", "error");
+        return;
+    }
+
+    const button = $("sendReplyButton");
+    setButtonLoading(button, true, "Enviando...", "Enviar resposta");
+
+    try {
+        const { error } = await supabaseClient
+            .from("forum_replies")
+            .insert({
+                topic_id: currentTopic.id,
+                user_id: currentUser.id,
+                content
+            });
+
+        if (error) throw error;
+
+        $("replyForm").reset();
+        showMessage("Resposta enviada com sucesso!", "success");
+
+        await openTopic(currentTopic.id);
+    } catch (error) {
+        console.error("Erro ao enviar resposta:", error);
+
+        showMessage(
+            "Não foi possível enviar a resposta. Verifique sua conta e tente novamente.",
+            "error"
+        );
+    } finally {
+        setButtonLoading(button, false, "Enviando...", "Enviar resposta");
+    }
+});
+
+// =====================================================
+// INICIALIZAÇÃO
+// =====================================================
+
+async function initializeForum() {
+    await initializeAuth();
+    await loadTopics();
+
+    const params = new URLSearchParams(window.location.search);
+    const topicId = params.get("topic");
+
+    if (topicId) {
+        const found = topicsCache.find(topic => topic.id === topicId);
+
+        if (found) {
+            await openTopic(topicId);
+        } else {
+            showMessage("O tópico solicitado não foi encontrado.", "error");
+        }
+    }
+}
+
+initializeForum().catch(error => {
+    console.error("Erro ao inicializar fórum:", error);
+    showMessage("Ocorreu um erro ao abrir o fórum. Tente recarregar a página.", "error");
+});
+
+// Atualizar a interface se a sessão mudar
+supabaseClient.auth.onAuthStateChange(() => {
+    setTimeout(async () => {
+        const { data } = await supabaseClient.auth.getSession();
+
+        currentUser = data && data.session ? data.session.user : null;
+
+        await loadCurrentProfile();
+        await updateAccountUI();
+        await loadTopics();
+
+        if (currentTopic) {
+            const topicId = currentTopic.id;
+            currentTopic = topicsCache.find(topic => topic.id === topicId) || null;
+
+            if (currentTopic) {
+                await openTopic(topicId);
+            } else {
+                setPageMode("list");
+            }
+        }
+    }, 0);
+});
+</script>
+</body>
+</html>
